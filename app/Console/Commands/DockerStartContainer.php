@@ -67,12 +67,14 @@ class DockerStartContainer extends Command
     protected function listenToWebsockets($docker, string $containerName)
     {
         // Websocket API doesnt (on mac -> see gh issue)
-        $webSocketStream = $docker->getContainerManager()->attachWebsocket($containerName, [
+        $response = $docker->getContainerManager()->attachWebsocket($containerName, [
             'stream' => true,
             'stdout' => true,
             'stderr' => true,
             'stdin'  => true,
-        ]);
+        ], false);
+
+        dd($response);
 
         $webSocketStream->write('echo "jo"\n');
         do {
