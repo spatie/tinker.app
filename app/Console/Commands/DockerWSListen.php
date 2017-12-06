@@ -16,8 +16,10 @@ class DockerWSListen extends Command
         $containerName = $this->argument('containerName');
         $client = new Client("ws://unix:///var/run/docker.sock/containers/{$containerName}/attach/ws?stream=1&stdin=1&stdout=1", 'http://localhost');
         $client->connect();
-        $client->sendData('hello');
-        $response = $client->receive()[0]->getPayload();
+        while (true) {
+            $client->sendData('hello');
+        }
+        // $response = $client->receive()[0]->getPayload();
         $client->disconnect();
     }
 }
