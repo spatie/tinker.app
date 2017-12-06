@@ -74,15 +74,17 @@ class DockerStartContainer extends Command
             'stderr' => true,
             'stdin'  => true,
         ], false);
+        
+        $stream = $response->getBody()->detach();
 
         /** @var \Http\Client\Socket\Stream */
-        $stream = Psr7\stream_for($response->getBody());
+        $stream = Psr7\stream_for($stream);
 
-        dump($stream->isWritable());
+        // dd($stream->isWritable());
         
         while (true) {
-            // fwrite($stream->socket, 'ejejeje');
-            echo $response->getBody()->read(8);
+            $stream->write('ejo');
+            echo $stream->read(8);
         }
     }
 }
