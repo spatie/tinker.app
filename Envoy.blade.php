@@ -7,6 +7,7 @@ $userAndServer = 'forge@'. $server;
 $repository = "spatie/{$server}";
 $baseDir = "/home/forge/{$server}";
 $releasesDir = "{$baseDir}/releases";
+$persistentDir = "{$baseDir}/persistent";
 $currentDir = "{$baseDir}/current";
 $newReleaseName = date('Ymd-His');
 $newReleaseDir = "{$releasesDir}/{$newReleaseName}";
@@ -47,6 +48,9 @@ git pull origin master
 @task('cloneRepository', ['on' => 'remote'])
 {{ logMessage("🌀  Cloning repository...") }}
 [ -d {{ $releasesDir }} ] || mkdir {{ $releasesDir }};
+[ -d {{ $persistentDir }} ] || mkdir {{ $persistentDir }};
+[ -d {{ $persistentDir }}/media ] || mkdir {{ $persistentDir }}/media;
+[ -d {{ $persistentDir }}/storage ] || mkdir {{ $persistentDir }}/storage;
 cd {{ $releasesDir }};
 
 # Create the release dir
@@ -84,7 +88,7 @@ yarn
 @task('generateAssets', ['on' => 'remote'])
 {{ logMessage("🌅  Generating assets...") }}
 cd {{ $newReleaseDir }};
-yarn run production -- --progress false
+yarn run production --progress false
 @endtask
 
 @task('updateSymlinks', ['on' => 'remote'])
@@ -93,6 +97,11 @@ yarn run production -- --progress false
 rm -rf {{ $newReleaseDir }}/storage;
 cd {{ $newReleaseDir }};
 ln -nfs {{ $baseDir }}/persistent/storage storage;
+
+# Remove the public/media directory and replace with persistent data
+rm -rf {{ $newReleaseDir }}/public/media;
+cd {{ $newReleaseDir }};
+ln -nfs {{ $baseDir }}/persistent/media public/media;
 
 # Import the environment config
 cd {{ $newReleaseDir }};
@@ -121,6 +130,8 @@ php artisan migrate --force;
 {{ logMessage("🙏  Blessing new release...") }}
 ln -nfs {{ $newReleaseDir }} {{ $currentDir }};
 cd {{ $newReleaseDir }}
+
+php artisan horizon:terminate
 php artisan config:clear
 php artisan cache:clear
 php artisan config:cache
@@ -148,6 +159,11 @@ git pull origin master
 php artisan config:clear
 php artisan cache:clear
 php artisan config:cache
-sudo supervisorctl restart all
 sudo service php7.2-fpm restart
+php artisan horizon:terminate
+sudo supervisorctl restart all
 @endtask
+
+@finished
+    @slack(env('SLACK_DEPLOYMENT_WEBHOOK_URL'), '#deployments', "{$server}: {$baseDir} release {$newReleaseName} by {$user}")
+@endfinished
