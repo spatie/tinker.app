@@ -20,7 +20,7 @@ class DockerStartContainer extends Command
         $containerName = 'tinker-'.str_random();
         
         $containerConfig = new ContainerConfig();
-        $containerConfig->setImage('spatie/tinker.sh-docker-image');
+        $containerConfig->setImage('alexvanderbist/tinker-sh-image');
         $containerConfig->setCmd(['/usr/bin/php', '/var/www/artisan', 'tinker']);
         // $containerConfig->setCmd(['/bin/bash']);
         $containerConfig->setTty(true);
