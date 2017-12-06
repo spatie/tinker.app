@@ -2,8 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Docker\API\Model\ContainerConfig;
+use Docker\API\V1_32\Model\ContainersCreatePostBody;
 use Docker\Docker;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\Stream;
 use Illuminate\Console\Command;
 
 class DockerStartContainer extends Command
@@ -14,27 +16,26 @@ class DockerStartContainer extends Command
     
     public function handle()
     {
-        $docker = new Docker();
-        $containerManager = $docker->getContainerManager();
+        $docker = Docker::create(Docker::VERSION_1_32);
         
         $containerName = 'tinker-'.str_random();
-        
-        $containerConfig = new ContainerConfig();
-        $containerConfig->setImage('alexvanderbist/tinker-sh-image');
-        // $containerConfig->setCmd(['/usr/bin/php', '/var/www/artisan', 'tinker']); // is in image now
-        $containerConfig->setTty(true);
-        $containerConfig->setOpenStdin(true); // -i interactive flag = keep stdin open even when not attached
-        // $containerConfig->setStdinOnce(true); // close stdin after client dc
-        $containerConfig->setAttachStdin(true);
-        $containerConfig->setAttachStdout(true);
-        $containerConfig->setAttachStderr(true);
-        
-        $containerManager->create($containerConfig, ['name' => $containerName]);
 
+        $containerCreatePostBody = new ContainersCreatePostBody();
+        $containerCreatePostBody->setImage('alexvanderbist/tinker-sh-image');
+        // $containerCreatePostBody->setCmd(['/usr/bin/php', '/var/www/artisan', 'tinker']); // is in image now
+        $containerCreatePostBody->setTty(true);
+        $containerCreatePostBody->setOpenStdin(true); // -i interactive flag = keep stdin open even when not attached
+        // $containerCreatePostBody->setStdinOnce(true); // close stdin after client dc
+        $containerCreatePostBody->setAttachStdin(true);
+        $containerCreatePostBody->setAttachStdout(true);
+        $containerCreatePostBody->setAttachStderr(true);
+
+        $docker->container()->containerCreate($containerCreatePostBody, ['name' => $containerName]);
+        
         $this->comment($containerName);
         
         // start container
-        $containerManager->start($containerName);
+        $docker->container()->containerStart($containerName);
 
         if ($this->option('websockets')) {
             return $this->listenToWebsockets($docker, $containerName);
@@ -67,17 +68,21 @@ class DockerStartContainer extends Command
     protected function listenToWebsockets($docker, string $containerName)
     {
         // Websocket API doesnt (on mac -> see gh issue)
-        $webSocketStream = $docker->getContainerManager()->attachWebsocket($containerName, [
+        $response = $docker->container()->containerAttach($containerName, [
             'stream' => true,
             'stdout' => true,
             'stderr' => true,
             'stdin'  => true,
-        ]);
+        ], false);
 
-        $webSocketStream->write('echo "jo"\n');
-        do {
-            $line = $webSocketStream->read();
-            echo($line);
-        } while ($line !== null);
+        /** @var \Http\Client\Socket\Stream */
+        $stream = Psr7\stream_for($response->getBody());
+
+        dump($stream->isWritable());
+        
+        while (true) {
+            // fwrite($stream->socket, 'ejejeje');
+            echo $response->getBody()->read(8);
+        }
     }
 }

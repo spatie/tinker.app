@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "1e2bb208fb31748bf2d855d091262517",
+    "content-hash": "67b82ba75fd244f78d3af7c258076cec",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -429,42 +429,54 @@
         },
         {
             "name": "docker-php/docker-php",
-            "version": "1.24.0",
+            "version": "dev-2.0-dev",
             "source": {
                 "type": "git",
                 "url": "https://github.com/docker-php/docker-php.git",
-                "reference": "27b04e15810e3ed688d5e87b75a4eb6716f0bda0"
+                "reference": "cac4840d1d43966a5e0802e24469d806f18e08ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/docker-php/docker-php/zipball/27b04e15810e3ed688d5e87b75a4eb6716f0bda0",
-                "reference": "27b04e15810e3ed688d5e87b75a4eb6716f0bda0",
+                "url": "https://api.github.com/repos/docker-php/docker-php/zipball/cac4840d1d43966a5e0802e24469d806f18e08ac",
+                "reference": "cac4840d1d43966a5e0802e24469d806f18e08ac",
                 "shasum": ""
             },
             "require": {
                 "guzzlehttp/psr7": "^1.2",
-                "jane/open-api": "^1.0",
-                "php": ">=5.4",
-                "php-http/client-common": "^1.1",
+                "jane/openapi-runtime": "^2.0",
+                "php": ">=7.0",
+                "php-http/client-common": "^1.6",
                 "php-http/message": "^1.0",
-                "php-http/socket-client": "^1.0",
+                "php-http/socket-client": "^1.3",
                 "symfony/filesystem": "^2.3 || ^3.0",
                 "symfony/process": "^2.3 || ^3.0"
             },
             "require-dev": {
                 "friendsofphp/php-cs-fixer": "^2.0",
-                "phpunit/phpunit": "^4.7"
+                "jane/open-api": "^3.1",
+                "phpunit/phpunit": "^6.0"
+            },
+            "suggest": {
+                "php-http/httplug-bundle": "For integration with Symfony"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.24-dev"
+                    "dev-master": "2-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
                     "Docker\\": "src/",
-                    "Docker\\API\\": "generated/"
+                    "Docker\\API\\V1_25\\": "generated/1.25",
+                    "Docker\\API\\V1_26\\": "generated/1.26",
+                    "Docker\\API\\V1_27\\": "generated/1.27",
+                    "Docker\\API\\V1_28\\": "generated/1.28",
+                    "Docker\\API\\V1_29\\": "generated/1.29",
+                    "Docker\\API\\V1_30\\": "generated/1.30",
+                    "Docker\\API\\V1_31\\": "generated/1.31",
+                    "Docker\\API\\V1_32\\": "generated/1.32",
+                    "Docker\\API\\V1_33\\": "generated/1.33"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -472,7 +484,7 @@
                 "MIT"
             ],
             "description": "A Docker PHP client",
-            "time": "2016-08-08T10:39:27+00:00"
+            "time": "2017-10-22T14:10:17+00:00"
         },
         {
             "name": "doctrine/annotations",
@@ -1423,49 +1435,33 @@
             "time": "2015-04-20T18:58:01+00:00"
         },
         {
-            "name": "jane/jane",
-            "version": "v1.5.1",
+            "name": "jane/openapi-runtime",
+            "version": "v2.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/janephp/jane.git",
-                "reference": "991e095881b570b010cd3a3e8c78ec80903238ee"
+                "url": "https://github.com/janephp/openapi-runtime.git",
+                "reference": "4fd799c0f0e486c7a19fe007da9853b19ea31154"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/janephp/jane/zipball/991e095881b570b010cd3a3e8c78ec80903238ee",
-                "reference": "991e095881b570b010cd3a3e8c78ec80903238ee",
+                "url": "https://api.github.com/repos/janephp/openapi-runtime/zipball/4fd799c0f0e486c7a19fe007da9853b19ea31154",
+                "reference": "4fd799c0f0e486c7a19fe007da9853b19ea31154",
                 "shasum": ""
             },
             "require": {
-                "doctrine/inflector": "^1.0",
-                "jane/runtime": "^1.0",
-                "nikic/php-parser": "^1.4|^2.0",
-                "symfony/console": "^2.3|^3.0",
-                "symfony/options-resolver": "^2.7.2|^3.1",
-                "symfony/property-access": "^2.3|^3.0"
-            },
-            "conflict": {
-                "fabpot/php-cs-fixer": "<2.0.0-alpha|>v2.0.0-alpha"
+                "jane/runtime": "^2.0",
+                "php-http/client-common": "^1.1",
+                "php-http/httplug": "^1.0",
+                "php-http/message-factory": "^1.0.2",
+                "symfony/options-resolver": "^3.1"
             },
             "require-dev": {
-                "friendsofphp/php-cs-fixer": "v2.0.0-alpha",
                 "phpunit/phpunit": "^4.7|^5.5"
             },
-            "suggest": {
-                "fabpot/php-cs-fixer": "Allow to automatically fix cs on generated code for better visualisation"
-            },
-            "bin": [
-                "bin/jane"
-            ],
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.0-dev"
-                }
-            },
             "autoload": {
                 "psr-4": {
-                    "Joli\\Jane\\": "src/"
+                    "Joli\\Jane\\OpenApi\\Runtime\\": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -1478,95 +1474,32 @@
                     "email": "jwurtz@jolicode.com"
                 }
             ],
-            "description": "Generate a serializable / deserializable object model given a json schema",
-            "time": "2017-06-30T18:45:29+00:00"
-        },
-        {
-            "name": "jane/open-api",
-            "version": "v1.2.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/janephp/openapi.git",
-                "reference": "189aafaec2b2ff1ef1519c8d6a2f09ac4b85d4e9"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/janephp/openapi/zipball/189aafaec2b2ff1ef1519c8d6a2f09ac4b85d4e9",
-                "reference": "189aafaec2b2ff1ef1519c8d6a2f09ac4b85d4e9",
-                "shasum": ""
-            },
-            "require": {
-                "doctrine/inflector": "^1.0",
-                "jane/jane": "^1.2.0",
-                "nikic/php-parser": "^1.4|^2.0",
-                "php-http/httplug": "^1.0",
-                "php-http/message-factory": "^1.0",
-                "symfony/console": "^2.3|^3.0",
-                "symfony/options-resolver": "^2.7|^3.0"
-            },
-            "conflict": {
-                "fabpot/php-cs-fixer": "<2.0"
-            },
-            "require-dev": {
-                "fabpot/php-cs-fixer": "^2.0@dev",
-                "phpunit/phpunit": "^4.7"
-            },
-            "suggest": {
-                "fabpot/php-cs-fixer": "To have a nice formatting of the generated files"
-            },
-            "bin": [
-                "bin/jane-openapi"
-            ],
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Joli\\Jane\\OpenApi\\Model\\": "generated/Model/",
-                    "Joli\\Jane\\OpenApi\\Normalizer\\": "generated/Normalizer/",
-                    "Joli\\Jane\\OpenApi\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Joel Wurtz",
-                    "email": "jwurtz@jolicode.com"
-                }
-            ],
-            "description": "Generate a PHP Client API (PSR7 compatible) given a OpenApi (Swagger) specification",
-            "keywords": [
-                "jane",
-                "openapi",
-                "swagger"
-            ],
-            "time": "2016-04-13T19:16:20+00:00"
+            "description": "Jane OpenAPI Runtime Library, dependencies and utility class for a library generated by jane/openapi",
+            "time": "2017-07-12T19:43:15+00:00"
         },
         {
             "name": "jane/runtime",
-            "version": "v1.0.0",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/janephp/runtime.git",
-                "reference": "949ddd8f28ed3a697ff2bdc23491be92fd76d6ba"
+                "reference": "5bdff5d9097d2d60bf5565ac8122be459be9b7ec"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/janephp/runtime/zipball/949ddd8f28ed3a697ff2bdc23491be92fd76d6ba",
-                "reference": "949ddd8f28ed3a697ff2bdc23491be92fd76d6ba",
+                "url": "https://api.github.com/repos/janephp/runtime/zipball/5bdff5d9097d2d60bf5565ac8122be459be9b7ec",
+                "reference": "5bdff5d9097d2d60bf5565ac8122be459be9b7ec",
                 "shasum": ""
             },
             "require": {
-                "symfony/serializer": "^2.3|^3.0"
+                "league/uri": "^4.2",
+                "php": "^7.0",
+                "php-jsonpointer/php-jsonpointer": "^3.0",
+                "symfony/serializer": "^3.1",
+                "symfony/yaml": "^3.1"
             },
             "require-dev": {
-                "phpunit/phpunit": "^5.5"
+                "phpunit/phpunit": "^4.7|^5.5"
             },
             "type": "library",
             "autoload": {
@@ -1582,10 +1515,76 @@
                 {
                     "name": "Joel Wurtz",
                     "email": "jwurtz@jolicode.com"
+                },
+                {
+                    "name": "JoliCode",
+                    "email": "coucou@jolicode.com"
                 }
             ],
             "description": "Jane runtime Library",
-            "time": "2016-08-31T15:38:54+00:00"
+            "time": "2017-07-13T20:19:22+00:00"
+        },
+        {
+            "name": "jeremykendall/php-domain-parser",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/jeremykendall/php-domain-parser.git",
+                "reference": "896e7e70f02bd4fd77190052799bc61e4d779672"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/jeremykendall/php-domain-parser/zipball/896e7e70f02bd4fd77190052799bc61e4d779672",
+                "reference": "896e7e70f02bd4fd77190052799bc61e4d779672",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-intl": "*",
+                "ext-mbstring": "*",
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "jeremykendall/debug-die": "0.0.1.*",
+                "mikey179/vfsstream": "~1.4",
+                "phpunit/phpunit": "~4.4"
+            },
+            "bin": [
+                "bin/parse",
+                "bin/update-psl"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Pdp\\": "src/"
+                },
+                "files": [
+                    "src/pdp-parse-url.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Jeremy Kendall",
+                    "homepage": "http://about.me/jeremykendall",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/jeremykendall/php-domain-parser/graphs/contributors"
+                }
+            ],
+            "description": "Public Suffix List based URL parsing implemented in PHP.",
+            "homepage": "https://github.com/jeremykendall/php-domain-parser",
+            "keywords": [
+                "Public Suffix List",
+                "domain parsing",
+                "url parsing"
+            ],
+            "time": "2015-03-30T12:49:45+00:00"
         },
         {
             "name": "laravel/framework",
@@ -1935,6 +1934,74 @@
             "time": "2017-08-06T17:41:04+00:00"
         },
         {
+            "name": "league/uri",
+            "version": "4.2.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thephpleague/uri.git",
+                "reference": "a2e73bad7e60c3bc61b649680fb8b46876e342e3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/thephpleague/uri/zipball/a2e73bad7e60c3bc61b649680fb8b46876e342e3",
+                "reference": "a2e73bad7e60c3bc61b649680fb8b46876e342e3",
+                "shasum": ""
+            },
+            "require": {
+                "ext-fileinfo": "*",
+                "ext-intl": "*",
+                "ext-mbstring": "*",
+                "jeremykendall/php-domain-parser": "^3.0",
+                "php": ">=5.5.9",
+                "psr/http-message": "^1.0"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^1.9",
+                "phpunit/phpunit": "^4.0",
+                "zendframework/zend-diactoros": "^1.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "4.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "League\\Uri\\": "src"
+                },
+                "files": [
+                    "src/functions_include.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ignace Nyamagana Butera",
+                    "email": "nyamsprod@gmail.com",
+                    "homepage": "https://nyamsprod.com"
+                }
+            ],
+            "description": "URI manipulation library",
+            "homepage": "http://uri.thephpleague.com",
+            "keywords": [
+                "data-uri",
+                "ftp",
+                "http",
+                "https",
+                "parse_url",
+                "psr-7",
+                "rfc3986",
+                "uri",
+                "url",
+                "ws"
+            ],
+            "time": "2016-12-12T11:36:42+00:00"
+        },
+        {
             "name": "maximebf/debugbar",
             "version": "1.13.1",
             "source": {
@@ -2237,24 +2304,24 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v2.1.1",
+            "version": "v3.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "4dd659edadffdc2143e4753df655d866dbfeedf0"
+                "reference": "08131e7ff29de6bb9f12275c7d35df71f25f4d89"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/4dd659edadffdc2143e4753df655d866dbfeedf0",
-                "reference": "4dd659edadffdc2143e4753df655d866dbfeedf0",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/08131e7ff29de6bb9f12275c7d35df71f25f4d89",
+                "reference": "08131e7ff29de6bb9f12275c7d35df71f25f4d89",
                 "shasum": ""
             },
             "require": {
                 "ext-tokenizer": "*",
-                "php": ">=5.4"
+                "php": ">=5.5"
             },
             "require-dev": {
-                "phpunit/phpunit": "~4.0"
+                "phpunit/phpunit": "~4.0|~5.0"
             },
             "bin": [
                 "bin/php-parse"
@@ -2262,7 +2329,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.1-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
@@ -2284,7 +2351,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2016-09-16T12:04:44+00:00"
+            "time": "2017-11-04T11:48:34+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -2788,6 +2855,58 @@
             ],
             "description": "Socket client for PHP-HTTP",
             "time": "2017-11-29T20:46:45+00:00"
+        },
+        {
+            "name": "php-jsonpointer/php-jsonpointer",
+            "version": "v3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/raphaelstolt/php-jsonpointer.git",
+                "reference": "4428f86c6f23846e9faa5a420c4ef14e485b3afb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/raphaelstolt/php-jsonpointer/zipball/4428f86c6f23846e9faa5a420c4ef14e485b3afb",
+                "reference": "4428f86c6f23846e9faa5a420c4ef14e485b3afb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^1.11",
+                "phpunit/phpunit": "4.6.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Rs\\Json": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Raphael Stolt",
+                    "email": "raphael.stolt@gmail.com",
+                    "homepage": "http://raphaelstolt.blogspot.com/"
+                }
+            ],
+            "description": "Implementation of JSON Pointer (http://tools.ietf.org/html/rfc6901)",
+            "homepage": "https://github.com/raphaelstolt/php-jsonpointer",
+            "keywords": [
+                "json",
+                "json pointer",
+                "json traversal"
+            ],
+            "time": "2016-08-29T08:51:01+00:00"
         },
         {
             "name": "predis/predis",
@@ -3950,63 +4069,6 @@
             "time": "2017-12-04T23:05:00+00:00"
         },
         {
-            "name": "symfony/inflector",
-            "version": "v3.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/inflector.git",
-                "reference": "8b7161c60d9481f8564df09987fe51e7edfadfce"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/inflector/zipball/8b7161c60d9481f8564df09987fe51e7edfadfce",
-                "reference": "8b7161c60d9481f8564df09987fe51e7edfadfce",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.5.9|>=7.0.8"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Inflector\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bernhard Schussek",
-                    "email": "bschussek@gmail.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Inflector Component",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "inflection",
-                "pluralize",
-                "singularize",
-                "string",
-                "symfony",
-                "words"
-            ],
-            "time": "2017-08-03T09:34:20+00:00"
-        },
-        {
             "name": "symfony/options-resolver",
             "version": "v3.4.1",
             "source": {
@@ -4226,74 +4288,6 @@
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
             "time": "2017-11-22T12:18:49+00:00"
-        },
-        {
-            "name": "symfony/property-access",
-            "version": "v3.4.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/property-access.git",
-                "reference": "4005f3de1c62befe0aea3a272b7379430304a331"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/property-access/zipball/4005f3de1c62befe0aea3a272b7379430304a331",
-                "reference": "4005f3de1c62befe0aea3a272b7379430304a331",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^5.5.9|>=7.0.8",
-                "symfony/inflector": "~3.1|~4.0",
-                "symfony/polyfill-php70": "~1.0"
-            },
-            "require-dev": {
-                "symfony/cache": "~3.1|~4.0"
-            },
-            "suggest": {
-                "psr/cache-implementation": "To cache access methods."
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "3.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\PropertyAccess\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony PropertyAccess Component",
-            "homepage": "https://symfony.com",
-            "keywords": [
-                "access",
-                "array",
-                "extraction",
-                "index",
-                "injection",
-                "object",
-                "property",
-                "property path",
-                "reflection"
-            ],
-            "time": "2017-11-19T18:41:20+00:00"
         },
         {
             "name": "symfony/routing",
@@ -4587,6 +4581,64 @@
                 "dump"
             ],
             "time": "2017-11-30T14:59:23+00:00"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "v3.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "f6a99b95b338799645fe9f7880d7d4ca1bf79cc1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/f6a99b95b338799645fe9f7880d7d4ca1bf79cc1",
+                "reference": "f6a99b95b338799645fe9f7880d7d4ca1bf79cc1",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8"
+            },
+            "conflict": {
+                "symfony/console": "<3.4"
+            },
+            "require-dev": {
+                "symfony/console": "~3.4|~4.0"
+            },
+            "suggest": {
+                "symfony/console": "For validating YAML files using the lint command"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.4-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "https://symfony.com",
+            "time": "2017-12-04T18:15:22+00:00"
         },
         {
             "name": "themsaid/laravel-mail-preview",
@@ -6822,7 +6874,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "docker-php/docker-php": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
