@@ -1,28 +1,21 @@
-@component('layouts.app')
-    <div class="flex-center position-ref full-height">
-        @if (Route::has('login'))
-            <div class="top-right links">
-                @if (Auth::check())
-                    <a href="{{ url('/home') }}">Home</a>
-                @else
-                    <a href="{{ url('/login') }}">Login</a>
-                    <a href="{{ url('/register') }}">Register</a>
-                @endif
-            </div>
-        @endif
+  <!doctype html>
+  <html>
+    <head>
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/xterm/2.9.2/xterm.css" />
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/2.9.2/xterm.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/2.9.2/addons/attach/attach.js"></script>
+    </head>
+    <body>
+      <div id="terminal"></div>
+      <script>
+      	var term = new Terminal();
+        term.open(document.getElementById('#terminal'));
+        term.write('Hello from \033[1;3;31mxterm.js\033[0m $ ')
+        
 
-        <div class="content">
-            <div class="title m-b-md">
-                Laravel
-            </div>
+        var socket = new WebSocket('ws://165.227.172.206/containers/tinker-FpGKTCmcAlY9npg0/attach/ws?stdin=1&stdout=1&stream=1');
 
-            <div class="links">
-                <a href="https://laravel.com/docs">Documentation</a>
-                <a href="https://laracasts.com">Laracasts</a>
-                <a href="https://laravel-news.com">News</a>
-                <a href="https://forge.laravel.com">Forge</a>
-                <a href="https://github.com/laravel/laravel">GitHub</a>
-            </div>
-        </div>
-    </div>
-@endcomponent
+        term.attach(socket);  // Attach the above socket to `term`
+      </script>
+    </body>
+  </html>
