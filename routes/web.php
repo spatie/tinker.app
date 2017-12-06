@@ -11,4 +11,4 @@
 |
 */
 
-Route::view('/laravel', 'home.index');
+Route::view('/', 'home.index');

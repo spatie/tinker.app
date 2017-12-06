@@ -21,8 +21,7 @@ class DockerStartContainer extends Command
         
         $containerConfig = new ContainerConfig();
         $containerConfig->setImage('alexvanderbist/tinker-sh-image');
-        $containerConfig->setCmd(['/usr/bin/php', '/var/www/artisan', 'tinker']);
-        // $containerConfig->setCmd(['/bin/bash']);
+        // $containerConfig->setCmd(['/usr/bin/php', '/var/www/artisan', 'tinker']); // is in image now
         $containerConfig->setTty(true);
         $containerConfig->setOpenStdin(true); // -i interactive flag = keep stdin open even when not attached
         // $containerConfig->setStdinOnce(true); // close stdin after client dc
