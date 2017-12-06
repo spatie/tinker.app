@@ -8,7 +8,7 @@ use Illuminate\Console\Command;
 
 class DockerStartContainer extends Command
 {
-    protected $signature = 'docker:start-container';
+    protected $signature = 'docker:start-container {--W|websockets}';
     
     protected $description = 'Start new Docker container';
     
@@ -37,33 +37,43 @@ class DockerStartContainer extends Command
         // start container
         $containerManager->start($containerName);
 
+        if ($this->option('websockets')) {
+            return $this->listenToWebsockets($docker, $containerName);
+        }
 
+        $this->listenToHijackedRequest($docker, $containerName);
+    }
+
+    protected function listenToHijackedRequest($docker, string $containerName)
+    {
         // Attach endpoint works => but not with TTY (docker-php parses frames wrong)
-        $attachStream = $containerManager->attach($containerName, [
+        $attachStream = $docker->getContainerManager()->attach($containerName, [
             'stream' => true,
             'stdin' => true,
             'stdout' => true,
             'stderr' => true
         ]);
+        
         $attachStream->onStdout(function ($stdout) {
             echo $stdout;
         });
+
         $attachStream->onStderr(function ($stderr) {
             echo $stderr;
         });
+
         $attachStream->wait();
+    }
 
-
-
+    protected function listenToWebsockets($docker, string $containerName)
+    {
         // Websocket API doesnt (on mac -> see gh issue)
-        $webSocketStream = $containerManager->attachWebsocket($containerName, [
+        $webSocketStream = $docker->getContainerManager()->attachWebsocket($containerName, [
             'stream' => true,
             'stdout' => true,
             'stderr' => true,
             'stdin'  => true,
         ]);
-
-        dump($webSocketStream->read());
 
         $webSocketStream->write('echo "jo"\n');
         do {
