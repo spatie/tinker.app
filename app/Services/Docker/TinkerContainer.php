@@ -72,5 +72,7 @@ class TinkerContainer
             echo $msg;
             $clientConnection->send($msg);
         });
+
+        $loop->run();
     }
 }
