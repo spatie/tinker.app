@@ -4,6 +4,7 @@ namespace App\Services\Docker;
 
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\Docker;
+use Docker\Stream\AttachWebsocketStream;
 
 class TinkerContainer
 {
@@ -36,27 +37,13 @@ class TinkerContainer
         $this->docker->containerStart($this->name);
     }
 
-    public function getWebsocketStream()
+    public function getWebsocketStream(): AttachWebsocketStream
     {
-        // Websocket API doesnt (on mac -> see gh issue)
-        $response = $docker->containerAttach($containerName, [
+        return $this->docker->containerAttachWebsocket($this->name, [
             'stream' => true,
             'stdout' => true,
             'stderr' => true,
             'stdin'  => true,
-        ], false);
-
-        $stream = $response->getBody()->detach();
-
-        /** @var \Http\Client\Socket\Stream */
-        $stream = Psr7\stream_for($stream);
-
-        // dd($stream->isWritable());
-        dd($stream);
-
-        while (true) {
-            // $stream->write('ejo');
-            echo $stream->read(8);
-        }
+        ]);
     }
 }

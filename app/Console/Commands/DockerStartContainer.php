@@ -7,6 +7,9 @@ use Docker\Docker;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Stream;
 use Illuminate\Console\Command;
+use Ratchet\Client\WebSocket;
+use React\EventLoop\Factory;
+use React\Stream\DuplexResourceStream;
 
 class DockerStartContainer extends Command
 {
@@ -83,13 +86,19 @@ class DockerStartContainer extends Command
             'stdout' => true,
             'stderr' => true,
             'stdin'  => true,
-        ]);
+        ], false);
 
-        // dd($response);
+        // This works for getting an interactive stream tho
+        $stream = $response->getBody()->detach();
 
-        while (true) {
-            // $stream->write('ejo');
-            echo $response->read();
-        }
+        $loop = Factory::create();
+
+        $conn = new DuplexResourceStream($stream, $loop);
+
+        $conn->on('data', function ($data) {
+            echo $data;
+        });
+
+        $loop->run();
     }
 }
