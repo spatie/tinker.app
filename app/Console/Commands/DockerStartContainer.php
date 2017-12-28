@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands;
 
-use App\Services\WebSocketStream;
+use App\Services\WebSocketConnection;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\Docker;
 use GuzzleHttp\Psr7;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
 use Illuminate\Console\Command;
 use Ratchet\Client\WebSocket;
@@ -88,17 +90,26 @@ class DockerStartContainer extends Command
             'stdin'  => true,
         ], false);
 
-        // This works for getting an interactive stream tho
         $stream = $response->getBody()->detach();
 
         $loop = Factory::create();
 
-        $conn = new WebSocketStream($stream, $loop);
+        $connection = new WebSocketConnection($stream, $loop);
+
+        $conn = new WebSocket($connection, new Response, new Request('GET', '/ws'));
 
         $conn->on('data', function ($data) {
             echo $data;
         });
 
+        $conn->on('message', function ($msg) use ($conn) {
+            echo "Received: {$msg}\n";
+            $conn->close();
+        });
+
+        $conn->send('Hello World!');
+
+        echo "\n\n\n";
         $loop->run();
     }
 }
