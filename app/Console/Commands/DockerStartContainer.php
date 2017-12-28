@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Services\WebSocketStream;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\Docker;
 use GuzzleHttp\Psr7;
@@ -9,7 +10,6 @@ use GuzzleHttp\Psr7\Stream;
 use Illuminate\Console\Command;
 use Ratchet\Client\WebSocket;
 use React\EventLoop\Factory;
-use React\Stream\DuplexResourceStream;
 
 class DockerStartContainer extends Command
 {
@@ -93,7 +93,7 @@ class DockerStartContainer extends Command
 
         $loop = Factory::create();
 
-        $conn = new DuplexResourceStream($stream, $loop);
+        $conn = new WebSocketStream($stream, $loop);
 
         $conn->on('data', function ($data) {
             echo $data;
