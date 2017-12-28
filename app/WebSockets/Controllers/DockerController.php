@@ -42,7 +42,6 @@ class DockerController implements MessageComponentInterface
             $this->tinkerContainer = new TinkerContainer();
             $this->tinkerContainer->start();
             $this->tinkerContainer->onMessage($this->loop, function ($message) use ($conn) {
-                echo "msg: {$message}";
                 $conn->send($message);
             });
         }
