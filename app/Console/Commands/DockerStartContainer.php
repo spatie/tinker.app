@@ -104,7 +104,7 @@ class DockerStartContainer extends Command
 
         $conn->on('message', function ($msg) use ($conn) {
             echo "Received: {$msg}\n";
-            $conn->close();
+            // $conn->close();
         });
 
         $conn->send('Hello World!');
