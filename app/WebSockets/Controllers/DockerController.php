@@ -33,11 +33,14 @@ class DockerController implements MessageComponentInterface
         if (! $this->tinkerContainer) {
             $this->tinkerContainer = new TinkerContainer();
             $this->tinkerContainer->start();
+            $this->tinkerContainer->attachWebSocketStream($conn);
         }
     }
 
     public function onMessage(ConnectionInterface $from, $msg)
     {
+        $this->tinkerContainer->sendToWebSocket($msg);
+
         echo sprintf('Connection %d sending message "%s" to other connection' . "\n", $from->resourceId, $msg);
     }
 }

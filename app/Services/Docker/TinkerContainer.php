@@ -2,9 +2,15 @@
 
 namespace App\Services\Docker;
 
+use App\Services\WebSocketConnection;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\Docker;
 use Docker\Stream\AttachWebsocketStream;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use Ratchet\Client\WebSocket;
+use Ratchet\ConnectionInterface;
+use React\EventLoop\Factory;
 
 class TinkerContainer
 {
@@ -13,6 +19,9 @@ class TinkerContainer
 
     /** @var \Docker\Docker */
     protected $docker;
+
+    /** @var \Ratchet\Client\WebSocket */
+    protected $webSocket;
 
     public function __construct(?Docker $docker = null)
     {
@@ -37,13 +46,30 @@ class TinkerContainer
         $this->docker->containerStart($this->name);
     }
 
-    public function getWebsocketStream(): AttachWebsocketStream
+    public function sendToWebSocket($message)
     {
-        return $this->docker->containerAttachWebsocket($this->name, [
+        $this->webSocket->send($message);
+    }
+
+    public function attachWebSocketStream(ConnectionInterface $clientConnection)
+    {
+        $response = $this->docker->containerAttachWebsocket($this->name, [
             'stream' => true,
             'stdout' => true,
             'stderr' => true,
             'stdin'  => true,
-        ]);
+        ], false);
+
+        $stream = $response->getBody()->detach();
+
+        $loop = Factory::create();
+
+        $connection = new WebSocketConnection($stream, $loop);
+
+        $this->webSocket = new WebSocket($connection, new Response, new Request('GET', '/ws'));
+
+        $this->webSocket->on('message', function ($msg) use ($clientConnection) {
+            $clientConnection->send($msg);
+        });
     }
 }

@@ -107,9 +107,8 @@ class DockerStartContainer extends Command
             // $conn->close();
         });
 
-        $conn->send('Hello World!');
+        // $conn->send('Hello World!');
 
-        echo "\n\n\n";
         $loop->run();
     }
 }
