@@ -70,7 +70,7 @@ class TinkerContainer
         $this->webSocket = new WebSocket($connection, new Response, new Request('GET', '/ws'));
 
         $this->webSocket->on('message', function ($msg) use ($clientConnection) {
-            echo $msg;
+            // echo $msg;
             $clientConnection->send($msg);
         });
 
