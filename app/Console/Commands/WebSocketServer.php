@@ -14,7 +14,7 @@ class WebSocketServer extends Command
 
     public function handle()
     {
-        $wsServer = new App();
+        $wsServer = new App('165.227.172.206', 8080, '0.0.0.0', null);
 
         $wsServer->route('', new DockerController(), ['*']);
 
