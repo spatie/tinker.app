@@ -3,6 +3,7 @@
 namespace App\WebSockets\Controllers;
 
 use \Ratchet\MessageComponentInterface;
+use App\Services\Docker\TinkerContainer;
 use Ratchet\ConnectionInterface;
 
 class DockerController implements MessageComponentInterface
@@ -10,7 +11,7 @@ class DockerController implements MessageComponentInterface
     /** @var \SplObjectStorage  */
     protected $clients;
 
-    // protected $docker =
+    protected $tinkerContainer;
 
     public function onClose(ConnectionInterface $conn)
     {
@@ -28,7 +29,11 @@ class DockerController implements MessageComponentInterface
     {
         echo "New connection! ({$conn->resourceId})\n";
 
-        // Create docker container
+        // Create docker container if we don't have one yet
+        if (! $this->tinkerContainer) {
+            $this->tinkerContainer = new TinkerContainer();
+            $this->tinkerContainer->start();
+        }
     }
 
     public function onMessage(ConnectionInterface $from, $msg)

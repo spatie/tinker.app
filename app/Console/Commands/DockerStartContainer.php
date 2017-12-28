@@ -83,18 +83,13 @@ class DockerStartContainer extends Command
             'stdout' => true,
             'stderr' => true,
             'stdin'  => true,
-        ], false);
+        ]);
 
         // dd($response);
 
-        $stream = $response->getBody()->detach();
-
-        /** @var \Http\Client\Socket\Stream */
-        $stream = Psr7\stream_for($stream);
-
         while (true) {
             // $stream->write('ejo');
-            echo $stream->read(8);
+            echo $response->read();
         }
     }
 }
