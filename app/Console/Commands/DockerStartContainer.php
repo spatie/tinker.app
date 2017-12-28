@@ -63,24 +63,33 @@ class DockerStartContainer extends Command
         });
 
         $attachStream->wait();
+
+        // This works for getting an interactive stream tho
+        $stream = $attachStream->getBody()->detach();
+
+        /** @var \Http\Client\Socket\Stream */
+        $stream = Psr7\stream_for($stream);
+
+        // dd($stream->isWritable());
     }
 
     protected function listenToWebsockets($docker, string $containerName)
     {
-        // Websocket API doesnt (on mac -> see gh issue)
-        $response = $docker->containerAttach($containerName, [
+        // Websocket API doesnt work on mac -> see gh issue
+
+        $response = $docker->containerAttachWebsocket($containerName, [
             'stream' => true,
             'stdout' => true,
             'stderr' => true,
             'stdin'  => true,
         ], false);
 
+        // dd($response);
+
         $stream = $response->getBody()->detach();
 
         /** @var \Http\Client\Socket\Stream */
         $stream = Psr7\stream_for($stream);
-
-        // dd($stream->isWritable());
 
         while (true) {
             // $stream->write('ejo');
