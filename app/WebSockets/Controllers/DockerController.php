@@ -41,7 +41,10 @@ class DockerController implements MessageComponentInterface
         if (! $this->tinkerContainer) {
             $this->tinkerContainer = new TinkerContainer();
             $this->tinkerContainer->start();
-            $this->tinkerContainer->attachWebSocketStream($conn, $this->loop);
+            $this->tinkerContainer->onMessage($this->loop, function ($message) use ($conn) {
+                echo "msg: {$message}";
+                $conn->send($message);
+            });
         }
     }
 

@@ -5,11 +5,9 @@ namespace App\Services\Docker;
 use App\Services\WebSocketConnection;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\Docker;
-use Docker\Stream\AttachWebsocketStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Ratchet\Client\WebSocket;
-use Ratchet\ConnectionInterface;
 use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 
@@ -52,7 +50,7 @@ class TinkerContainer
         $this->webSocket->send($message);
     }
 
-    public function attachWebSocketStream(ConnectionInterface $clientConnection, LoopInterface $loop)
+    public function onMessage(LoopInterface $loop, callback $callback)
     {
         $response = $this->docker->containerAttachWebsocket($this->name, [
             'stream' => true,
@@ -69,10 +67,7 @@ class TinkerContainer
 
         $this->webSocket = new WebSocket($connection, new Response, new Request('GET', '/ws'));
 
-        $this->webSocket->on('message', function ($msg) use ($clientConnection) {
-            // echo $msg;
-            $clientConnection->send($msg);
-        });
+        $this->webSocket->on('message', $callback);
 
         $loop->run();
     }
