@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\WebSockets\Controllers\DockerController;
 use Illuminate\Console\Command;
 use Ratchet\App;
+use React\EventLoop\Factory;
 
 class WebSocketServer extends Command
 {
@@ -14,9 +15,11 @@ class WebSocketServer extends Command
 
     public function handle()
     {
-        $wsServer = new App('localhost', 8080, '0.0.0.0', null);
+        $loop = Factory::create();
 
-        $wsServer->route('', new DockerController(), ['*']);
+        $wsServer = new App('localhost', 8080, '0.0.0.0', $loop);
+
+        $wsServer->route('', new DockerController($loop), ['*']);
 
         $wsServer->run();
     }

@@ -11,6 +11,7 @@ use GuzzleHttp\Psr7\Response;
 use Ratchet\Client\WebSocket;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\Factory;
+use React\EventLoop\LoopInterface;
 
 class TinkerContainer
 {
@@ -51,7 +52,7 @@ class TinkerContainer
         $this->webSocket->send($message);
     }
 
-    public function attachWebSocketStream(ConnectionInterface $clientConnection)
+    public function attachWebSocketStream(ConnectionInterface $clientConnection, LoopInterface $loop)
     {
         $response = $this->docker->containerAttachWebsocket($this->name, [
             'stream' => true,
@@ -62,7 +63,7 @@ class TinkerContainer
 
         $stream = $response->getBody()->detach();
 
-        $loop = Factory::create();
+        // $loop = Factory::create();
 
         $connection = new WebSocketConnection($stream, $loop);
 

@@ -5,6 +5,7 @@ namespace App\WebSockets\Controllers;
 use \Ratchet\MessageComponentInterface;
 use App\Services\Docker\TinkerContainer;
 use Ratchet\ConnectionInterface;
+use React\EventLoop\LoopInterface;
 
 class DockerController implements MessageComponentInterface
 {
@@ -12,6 +13,13 @@ class DockerController implements MessageComponentInterface
     protected $clients;
 
     protected $tinkerContainer;
+
+    protected $loop;
+
+    public function __construct(LoopInterface $loop)
+    {
+        $this->loop = $loop;
+    }
 
     public function onClose(ConnectionInterface $conn)
     {
@@ -33,7 +41,7 @@ class DockerController implements MessageComponentInterface
         if (! $this->tinkerContainer) {
             $this->tinkerContainer = new TinkerContainer();
             $this->tinkerContainer->start();
-            $this->tinkerContainer->attachWebSocketStream($conn);
+            $this->tinkerContainer->attachWebSocketStream($conn, $this->loop);
         }
     }
 
