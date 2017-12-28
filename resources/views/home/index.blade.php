@@ -11,9 +11,9 @@
       	var term = new Terminal();
         term.open(document.getElementById('#terminal'));
         term.write('Hello from \033[1;3;31mxterm.js\033[0m $ ')
-        
 
-        var socket = new WebSocket('ws://165.227.172.206/containers/tinker-FpGKTCmcAlY9npg0/attach/ws?stdin=1&stdout=1&stream=1');
+
+        var socket = new WebSocket('ws://165.227.172.206:8080/');
 
         term.attach(socket);  // Attach the above socket to `term`
       </script>
