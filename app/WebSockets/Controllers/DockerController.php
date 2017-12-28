@@ -51,6 +51,8 @@ class DockerController implements MessageComponentInterface
     {
         $this->tinkerContainer->sendToWebSocket($msg);
 
+        $from->send('ej');
+
         echo sprintf('Connection %d sending message "%s" to other connection' . "\n", $from->resourceId, $msg);
     }
 }
