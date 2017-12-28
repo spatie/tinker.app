@@ -50,7 +50,7 @@ class TinkerContainer
         $this->webSocket->send($message);
     }
 
-    public function onMessage(LoopInterface $loop, callback $callback)
+    public function onMessage(LoopInterface $loop, \Closure $callback)
     {
         $response = $this->docker->containerAttachWebsocket($this->name, [
             'stream' => true,
