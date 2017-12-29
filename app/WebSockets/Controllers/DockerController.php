@@ -2,10 +2,11 @@
 
 namespace App\WebSockets\Controllers;
 
-use \Ratchet\MessageComponentInterface;
+use App\Services\Client;
 use App\Services\Docker\TinkerContainer;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
+use \Ratchet\MessageComponentInterface;
 
 class DockerController implements MessageComponentInterface
 {
@@ -21,9 +22,22 @@ class DockerController implements MessageComponentInterface
         $this->loop = $loop;
     }
 
+    public function onOpen(ConnectionInterface $conn)
+    {
+        echo "New connection! ({$conn->resourceId})\n";
+
+        $client = new Client($conn, $this->loop);
+
+        $this->tinkerContainer = $client->tinkerContainer;
+
+        $this->clients = $client->clients;
+    }
+
     public function onClose(ConnectionInterface $conn)
     {
         echo "Connection {$conn->resourceId} has disconnected\n";
+
+        $this->clients->detach($conn);
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e)
@@ -31,20 +45,6 @@ class DockerController implements MessageComponentInterface
         echo "An error has occurred: {$e->getMessage()}\n";
 
         $conn->close();
-    }
-
-    public function onOpen(ConnectionInterface $conn)
-    {
-        echo "New connection! ({$conn->resourceId})\n";
-
-        // Create docker container if we don't have one yet
-        if (! $this->tinkerContainer) {
-            $this->tinkerContainer = new TinkerContainer();
-            $this->tinkerContainer->start();
-            $this->tinkerContainer->onMessage($this->loop, function ($message) use ($conn) {
-                $conn->send((string) $message);
-            });
-        }
     }
 
     public function onMessage(ConnectionInterface $from, $msg)
