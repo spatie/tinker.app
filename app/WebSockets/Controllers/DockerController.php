@@ -58,8 +58,8 @@ class DockerController implements MessageComponentInterface
 
     protected function getClientForConnection(ConnectionInterface $conn): ?Client
     {
-        return collect($this->clients)->each(function ($client, $key) use ($conn) {
-            return $client->connection == $conn ? $client : null;
+        return collect($this->clients)->first(function ($client, $key) use ($conn) {
+            return $client->connection == $conn;
         });
     }
 }
