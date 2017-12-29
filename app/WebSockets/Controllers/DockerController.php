@@ -20,17 +20,19 @@ class DockerController implements MessageComponentInterface
     public function __construct(LoopInterface $loop)
     {
         $this->loop = $loop;
+
+        $this->clients = new \SplObjectStorage();
     }
 
     public function onOpen(ConnectionInterface $conn)
     {
         echo "New connection! ({$conn->resourceId})\n";
 
+        $this->clients->attach($conn);
+
         $client = new Client($conn, $this->loop);
 
         $this->tinkerContainer = $client->tinkerContainer;
-
-        $this->clients = $client->clients;
     }
 
     public function onClose(ConnectionInterface $conn)
