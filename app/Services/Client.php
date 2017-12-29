@@ -10,12 +10,21 @@ class Client
 {
     public $tinkerContainer;
 
+    public $connection;
+
     public function __construct(ConnectionInterface $conn, LoopInterface $loop)
     {
+        $this->connection = $conn;
+
         $this->tinkerContainer = new TinkerContainer();
         $this->tinkerContainer->start();
         $this->tinkerContainer->onMessage($loop, function ($message) use ($conn) {
             $conn->send((string) $message);
         });
+    }
+
+    public function getConnection()
+    {
+        return $this->connection;
     }
 }
