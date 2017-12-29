@@ -13,8 +13,6 @@ class DockerController implements MessageComponentInterface
     /** @var \SplObjectStorage  */
     protected $clients;
 
-    protected $tinkerContainer;
-
     protected $loop;
 
     public function __construct(LoopInterface $loop)
@@ -28,18 +26,18 @@ class DockerController implements MessageComponentInterface
     {
         echo "New connection! ({$conn->resourceId})\n";
 
-        $this->clients->attach($conn);
-
         $client = new Client($conn, $this->loop);
 
-        $this->tinkerContainer = $client->tinkerContainer;
+        $this->clients->attach($client);
     }
 
     public function onClose(ConnectionInterface $conn)
     {
         echo "Connection {$conn->resourceId} has disconnected\n";
 
-        $this->clients->detach($conn);
+        $client = $this->getClientForConnection($conn);
+
+        $this->clients->detach($client);
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e)
@@ -51,8 +49,22 @@ class DockerController implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $from, $msg)
     {
-        $this->tinkerContainer->sendToWebSocket($msg);
+        $client = $this->getClientForConnection($from);
+
+        $client->tinkerContainer->sendToWebSocket($msg);
 
         echo sprintf('Connection %d sending message "%s" to other connection' . "\n", $from->resourceId, $msg);
+    }
+
+    protected function getClientForConnection(ConnectionInterface $conn): ?Client
+    {
+        foreach($this->clients as $client)
+        {
+            if($client->getConnection() == $conn){
+                return $client;
+            }
+        }
+
+        return null;
     }
 }
