@@ -60,7 +60,7 @@ class DockerController implements MessageComponentInterface
     {
         foreach($this->clients as $client)
         {
-            if($client->getConnection() == $conn){
+            if ($client->connection == $conn) {
                 return $client;
             }
         }

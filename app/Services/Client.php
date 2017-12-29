@@ -22,9 +22,4 @@ class Client
             $conn->send((string) $message);
         });
     }
-
-    public function getConnection()
-    {
-        return $this->connection;
-    }
 }
