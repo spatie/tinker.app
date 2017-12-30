@@ -49,8 +49,9 @@ class DockerController implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $from, $msg)
     {
-        echo $this->clients;
-        var_dump($this->clients);
+        foreach ($this->clients as $client) {
+            var_dump($client);
+        }
         //$client = $this->getClientForConnection($from);
         // echo $client;
         // var_dump($client);
