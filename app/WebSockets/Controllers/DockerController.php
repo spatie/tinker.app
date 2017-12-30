@@ -50,8 +50,8 @@ class DockerController implements MessageComponentInterface
     public function onMessage(ConnectionInterface $from, $msg)
     {
         $client = $this->getClientForConnection($from);
-        echo $client;
-        var_dump($client);
+        // echo $client;
+        // var_dump($client);
         //$client->tinkerContainer->sendToWebSocket($msg);
 
         //echo sprintf('Connection %d sending message "%s" to other connection' . "\n", $from->resourceId, $msg);
@@ -60,7 +60,9 @@ class DockerController implements MessageComponentInterface
     protected function getClientForConnection(ConnectionInterface $conn): ?Client
     {
         return collect($this->clients)->first(function ($client, $key) use ($conn) {
-            return $client->connection == $conn;
+            echo $client;
+            var_dump($client);
+            //return $client->connection == $conn;
         });
     }
 }
