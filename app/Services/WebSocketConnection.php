@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-// use \resource;
 use Evenement\EventEmitter;
 use React\EventLoop\LoopInterface;
 use React\Socket\ConnectionInterface;
@@ -19,7 +18,7 @@ class WebSocketConnection extends EventEmitter implements ConnectionInterface
     /** @var \React\Stream\DuplexResourceStream */
     private $input;
 
-    public function __construct(resource $resource, LoopInterface $loop)
+    public function __construct($resource, LoopInterface $loop)
     {
         $this->input = new DuplexResourceStream(
             $resource,
