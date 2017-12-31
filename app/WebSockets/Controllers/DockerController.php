@@ -2,11 +2,10 @@
 
 namespace App\WebSockets\Controllers;
 
+use \Ratchet\MessageComponentInterface;
 use App\Services\Client;
-use App\Services\Docker\TinkerContainer;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
-use \Ratchet\MessageComponentInterface;
 
 class DockerController implements MessageComponentInterface
 {
@@ -51,20 +50,19 @@ class DockerController implements MessageComponentInterface
     {
         $client = $this->getClientForConnection($from);
 
-        $client->tinkerContainer->sendToWebSocket($msg);
+        $client->sendToTinker($msg);
 
         echo sprintf('Connection %d sending message "%s" to other connection' . "\n", $from->resourceId, $msg);
     }
 
     protected function getClientForConnection(ConnectionInterface $conn): ?Client
     {
-        foreach($this->clients as $client)
-        {
-            if($client->getConnection() == $conn){
+        foreach ($this->clients as $client) {
+            if ($client->getConnection() == $conn) {
                 return $client;
             }
         }
 
-        return null;
+        return null; // throw exception or something?
     }
 }

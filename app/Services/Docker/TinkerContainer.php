@@ -69,6 +69,6 @@ class TinkerContainer
 
         $this->webSocket->on('message', $callback);
 
-        $loop->run();
+        // $loop->run();
     }
 }
