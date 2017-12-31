@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use \resource;
+// use \resource;
 use Evenement\EventEmitter;
 use React\EventLoop\LoopInterface;
 use React\Socket\ConnectionInterface;
