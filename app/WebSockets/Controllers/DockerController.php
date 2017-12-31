@@ -55,14 +55,10 @@ class DockerController implements MessageComponentInterface
         echo sprintf('Connection %d sending message "%s" to other connection' . "\n", $from->resourceId, $msg);
     }
 
-    protected function getClientForConnection(ConnectionInterface $conn): ?Client
+    protected function getClientForConnection(ConnectionInterface $connection): ?Client
     {
-        foreach ($this->clients as $client) {
-            if ($client->getConnection() == $conn) {
-                return $client;
-            }
-        }
-
-        return null; // throw exception or something?
+        return collect($this->clients)->first(function ($client, $key) use ($connection) {
+            return $client->getConnection() == $connection;
+        });
     }
 }
