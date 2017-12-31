@@ -18,12 +18,16 @@ class Client
     {
         $this->connection = $connection;
 
-        $this->tinkerContainer = new TinkerContainer();
+        $this->tinkerContainer = new TinkerContainer($loop);
 
         $this->tinkerContainer->start();
 
-        $this->tinkerContainer->onMessage($loop, function ($message) use ($connection) {
+        $this->tinkerContainer->onMessage(function ($message) use ($connection) {
             $connection->send((string) $message);
+        });
+
+        $this->tinkerContainer->onQuit(function ($message) use ($connection) {
+            $connection->close();
         });
     }
 

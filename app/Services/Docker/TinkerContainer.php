@@ -21,8 +21,12 @@ class TinkerContainer
     /** @var \Ratchet\Client\WebSocket */
     protected $webSocket;
 
-    public function __construct(?Docker $docker = null)
+    /** @var \React\EventLoop\LoopInterface */
+    protected $loop;
+
+    public function __construct(LoopInterface $loop, ?Docker $docker = null)
     {
+        $this->loop = $loop;
         $this->docker = $docker ?? Docker::create();
 
         $this->name = 'tinker-'.str_random();
@@ -42,6 +46,19 @@ class TinkerContainer
     public function start(): self
     {
         $this->docker->containerStart($this->name);
+
+        $response = $this->docker->containerAttachWebsocket($this->name, [
+            'stream' => true,
+            'stdout' => true,
+            'stderr' => true,
+            'stdin'  => true,
+        ], false);
+
+        $stream = $response->getBody()->detach();
+
+        $connection = new WebSocketConnection($stream, $this->loop);
+
+        $this->webSocket = new WebSocket($connection, new Response, new Request('GET', '/ws'));
 
         return $this;
     }
@@ -65,21 +82,17 @@ class TinkerContainer
         $this->webSocket->send($message);
     }
 
-    public function onMessage(LoopInterface $loop, \Closure $callback)
+    public function onMessage(\Closure $callback): self
     {
-        $response = $this->docker->containerAttachWebsocket($this->name, [
-            'stream' => true,
-            'stdout' => true,
-            'stderr' => true,
-            'stdin'  => true,
-        ], false);
-
-        $stream = $response->getBody()->detach();
-
-        $connection = new WebSocketConnection($stream, $loop);
-
-        $this->webSocket = new WebSocket($connection, new Response, new Request('GET', '/ws'));
-
         $this->webSocket->on('message', $callback);
+
+        return $this;
+    }
+
+    public function onQuit(\Closure $callback): self
+    {
+        $this->webSocket->on('quit', $callback);
+
+        return $this;
     }
 }
