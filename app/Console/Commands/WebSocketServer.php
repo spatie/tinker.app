@@ -17,7 +17,7 @@ class WebSocketServer extends Command
     {
         $loop = Factory::create();
 
-        $wsServer = new App(env('WS_HOST'), 8080, '0.0.0.0', $loop);
+        $wsServer = new App(config('websockets.host'), config('websockets.port'), '0.0.0.0', $loop);
 
         $wsServer->route('', new DockerController($loop), ['*']);
 
