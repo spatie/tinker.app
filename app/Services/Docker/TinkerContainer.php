@@ -2,7 +2,6 @@
 
 namespace App\Services\Docker;
 
-use App\Services\WebSocketConnection;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\Docker;
 use GuzzleHttp\Psr7\Request;

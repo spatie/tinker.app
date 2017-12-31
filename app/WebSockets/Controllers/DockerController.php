@@ -2,8 +2,8 @@
 
 namespace App\WebSockets\Controllers;
 
+use \App\WebSockets\Client;
 use \Ratchet\MessageComponentInterface;
-use App\Services\Client;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
 

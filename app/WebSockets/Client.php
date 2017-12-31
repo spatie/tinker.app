@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services;
+namespace App\WebSockets;
 
 use App\Services\Docker\TinkerContainer;
 use Ratchet\ConnectionInterface;
