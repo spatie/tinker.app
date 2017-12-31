@@ -89,9 +89,9 @@ class TinkerContainer
         return $this;
     }
 
-    public function onQuit(\Closure $callback): self
+    public function onClose(\Closure $callback): self
     {
-        $this->webSocket->on('quit', $callback);
+        $this->webSocket->on('close', $callback);
 
         return $this;
     }
