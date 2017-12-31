@@ -8,7 +8,6 @@ use Docker\Docker;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Ratchet\Client\WebSocket;
-use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 
 class TinkerContainer
@@ -40,9 +39,25 @@ class TinkerContainer
         $this->docker->containerCreate($containerCreatePostBody, ['name' => $this->name]);
     }
 
-    public function start()
+    public function start(): self
     {
         $this->docker->containerStart($this->name);
+
+        return $this;
+    }
+
+    public function stop(): self
+    {
+        $this->docker->containerStop($this->name);
+
+        return $this;
+    }
+
+    public function remove(): self
+    {
+        $this->docker->containerDelete($this->name);
+
+        return $this;
     }
 
     public function sendToWebSocket($message)
@@ -61,14 +76,10 @@ class TinkerContainer
 
         $stream = $response->getBody()->detach();
 
-        // $loop = Factory::create();
-
         $connection = new WebSocketConnection($stream, $loop);
 
         $this->webSocket = new WebSocket($connection, new Response, new Request('GET', '/ws'));
 
         $this->webSocket->on('message', $callback);
-
-        // $loop->run();
     }
 }

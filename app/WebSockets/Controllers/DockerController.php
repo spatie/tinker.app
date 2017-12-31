@@ -36,6 +36,8 @@ class DockerController implements MessageComponentInterface
 
         $client = $this->getClientForConnection($conn);
 
+        $client->cleanupContainer();
+
         $this->clients->detach($client);
     }
 

@@ -13,7 +13,7 @@
         term.write('Hello from \033[1;3;31mxterm.js\033[0m $ ')
 
 
-        var socket = new WebSocket('ws://localhost:{{ config('websockets.port') }}/');
+        var socket = new WebSocket('ws://{{ config('websockets.host') }}:{{ config('websockets.port') }}/');
 
         term.attach(socket);  // Attach the above socket to `term`
       </script>

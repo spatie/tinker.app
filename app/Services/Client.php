@@ -27,6 +27,14 @@ class Client
         });
     }
 
+    public function cleanupContainer()
+    {
+        $this
+            ->tinkerContainer
+            ->stop()
+            ->remove();
+    }
+
     public function sendToTinker(string $message)
     {
         $this->tinkerContainer->sendToWebSocket($message);
