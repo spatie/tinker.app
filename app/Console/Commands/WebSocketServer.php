@@ -5,7 +5,10 @@ namespace App\Console\Commands;
 use App\WebSockets\Controllers\DockerController;
 use Illuminate\Console\Command;
 use Ratchet\App;
+use Ratchet\Http\OriginCheck;
+use Ratchet\WebSocket\WsServer;
 use React\EventLoop\Factory;
+use Symfony\Component\Routing\Route;
 
 class WebSocketServer extends Command
 {
@@ -17,10 +20,18 @@ class WebSocketServer extends Command
     {
         $loop = Factory::create();
 
-        $wsServer = new App(config('websockets.host'), config('websockets.port'), '0.0.0.0', $loop);
+        $httpHost = config('websockets.host');
 
-        $wsServer->route('', new DockerController($loop), ['*']);
+        $ioServer = new App($httpHost, config('websockets.port'), '0.0.0.0', $loop);
 
-        $wsServer->run();
+        // $ioServer->route('/{sessionId}', new DockerController($loop), config('websockets.allowedOrigins'));
+
+        $decoratedController = new WsServer(new DockerController($loop));
+        $decoratedController->enableKeepAlive($loop);
+        $decoratedController = new OriginCheck($decoratedController, config('websockets.allowedOrigins'));
+
+        $ioServer->routes->add('tinker', new Route('/{sessionId}', ['_controller' => $decoratedController, 'sessionId' => null], ['Origin' => $httpHost], [], $httpHost, [], ['GET']));
+
+        $ioServer->run();
     }
 }
