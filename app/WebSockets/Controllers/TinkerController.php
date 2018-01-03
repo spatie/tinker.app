@@ -4,12 +4,17 @@ namespace App\WebSockets\Controllers;
 
 use \App\WebSockets\Client;
 use \Ratchet\MessageComponentInterface;
+use App\Services\Docker\ContainerManager;
+use App\Services\Docker\TinkerContainer;
 use GuzzleHttp\Psr7\Request;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
 
-class DockerController implements MessageComponentInterface
+class TinkerController implements MessageComponentInterface
 {
+    /** @var \App\Services\Docker\ContainerManager */
+    protected $containerManager;
+
     /** @var \SplObjectStorage  */
     protected $clients;
 
@@ -20,17 +25,33 @@ class DockerController implements MessageComponentInterface
         $this->loop = $loop;
 
         $this->clients = new \SplObjectStorage();
+
+        $this->containerManager = new ContainerManager($loop);
     }
 
     public function onOpen(ConnectionInterface $connection)
     {
-        $sessionId = $this->getQueryParam($connection->httpRequest, 'sessionId');
-
-        dump($sessionId);
-
         echo "New connection! ({$connection->resourceId})\n";
 
+        $connection->send("Loading Tinker session...\n\r");
+
+        $sessionId = $this->getQueryParam($connection->httpRequest, 'sessionId');
+
+        if ($sessionId) {
+            $tinkerContainer = $this->containerManager->findBySessionId($sessionId);
+
+            if (! $tinkerContainer) {
+                $connection->send("Session id `{$sessionId}` is invalid.\n\r");
+                $connection->close();
+            }
+        } else {
+            $tinkerContainer = TinkerContainer::create($this->loop);
+            $tinkerContainer->start();
+        }
+
         $client = new Client($connection, $this->loop);
+
+        $client->attachContainer($tinkerContainer);
 
         $this->clients->attach($client);
     }

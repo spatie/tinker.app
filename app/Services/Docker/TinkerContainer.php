@@ -23,12 +23,18 @@ class TinkerContainer
     /** @var \React\EventLoop\LoopInterface */
     protected $loop;
 
-    public function __construct(LoopInterface $loop, ?Docker $docker = null)
+    public function __construct(LoopInterface $loop, string $name)
     {
         $this->loop = $loop;
-        $this->docker = $docker ?? Docker::create();
 
-        $this->name = 'tinker-'.str_random();
+        $this->docker = Docker::create();
+
+        $this->name = $name;
+    }
+
+    public static function create(LoopInterface $loop): self
+    {
+        $name = 'tinker-'.str_random();
 
         $containerCreatePostBody = new ContainersCreatePostBody();
         $containerCreatePostBody->setImage('spatie/tinker.sh-image');
@@ -39,7 +45,9 @@ class TinkerContainer
         $containerCreatePostBody->setAttachStdout(true);
         $containerCreatePostBody->setAttachStderr(true);
 
-        $this->docker->containerCreate($containerCreatePostBody, ['name' => $this->name]);
+        Docker::create()->containerCreate($containerCreatePostBody, ['name' => $name]);
+
+        return new static($loop, $name);
     }
 
     public function start(): self

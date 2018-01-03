@@ -11,26 +11,33 @@ class Client
     /** @var \App\Services\Docker\TinkerContainer */
     protected $tinkerContainer;
 
+    /** @var \React\EventLoop\LoopInterface */
+    protected $loop;
+
     /** @var \Ratchet\ConnectionInterface */
     protected $connection;
 
     public function __construct(ConnectionInterface $connection, LoopInterface $loop)
     {
         $this->connection = $connection;
+        $this->loop = $loop;
+    }
 
-        $this->tinkerContainer = new TinkerContainer($loop);
+    public function attachContainer(TinkerContainer $tinkerContainer): self
+    {
+        $this->tinkerContainer = $tinkerContainer;
 
-        $this->tinkerContainer->start();
-
-        $this->tinkerContainer->onMessage(function ($message) use ($connection) {
-            $connection->send((string) $message);
+        $this->tinkerContainer->onMessage(function ($message) {
+            $this->connection->send((string) $message);
         });
 
-        $this->tinkerContainer->onClose(function ($message) use ($connection) {
+        $this->tinkerContainer->onClose(function ($message) {
             echo "Connection to container lost; closing websocket to client {$connection->resourceId}\n";
 
-            $connection->close();
+            $this->connection->close();
         });
+
+        return $this;
     }
 
     public function cleanupContainer()

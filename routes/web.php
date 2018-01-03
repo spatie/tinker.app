@@ -11,4 +11,4 @@
 |
 */
 
-Route::view('/', 'terminal');
+Route::get('/', 'TinkerController');

@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\WebSockets\Controllers\DockerController;
+use App\WebSockets\Controllers\TinkerController;
 use Illuminate\Console\Command;
 use Ratchet\App;
 use Ratchet\Http\OriginCheck;
@@ -26,9 +26,9 @@ class WebSocketServer extends Command
 
         $ioServer = new App($host, config('websockets.port'), '0.0.0.0', $loop);
 
-        // $ioServer->route('', new DockerController($loop), config('websockets.allowedOrigins'));
+        // $ioServer->route('', new TinkerController($loop), config('websockets.allowedOrigins'));
 
-        $decoratedController = new WsServer(new DockerController($loop));
+        $decoratedController = new WsServer(new TinkerController($loop));
         $decoratedController->enableKeepAlive($loop);
         $decoratedController = new OriginCheck($decoratedController, $allowedOrigins);
 
