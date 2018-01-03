@@ -67,9 +67,10 @@ class TinkerController implements MessageComponentInterface
 
         $client = $this->getClientForConnection($connection);
 
-        $client->cleanupContainer();
-
-        $this->clients->detach($client);
+        if ($client) {
+            $client->cleanupContainer();
+            $this->clients->detach($client);
+        }
     }
 
     public function onError(ConnectionInterface $connection, \Exception $e)

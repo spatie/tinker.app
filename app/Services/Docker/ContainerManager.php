@@ -26,7 +26,7 @@ class ContainerManager
         $containers = collect($docker->containerList());
 
         $container = $containers->first(function (ContainerSummaryItem $container) use ($name) {
-            return array_has($container->getNames(), $name);
+            return in_array('/'.$name, $container->getNames());
         });
 
         if (! $container) {
