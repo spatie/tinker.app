@@ -38,6 +38,9 @@ class WebSocketServer extends Command
 
         $ioServer->routes->add('tinker', new Route('/{sessionId}', ['_controller' => $decoratedController, 'sessionId' => null], ['Origin' => $host], [], $host, [], ['GET']));
 
+        $this->info("WebSocket server started on {$host}:{$port}");
+        $this->comment('Allowed origins: '.implode(', ', $allowedOrigins));
+
         $ioServer->run();
     }
 }
