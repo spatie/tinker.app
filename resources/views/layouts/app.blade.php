@@ -9,7 +9,7 @@
 
         <title>Tinker.js</title>
     </head>
-    <body>
+    <body class="w-screen h-screen">
         @yield('content')
 
         <script src="{{ asset('js/app.js') }}"></script>
