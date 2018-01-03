@@ -3,10 +3,9 @@
 namespace App\WebSockets\Controllers;
 
 use \App\WebSockets\Client;
-use \Ratchet\WebSocket\MessageComponentInterface;
+use \Ratchet\MessageComponentInterface;
 use GuzzleHttp\Psr7\Request;
 use Ratchet\ConnectionInterface;
-use Ratchet\RFC6455\Messaging\MessageInterface;
 use React\EventLoop\LoopInterface;
 
 class DockerController implements MessageComponentInterface
@@ -54,7 +53,7 @@ class DockerController implements MessageComponentInterface
         $connection->close();
     }
 
-    public function onMessage(ConnectionInterface $from, MessageInterface $msg)
+    public function onMessage(ConnectionInterface $from, $msg)
     {
         $client = $this->getClientForConnection($from);
 

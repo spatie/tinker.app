@@ -26,6 +26,8 @@ class WebSocketServer extends Command
 
         // $ioServer->route('/{sessionId}', new DockerController($loop), config('websockets.allowedOrigins'));
 
+        // WIP:
+
         $decoratedController = new WsServer(new DockerController($loop));
         $decoratedController->enableKeepAlive($loop);
         $decoratedController = new OriginCheck($decoratedController, config('websockets.allowedOrigins'));
