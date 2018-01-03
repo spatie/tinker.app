@@ -32,7 +32,7 @@ class Client
         });
 
         $this->tinkerContainer->onClose(function ($message) {
-            echo "Connection to container lost; closing websocket to client {$connection->resourceId}\n";
+            echo "Connection to container lost; closing websocket to client {$this->connection->resourceId}\n";
 
             $this->connection->close();
         });
