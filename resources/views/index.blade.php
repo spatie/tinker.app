@@ -16,5 +16,6 @@
 
         term.attach(socket);  // Attach the above socket to `term`
       </script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/xterm/2.9.2/xterm.js"></script>
     </body>
   </html>

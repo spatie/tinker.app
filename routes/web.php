@@ -11,4 +11,4 @@
 |
 */
 
-Route::view('/', 'home.index');
+Route::view('/', 'terminal');

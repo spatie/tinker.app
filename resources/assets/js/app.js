@@ -1,18 +1,14 @@
-/**
- * Bootstrap the application. This includes all setup that doesn't really *do*
- * anything.
- */
+import 'babel-polyfill';
 
-require('./bootstrap');
+import Terminal from 'xterm';
 
-/**
- * Finally, we'll mount our Vue application.
- */
+Terminal.loadAddon('fit');
+Terminal.loadAddon('attach');
 
-const Vue = require('vue');
+const xterm = new Terminal({ focus: true });
+xterm.open(document.getElementById('#terminal'), true);
 
-Vue.component('example', require('./components/Example.vue'));
+const socket = new WebSocket('ws://localhost:8080/');
 
-new Vue({
-    el: '#app',
-});
+xterm.attach(socket);
+xterm.fit();
