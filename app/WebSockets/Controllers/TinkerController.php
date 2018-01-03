@@ -43,6 +43,10 @@ class TinkerController implements MessageComponentInterface
             if (! $tinkerContainer) {
                 $connection->send("Session id `{$sessionId}` is invalid.\n\r");
                 $connection->close();
+
+                return;
+            } else {
+                $connection->send("Session id `{$sessionId}` found.\n\r");
             }
         } else {
             $tinkerContainer = TinkerContainer::create($this->loop);
