@@ -50,9 +50,11 @@ class TinkerContainer
         return new static($loop, $name);
     }
 
-    public function start(): self
+    protected function attachToWebsocket()
     {
-        $this->docker->containerStart($this->name);
+        if ($this->webSocket) {
+            return;
+        }
 
         $response = $this->docker->containerAttachWebsocket($this->name, [
             'stream' => true,
@@ -66,6 +68,11 @@ class TinkerContainer
         $connection = new WebSocketConnection($stream, $this->loop);
 
         $this->webSocket = new WebSocket($connection, new Response, new Request('GET', '/ws'));
+    }
+
+    public function start(): self
+    {
+        $this->docker->containerStart($this->name);
 
         return $this;
     }
@@ -86,11 +93,15 @@ class TinkerContainer
 
     public function sendToWebSocket($message)
     {
+        $this->attachToWebsocket();
+
         $this->webSocket->send($message);
     }
 
     public function onMessage(\Closure $callback): self
     {
+        $this->attachToWebsocket();
+
         $this->webSocket->on('message', $callback);
 
         return $this;
@@ -98,6 +109,8 @@ class TinkerContainer
 
     public function onClose(\Closure $callback): self
     {
+        $this->attachToWebsocket();
+
         $this->webSocket->on('close', $callback);
 
         return $this;
