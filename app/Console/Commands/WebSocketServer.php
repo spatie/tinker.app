@@ -24,15 +24,15 @@ class WebSocketServer extends Command
 
         $ioServer = new App($httpHost, config('websockets.port'), '0.0.0.0', $loop);
 
-        // $ioServer->route('/{sessionId}', new DockerController($loop), config('websockets.allowedOrigins'));
+        $ioServer->route('/{sessionId}', new DockerController($loop), config('websockets.allowedOrigins'));
 
         // WIP:
 
-        $decoratedController = new WsServer(new DockerController($loop));
-        $decoratedController->enableKeepAlive($loop);
-        $decoratedController = new OriginCheck($decoratedController, config('websockets.allowedOrigins'));
+        // $decoratedController = new WsServer(new DockerController($loop));
+        // $decoratedController->enableKeepAlive($loop);
+        // $decoratedController = new OriginCheck($decoratedController, config('websockets.allowedOrigins'));
 
-        $ioServer->routes->add('tinker', new Route('/{sessionId}', ['_controller' => $decoratedController, 'sessionId' => null], ['Origin' => $httpHost], [], $httpHost, [], ['GET']));
+        // $ioServer->routes->add('tinker', new Route('/{sessionId}', ['_controller' => $decoratedController, 'sessionId' => null], ['Origin' => $httpHost], [], $httpHost, [], ['GET']));
 
         $ioServer->run();
     }
