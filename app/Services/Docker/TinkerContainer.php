@@ -31,7 +31,7 @@ class TinkerContainer
         $this->name = 'tinker-'.str_random();
 
         $containerCreatePostBody = new ContainersCreatePostBody();
-        $containerCreatePostBody->setImage('alexvanderbist/tinker-sh-image');
+        $containerCreatePostBody->setImage('spatie/tinker.sh-image');
         $containerCreatePostBody->setTty(true);
         $containerCreatePostBody->setOpenStdin(true); // -i interactive flag = keep stdin open even when not attached
         // $containerCreatePostBody->setStdinOnce(true); // close stdin after client dc
