@@ -20,19 +20,23 @@ class WebSocketServer extends Command
     {
         $loop = Factory::create();
 
-        $httpHost = config('websockets.host');
+        $host = config('websockets.host');
+        $port = config('websockets.port');
+        $allowedOrigins = config('websockets.allowedOrigins');
 
-        $ioServer = new App($httpHost, config('websockets.port'), '0.0.0.0', $loop);
+        $ioServer = new App($host, config('websockets.port'), '0.0.0.0', $loop);
 
-        $ioServer->route('', new DockerController($loop), config('websockets.allowedOrigins'));
+        // $ioServer->route('', new DockerController($loop), config('websockets.allowedOrigins'));
 
-        // WIP:
+        $decoratedController = new WsServer(new DockerController($loop));
+        $decoratedController->enableKeepAlive($loop);
+        $decoratedController = new OriginCheck($decoratedController, $allowedOrigins);
 
-        // $decoratedController = new WsServer(new DockerController($loop));
-        // $decoratedController->enableKeepAlive($loop);
-        // $decoratedController = new OriginCheck($decoratedController, config('websockets.allowedOrigins'));
+        foreach ($allowedOrigins as $allowedOrgin) {
+            $ioServer->flashServer->app->addAllowedAccess($allowedOrgin, $port);
+        }
 
-        // $ioServer->routes->add('tinker', new Route('/{sessionId}', ['_controller' => $decoratedController, 'sessionId' => null], ['Origin' => $httpHost], [], $httpHost, [], ['GET']));
+        $ioServer->routes->add('tinker', new Route('/{sessionId}', ['_controller' => $decoratedController, 'sessionId' => null], ['Origin' => $host], [], $host, [], ['GET']));
 
         $ioServer->run();
     }
