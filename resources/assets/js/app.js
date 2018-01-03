@@ -8,7 +8,7 @@ Terminal.loadAddon('attach');
 const xterm = new Terminal({ focus: true });
 xterm.open(document.getElementById('#terminal'), true);
 
-const socket = new WebSocket('ws://localhost:8080/');
+const socket = new WebSocket(`ws://${window.webSocket.host}:${window.webSocket.port}/`);
 
 xterm.attach(socket);
 xterm.fit();
