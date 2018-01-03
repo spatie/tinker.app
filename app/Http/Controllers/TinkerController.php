@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 class TinkerController extends Controller
 {
-    public function __invoke(?string $sessionId = null)
+    public function __invoke(string $sessionId = '')
     {
-        if (! $sessionId) {
-        }
-
-        return view('terminal');
+        return view('terminal', compact('sessionId'));
     }
 }

@@ -7,4 +7,10 @@
   <div id="terminal" class="m-4 absolute pin"></div>
 </div>
 
+<script>
+    window.webSocket = @json(config('websockets'));
+
+    window.sessionId = @json($sessionId);
+</script>
+
 @endsection

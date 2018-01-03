@@ -11,4 +11,4 @@
 |
 */
 
-Route::get('/', 'TinkerController');
+Route::get('/{sessionId?}', 'TinkerController');

@@ -47,6 +47,7 @@ class TinkerController implements MessageComponentInterface
         } else {
             $tinkerContainer = TinkerContainer::create($this->loop);
             $tinkerContainer->start();
+            $connection->send("New Tinker session created ({$tinkerContainer->getName()})\n\r");
         }
 
         $client = new Client($connection, $this->loop);

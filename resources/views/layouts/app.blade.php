@@ -12,10 +12,6 @@
     <body class="w-screen h-screen">
         @yield('content')
 
-        <script>
-            window.webSocket = @json(config('websockets'));
-        </script>
-
         <script src="{{ asset('js/app.js') }}"></script>
     </body>
 </html>
