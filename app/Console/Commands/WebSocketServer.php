@@ -24,7 +24,7 @@ class WebSocketServer extends Command
 
         $ioServer = new App($httpHost, config('websockets.port'), '0.0.0.0', $loop);
 
-        $ioServer->route('/{sessionId}', new DockerController($loop), config('websockets.allowedOrigins'));
+        $ioServer->route('', new DockerController($loop), config('websockets.allowedOrigins'));
 
         // WIP:
 
