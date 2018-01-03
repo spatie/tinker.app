@@ -3,6 +3,8 @@
 
 @section('content')
 
-<div id="terminal" class="absolute pin"></div>
+<div class="w-screen h-screen bg-black">
+  <div id="terminal" class="m-4 absolute pin"></div>
+</div>
 
 @endsection

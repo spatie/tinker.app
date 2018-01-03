@@ -1,1 +1,9 @@
 @import "xterm/src/xterm.css";
+
+.terminal .xterm-viewport {
+    background-color: config('colors.black');
+}
+
+.terminal {
+    background-color: config('colors.black');
+}

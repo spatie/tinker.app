@@ -37,43 +37,44 @@ mix
             chunkFilename: 'js/[name].js',
         };
 
-        if (mix.inProduction()) {
-            config.plugins = [
-                new PurgecssPlugin({
-                    paths: glob.sync([
-                        path.join(__dirname, 'app/**/*.php'),
-                        path.join(__dirname, 'resources/views/**/*.blade.php'),
-                        path.join(__dirname, 'resources/assets/js/**/*.vue'),
-                        path.join(__dirname, 'resources/assets/js/**/*.js'),
-                        path.join(__dirname, 'vendor/spatie/menu/**/*.php'),
+        /*
+         * Purge CSS - commented out because it keeps removing xterms styles/colors 😠
+         */
 
-                        // Blender css paths. In the future it would be preferable
-                        // to simply ignore all of blender-css by extracting all
-                        // selectors from the dist .css file provided by the
-                        // package, but it's currently not possible to add
-                        // css paths to Purgecss via the webpack plugin.
-                        path.join(__dirname, 'node_modules/@spatie/blender-css/**/*.scss'),
-                        path.join(__dirname, 'node_modules/datatables/**/*.js'),
-                        path.join(__dirname, 'node_modules/jquery-confirm/**/*.js'),
-                        path.join(__dirname, 'node_modules/select2/**/*.js'),
-                    ]),
-                    whitelistPatterns: [
-                        /fa-/, // FontAwesome icon font selectors
-                        /re-/, // Redactor icon font selectors
-                    ],
-                    extractors: [
-                        {
-                            extractor: class {
-                                static extract(content) {
-                                    return content.match(/[A-z0-9-:\/]+/g) || [];
-                                }
-                            },
-                            extensions: ['html', 'js', 'php', 'scss', 'vue'],
-                        },
-                    ],
-                }),
-            ];
-        }
+        // if (mix.inProduction()) {
+        //     config.plugins = [
+        //         new PurgecssPlugin({
+        //             paths: glob.sync([
+        //                 path.join(__dirname, 'app/**/*.php'),
+        //                 path.join(__dirname, 'resources/views/**/*.blade.php'),
+        //                 path.join(__dirname, 'resources/assets/js/**/*.vue'),
+        //                 path.join(__dirname, 'resources/assets/js/**/*.js'),
+
+        //                 // Blender css paths. In the future it would be preferable
+        //                 // to simply ignore all of blender-css by extracting all
+        //                 // selectors from the dist .css file provided by the
+        //                 // package, but it's currently not possible to add
+        //                 // css paths to Purgecss via the webpack plugin.
+        //                 path.join(__dirname, 'node_modules/xterm/**/*.css'),
+        //                 path.join(__dirname, 'node_modules/xterm/**/*.js'),
+        //             ]),
+        //             whitelistPatterns: [
+        //                 /fa-/, // FontAwesome icon font selectors
+        //                 /re-/, // Redactor icon font selectors
+        //             ],
+        //             extractors: [
+        //                 {
+        //                     extractor: class {
+        //                         static extract(content) {
+        //                             return content.match(/[A-z0-9-:\/]+/g) || [];
+        //                         }
+        //                     },
+        //                     extensions: ['html', 'js', 'php', 'scss', 'vue'],
+        //                 },
+        //             ],
+        //         }),
+        //     ];
+        // }
 
         return config;
     });
