@@ -38,11 +38,11 @@ class EventHandler implements MessageComponentInterface
 
         $connection->send("Loading Tinker session...\n\r");
 
-        $sessionId = $this->getQueryParam($connection->httpRequest, 'sessionId');
-
         $client = new Client($connection, $this->loop);
 
-        $tinkerContainer = $this->getTinkerContainer();
+        $sessionId = $this->getQueryParam($connection->httpRequest, 'sessionId');
+
+        $tinkerContainer = $this->getTinkerContainer($sessionId);
 
         if (!$tinkerContainer) {
             return;
