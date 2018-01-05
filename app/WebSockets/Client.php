@@ -10,7 +10,7 @@ use PartyLine;
 class Client
 {
     /** @var \App\Services\Docker\Container */
-    protected $tinkerContainer;
+    protected $container;
 
     /** @var \React\EventLoop\LoopInterface */
     protected $loop;
@@ -25,15 +25,15 @@ class Client
         $this->loop = $loop;
     }
 
-    public function attachContainer(Container $tinkerContainer): self
+    public function attachContainer(Container $container): self
     {
-        $this->tinkerContainer = $tinkerContainer;
+        $this->container = $container;
 
-        $this->tinkerContainer->onMessage(function ($message) {
+        $this->container->onMessage(function ($message) {
             $this->connection->send((string) $message);
         });
 
-        $this->tinkerContainer->onClose(function ($message) {
+        $this->container->onClose(function ($message) {
             PartyLine::error("Connection to container lost; closing websocket to client {$this->connection->resourceId}");
 
             $this->connection->close();
@@ -45,14 +45,14 @@ class Client
     public function cleanupContainer()
     {
         $this
-            ->tinkerContainer
+            ->container
             ->stop()
             ->remove();
     }
 
     public function sendToTinker(string $message)
     {
-        $this->tinkerContainer->sendToWebSocket($message);
+        $this->container->sendToWebSocket($message);
     }
 
     public function getConnection(): ConnectionInterface
