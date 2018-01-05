@@ -6,7 +6,7 @@ use Docker\API\Model\ContainerSummaryItem;
 use Docker\Docker;
 use React\EventLoop\LoopInterface;
 
-class Containers
+class ContainerRepository
 {
     /** @var \Illuminate\Support\Collection */
     protected $tinkerContainers;
