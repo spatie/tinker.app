@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\WebSockets\Controllers\TinkerController;
 use Illuminate\Console\Command;
+use League\Uri\Schemes\Ws;
 use Ratchet\App;
 use Ratchet\Http\OriginCheck;
 use Ratchet\WebSocket\WsServer;
@@ -14,33 +15,56 @@ class WebSocketServer extends Command
 {
     protected $signature = 'websocket:init';
 
-    protected $description = 'Command description';
+    protected $description = 'Start the browser faceing websocket connection';
+
+    /** @var \Ratchet\WebSocket\WsServer */
+    protected $websocketServer;
 
     public function handle()
     {
-        $loop = Factory::create();
+        $eventLoop = Factory::create();
 
-        $host = config('websockets.host');
-        $port = config('websockets.port');
+        $ratchetApp = new App(
+            config('websockets.host'),
+            config('websockets.port'),
+            '0.0.0.0',
+            $eventLoop
+        );
+
+        $this->websocketServer = new WsServer(new TinkerController($eventLoop));
+        $this->websocketServer->enableKeepAlive($eventLoop);
+
+        $this->addAllowedOrigins($ratchetApp);
+
+        $ratchetApp->routes->add('tinker', $this->getRoute());
+
+        $this->info('WebSocket server started on ' . config('websockets.host') . ':' . config('websockets.host'));
+        $this->comment('Allowed origins: '.implode(', ', config('websockets.allowedOrigins')));
+
+        $ratchetApp->run();
+    }
+
+    protected function addAllowedOrigins(App $ratchetApp)
+    {
         $allowedOrigins = config('websockets.allowedOrigins');
+        $port = config('websockets.port');
 
-        $ioServer = new App($host, config('websockets.port'), '0.0.0.0', $loop);
-
-        // $ioServer->route('', new TinkerController($loop), config('websockets.allowedOrigins'));
-
-        $decoratedController = new WsServer(new TinkerController($loop));
-        $decoratedController->enableKeepAlive($loop);
-        $decoratedController = new OriginCheck($decoratedController, $allowedOrigins);
+        $this->websocketServer = new OriginCheck($this->websocketServer, $allowedOrigins);
 
         foreach ($allowedOrigins as $allowedOrgin) {
-            $ioServer->flashServer->app->addAllowedAccess($allowedOrgin, $port);
+            $ratchetApp->flashServer->app->addAllowedAccess($allowedOrgin, $port);
         }
+    }
 
-        $ioServer->routes->add('tinker', new Route('/{sessionId}', ['_controller' => $decoratedController, 'sessionId' => null], ['Origin' => $host], [], $host, [], ['GET']));
-
-        $this->info("WebSocket server started on {$host}:{$port}");
-        $this->comment('Allowed origins: '.implode(', ', $allowedOrigins));
-
-        $ioServer->run();
+    protected function getRoute(): Route
+    {
+        return new Route('/{sessionId}', [
+            '_controller' => $this->websocketServer,
+            'sessionId' => null],
+            ['Origin' => config('websockets.host')],
+            [],
+            config('websockets.host'),
+            [],
+            ['GET']);
     }
 }
