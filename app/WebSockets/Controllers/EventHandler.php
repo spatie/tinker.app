@@ -109,7 +109,7 @@ class EventHandler implements MessageComponentInterface
     protected function getClientForConnection(ConnectionInterface $connection): ?Client
     {
         return collect($this->clients)->first(function ($client, $key) use ($connection) {
-            return $client->getConnection() == $connection;
+            return $client->getConnection() === $connection;
         });
     }
 
