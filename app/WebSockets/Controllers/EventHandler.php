@@ -9,6 +9,7 @@ use App\Services\Docker\TinkerContainer;
 use GuzzleHttp\Psr7\Request;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
+use PartyLine;
 
 class EventHandler implements MessageComponentInterface
 {
@@ -31,7 +32,7 @@ class EventHandler implements MessageComponentInterface
 
     public function onOpen(ConnectionInterface $connection)
     {
-        echo "New connection! ({$connection->resourceId})\n";
+        PartyLine::comment("New connection! ({$connection->resourceId})");
 
         $connection->send("Loading Tinker session...\n\r");
 
@@ -63,7 +64,7 @@ class EventHandler implements MessageComponentInterface
 
     public function onClose(ConnectionInterface $connection)
     {
-        echo "Connection {$connection->resourceId} has disconnected\n";
+        PartyLine::comment("Connection {$connection->resourceId} has disconnected");
 
         $client = $this->getClientForConnection($connection);
 
@@ -75,7 +76,7 @@ class EventHandler implements MessageComponentInterface
 
     public function onError(ConnectionInterface $connection, \Exception $e)
     {
-        echo "An error has occurred: {$e->getMessage()}\n";
+        PartyLine::error("An error has occurred: {$e->getMessage()}");
 
         $connection->close();
     }
@@ -86,7 +87,7 @@ class EventHandler implements MessageComponentInterface
 
         $client->sendToTinker($msg);
 
-        echo sprintf('Connection %d sending message "%s" to other connection' . "\n", $from->resourceId, $msg);
+        PartyLine::comment("Connection {$from->resourceId} sending message `{$msg}` to other connection");
     }
 
     protected function getClientForConnection(ConnectionInterface $connection): ?Client

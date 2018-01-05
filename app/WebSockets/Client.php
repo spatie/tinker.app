@@ -5,6 +5,7 @@ namespace App\WebSockets;
 use App\Services\Docker\TinkerContainer;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
+use PartyLine;
 
 class Client
 {
@@ -20,6 +21,7 @@ class Client
     public function __construct(ConnectionInterface $connection, LoopInterface $loop)
     {
         $this->connection = $connection;
+
         $this->loop = $loop;
     }
 
@@ -32,7 +34,7 @@ class Client
         });
 
         $this->tinkerContainer->onClose(function ($message) {
-            echo "Connection to container lost; closing websocket to client {$this->connection->resourceId}\n";
+            PartyLine::error("Connection to container lost; closing websocket to client {$this->connection->resourceId}");
 
             $this->connection->close();
         });
