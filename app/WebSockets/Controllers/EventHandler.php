@@ -10,6 +10,7 @@ use GuzzleHttp\Psr7\Request;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
 use PartyLine;
+use SplObjectStorage;
 
 class EventHandler implements MessageComponentInterface
 {
@@ -25,7 +26,7 @@ class EventHandler implements MessageComponentInterface
     {
         $this->loop = $loop;
 
-        $this->clients = new \SplObjectStorage();
+        $this->clients = new SplObjectStorage();
 
         $this->containerManager = new ContainerManager($loop);
     }
