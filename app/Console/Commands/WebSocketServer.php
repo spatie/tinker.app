@@ -9,7 +9,9 @@ use Ratchet\App;
 use Ratchet\Http\OriginCheck;
 use Ratchet\WebSocket\WsServer;
 use React\EventLoop\Factory;
+use React\EventLoop\StreamSelectLoop;
 use Symfony\Component\Routing\Route;
+use Partyline;
 
 class WebSocketServer extends Command
 {
@@ -33,17 +35,22 @@ class WebSocketServer extends Command
             $eventLoop
         );
 
-        $this->websocketServer = new WsServer(new EventHandler($eventLoop));
-        $this->websocketServer->enableKeepAlive($eventLoop);
-
-        $this->addAllowedOrigins($ratchetApp);
+        $this->configureWebsocketServer($eventLoop, $ratchetApp);
 
         $ratchetApp->routes->add('tinker', $this->getRoute());
 
-        $this->info('WebSocket server started on ' . config('websockets.host') . ':' . config('websockets.host'));
-        $this->comment('Allowed origins: '.implode(', ', config('websockets.allowedOrigins')));
+        $this->outputStartedMessageToConsole();
 
         $ratchetApp->run();
+    }
+
+    public function configureWebsocketServer(StreamSelectLoop $eventLoop, App $ratchetApp)
+    {
+        $this->websocketServer = new WsServer(new EventHandler($eventLoop));
+
+        $this->websocketServer->enableKeepAlive($eventLoop);
+
+        $this->addAllowedOrigins($ratchetApp);
     }
 
     protected function addAllowedOrigins(App $ratchetApp)
@@ -68,5 +75,14 @@ class WebSocketServer extends Command
             config('websockets.host'),
             [],
             ['GET']);
+    }
+
+    public function outputStartedMessageToConsole(): void
+    {
+        $wsConfig = config('websockets');
+        $allowedOrigins = implode(', ', $wsConfig['allowedOrigins']);
+
+        Partyline::info("WebSocket server started on {$wsConfig['host']}:{$wsConfig['port']}");
+        Partyline::comment("Allowed origins: {$allowedOrigins}");
     }
 }
