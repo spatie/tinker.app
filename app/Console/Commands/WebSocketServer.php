@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\WebSockets\Controllers\TinkerController;
+use App\WebSockets\Controllers\EventHandler;
 use Illuminate\Console\Command;
 use League\Uri\Schemes\Ws;
 use Ratchet\App;
@@ -22,6 +22,8 @@ class WebSocketServer extends Command
 
     public function handle()
     {
+        Partyline::bind($this);
+
         $eventLoop = Factory::create();
 
         $ratchetApp = new App(
@@ -31,7 +33,7 @@ class WebSocketServer extends Command
             $eventLoop
         );
 
-        $this->websocketServer = new WsServer(new TinkerController($eventLoop));
+        $this->websocketServer = new WsServer(new EventHandler($eventLoop));
         $this->websocketServer->enableKeepAlive($eventLoop);
 
         $this->addAllowedOrigins($ratchetApp);

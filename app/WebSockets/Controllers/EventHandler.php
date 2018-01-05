@@ -10,7 +10,7 @@ use GuzzleHttp\Psr7\Request;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
 
-class TinkerController implements MessageComponentInterface
+class EventHandler implements MessageComponentInterface
 {
     /** @var \App\Services\Docker\ContainerManager */
     protected $containerManager;
