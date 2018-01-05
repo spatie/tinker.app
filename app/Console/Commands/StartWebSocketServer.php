@@ -20,7 +20,7 @@ class StartWebSocketServer extends Command
     protected $description = 'Start the browser faceing websocket connection';
 
     /** @var \Ratchet\WebSocket\WsServer */
-    protected $websocketServer;
+    protected $webSocketServer;
 
     public function handle()
     {
@@ -46,9 +46,9 @@ class StartWebSocketServer extends Command
 
     public function configureWebsocketServer(StreamSelectLoop $eventLoop, App $ratchetApp)
     {
-        $this->websocketServer = new WsServer(new EventHandler($eventLoop));
+        $this->webSocketServer = new WsServer(new EventHandler($eventLoop));
 
-        $this->websocketServer->enableKeepAlive($eventLoop);
+        $this->webSocketServer->enableKeepAlive($eventLoop);
 
         $this->addAllowedOrigins($ratchetApp);
     }
@@ -58,7 +58,7 @@ class StartWebSocketServer extends Command
         $allowedOrigins = config('websockets.allowedOrigins');
         $port = config('websockets.port');
 
-        $this->websocketServer = new OriginCheck($this->websocketServer, $allowedOrigins);
+        $this->webSocketServer = new OriginCheck($this->webSocketServer, $allowedOrigins);
 
         foreach ($allowedOrigins as $allowedOrgin) {
             $ratchetApp->flashServer->app->addAllowedAccess($allowedOrgin, $port);
@@ -68,7 +68,7 @@ class StartWebSocketServer extends Command
     protected function getRoute(): Route
     {
         return new Route('/{sessionId}', [
-            '_controller' => $this->websocketServer,
+            '_controller' => $this->webSocketServer,
             'sessionId' => null],
             ['Origin' => config('websockets.host')],
             [],
