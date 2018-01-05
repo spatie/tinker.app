@@ -4,14 +4,13 @@ namespace App\WebSockets\Commands;
 
 use App\WebSockets\Controllers\EventHandler;
 use Illuminate\Console\Command;
-use League\Uri\Schemes\Ws;
+use Partyline;
 use Ratchet\App;
 use Ratchet\Http\OriginCheck;
 use Ratchet\WebSocket\WsServer;
 use React\EventLoop\Factory;
 use React\EventLoop\StreamSelectLoop;
 use Symfony\Component\Routing\Route;
-use Partyline;
 
 class StartWebSocketServer extends Command
 {
@@ -67,14 +66,17 @@ class StartWebSocketServer extends Command
 
     protected function getRoute(): Route
     {
-        return new Route('/{sessionId}', [
+        return new Route(
+            '/{sessionId}',
+            [
             '_controller' => $this->webSocketServer,
             'sessionId' => null],
             ['Origin' => config('websockets.host')],
             [],
             config('websockets.host'),
             [],
-            ['GET']);
+            ['GET']
+        );
     }
 
     public function outputStartedMessageToConsole(): void

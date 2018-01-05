@@ -24,8 +24,8 @@ class ContainerRepository
         $docker = Docker::create();
 
         $container = collect($docker->containerList())->first(function (ContainerSummaryItem $container) use ($name) {
-                return in_array('/' . $name, $container->getNames());
-            });
+            return in_array('/' . $name, $container->getNames());
+        });
 
         if (!$container) {
             return null;

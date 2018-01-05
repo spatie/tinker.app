@@ -3,9 +3,9 @@
 namespace App\WebSockets;
 
 use App\Services\Docker\Container;
+use PartyLine;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
-use PartyLine;
 
 class Client
 {

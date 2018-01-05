@@ -4,14 +4,14 @@ namespace App\WebSockets\Controllers;
 
 use \App\WebSockets\Client;
 use \Ratchet\MessageComponentInterface;
-use App\Services\Docker\ContainerRepository;
 use App\Services\Docker\Container;
+use App\Services\Docker\ContainerRepository;
+use Exception;
 use GuzzleHttp\Psr7\Request;
+use PartyLine;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
-use PartyLine;
 use SplObjectStorage;
-use Exception;
 
 class EventHandler implements MessageComponentInterface
 {
@@ -84,11 +84,9 @@ class EventHandler implements MessageComponentInterface
     protected function getTinkerContainer(string $sessionId, ConnectionInterface $connection): ?Container
     {
         if ($sessionId) {
-
             $tinkerContainer = $this->containerManager->findBySessionId($sessionId);
 
             if (!$tinkerContainer) {
-
                 $connection->send("Session id `{$sessionId}` is invalid.\n\r");
                 $connection->close();
 
