@@ -11,6 +11,7 @@ use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
 use PartyLine;
 use SplObjectStorage;
+use Exception;
 
 class EventHandler implements MessageComponentInterface
 {
@@ -64,7 +65,7 @@ class EventHandler implements MessageComponentInterface
         }
     }
 
-    public function onError(ConnectionInterface $connection, \Exception $e)
+    public function onError(ConnectionInterface $connection, Exception $e)
     {
         PartyLine::error("An error has occurred: {$e->getMessage()}");
 
