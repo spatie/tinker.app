@@ -5,7 +5,7 @@ namespace App\WebSockets\Controllers;
 use \App\WebSockets\Client;
 use \Ratchet\MessageComponentInterface;
 use App\Services\Docker\Containers;
-use App\Services\Docker\TinkerContainer;
+use App\Services\Docker\Container;
 use GuzzleHttp\Psr7\Request;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
@@ -81,7 +81,7 @@ class EventHandler implements MessageComponentInterface
         PartyLine::comment("Connection {$from->resourceId} sending message `{$message}` to other connection");
     }
 
-    protected function getTinkerContainer(string $sessionId, ConnectionInterface $connection): ?TinkerContainer
+    protected function getTinkerContainer(string $sessionId, ConnectionInterface $connection): ?Container
     {
         if ($sessionId) {
 
@@ -100,7 +100,7 @@ class EventHandler implements MessageComponentInterface
             return $tinkerContainer;
         }
 
-        $tinkerContainer = (TinkerContainer::create($this->loop))->start();
+        $tinkerContainer = (Container::create($this->loop))->start();
 
         $connection->send("New Tinker session created ({$tinkerContainer->getName()})\n\r");
 

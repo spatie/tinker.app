@@ -19,24 +19,22 @@ class Containers
         $this->loop = $loop;
     }
 
-    public function find(string $name): ?TinkerContainer
+    public function find(string $name): ?Container
     {
         $docker = Docker::create();
 
-        $containers = collect($docker->containerList());
+        $container = collect($docker->containerList())->first(function (ContainerSummaryItem $container) use ($name) {
+                return in_array('/' . $name, $container->getNames());
+            });
 
-        $container = $containers->first(function (ContainerSummaryItem $container) use ($name) {
-            return in_array('/'.$name, $container->getNames());
-        });
-
-        if (! $container) {
+        if (!$container) {
             return null;
         }
 
-        return new TinkerContainer($this->loop, $name);
+        return new Container($this->loop, $name);
     }
 
-    public function findBySessionId(string $sessionId): ?TinkerContainer
+    public function findBySessionId(string $sessionId): ?Container
     {
         return $this->find("tinker-{$sessionId}");
     }

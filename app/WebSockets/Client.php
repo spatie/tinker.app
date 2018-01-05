@@ -2,14 +2,14 @@
 
 namespace App\WebSockets;
 
-use App\Services\Docker\TinkerContainer;
+use App\Services\Docker\Container;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
 use PartyLine;
 
 class Client
 {
-    /** @var \App\Services\Docker\TinkerContainer */
+    /** @var \App\Services\Docker\Container */
     protected $tinkerContainer;
 
     /** @var \React\EventLoop\LoopInterface */
@@ -25,7 +25,7 @@ class Client
         $this->loop = $loop;
     }
 
-    public function attachContainer(TinkerContainer $tinkerContainer): self
+    public function attachContainer(Container $tinkerContainer): self
     {
         $this->tinkerContainer = $tinkerContainer;
 

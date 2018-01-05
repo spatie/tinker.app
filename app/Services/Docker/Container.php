@@ -9,7 +9,7 @@ use GuzzleHttp\Psr7\Response;
 use Ratchet\Client\WebSocket;
 use React\EventLoop\LoopInterface;
 
-class TinkerContainer
+class Container
 {
     /** @var string */
     protected $name;
