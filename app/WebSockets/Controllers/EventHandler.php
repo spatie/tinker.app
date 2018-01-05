@@ -17,7 +17,7 @@ class EventHandler implements MessageComponentInterface
     /** @var \App\Services\Docker\ContainerManager */
     protected $containerManager;
 
-    /** @var \SplObjectStorage  */
+    /** @var \SplObjectStorage */
     protected $clients;
 
     protected $loop;
@@ -39,24 +39,13 @@ class EventHandler implements MessageComponentInterface
 
         $sessionId = $this->getQueryParam($connection->httpRequest, 'sessionId');
 
-        if ($sessionId) {
-            $tinkerContainer = $this->containerManager->findBySessionId($sessionId);
-
-            if (! $tinkerContainer) {
-                $connection->send("Session id `{$sessionId}` is invalid.\n\r");
-                $connection->close();
-
-                return;
-            } else {
-                $connection->send("Session id `{$sessionId}` found.\n\r");
-            }
-        } else {
-            $tinkerContainer = TinkerContainer::create($this->loop);
-            $tinkerContainer->start();
-            $connection->send("New Tinker session created ({$tinkerContainer->getName()})\n\r");
-        }
-
         $client = new Client($connection, $this->loop);
+
+        $tinkerContainer = $this->getTinkerContainer();
+
+        if (!$tinkerContainer) {
+            return;
+        }
 
         $client->attachContainer($tinkerContainer);
 
@@ -89,6 +78,32 @@ class EventHandler implements MessageComponentInterface
         $client->sendToTinker($msg);
 
         PartyLine::comment("Connection {$from->resourceId} sending message `{$msg}` to other connection");
+    }
+
+    protected function getTinkerContainer(string $sessionId, ConnectionInterface $connection): ?TinkerContainer
+    {
+        if ($sessionId) {
+
+            $tinkerContainer = $this->containerManager->findBySessionId($sessionId);
+
+            if (!$tinkerContainer) {
+
+                $connection->send("Session id `{$sessionId}` is invalid.\n\r");
+                $connection->close();
+
+                return null;
+            }
+
+            $connection->send("Session id `{$sessionId}` found.\n\r");
+
+            return $tinkerContainer;
+        }
+
+        $tinkerContainer = (TinkerContainer::create($this->loop))->start();
+
+        $connection->send("New Tinker session created ({$tinkerContainer->getName()})\n\r");
+
+        return $tinkerContainer;
     }
 
     protected function getClientForConnection(ConnectionInterface $connection): ?Client
