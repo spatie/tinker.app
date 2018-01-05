@@ -65,20 +65,20 @@ class EventHandler implements MessageComponentInterface
         }
     }
 
-    public function onError(ConnectionInterface $connection, Exception $e)
+    public function onError(ConnectionInterface $connection, Exception $exception)
     {
-        PartyLine::error("An error has occurred: {$e->getMessage()}");
+        PartyLine::error("An error has occurred: {$exception->getMessage()}");
 
         $connection->close();
     }
 
-    public function onMessage(ConnectionInterface $from, $msg)
+    public function onMessage(ConnectionInterface $from, $message)
     {
         $client = $this->getClientForConnection($from);
 
-        $client->sendToTinker($msg);
+        $client->sendToTinker($message);
 
-        PartyLine::comment("Connection {$from->resourceId} sending message `{$msg}` to other connection");
+        PartyLine::comment("Connection {$from->resourceId} sending message `{$message}` to other connection");
     }
 
     protected function getTinkerContainer(string $sessionId, ConnectionInterface $connection): ?TinkerContainer
