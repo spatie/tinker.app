@@ -4,7 +4,7 @@ namespace App\WebSockets\Controllers;
 
 use \App\WebSockets\Client;
 use \Ratchet\MessageComponentInterface;
-use App\Services\Docker\ContainerManager;
+use App\Services\Docker\Containers;
 use App\Services\Docker\TinkerContainer;
 use GuzzleHttp\Psr7\Request;
 use Ratchet\ConnectionInterface;
@@ -15,7 +15,7 @@ use Exception;
 
 class EventHandler implements MessageComponentInterface
 {
-    /** @var \App\Services\Docker\ContainerManager */
+    /** @var \App\Services\Docker\Containers */
     protected $containerManager;
 
     /** @var \SplObjectStorage */
@@ -29,7 +29,7 @@ class EventHandler implements MessageComponentInterface
 
         $this->clients = new SplObjectStorage();
 
-        $this->containerManager = new ContainerManager($loop);
+        $this->containerManager = new Containers($loop);
     }
 
     public function onOpen(ConnectionInterface $connection)
