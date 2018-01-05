@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\WebSockets\Commands;
 
 use App\WebSockets\Controllers\EventHandler;
 use Illuminate\Console\Command;
