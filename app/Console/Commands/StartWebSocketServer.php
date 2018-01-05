@@ -13,9 +13,9 @@ use React\EventLoop\StreamSelectLoop;
 use Symfony\Component\Routing\Route;
 use Partyline;
 
-class WebSocketServer extends Command
+class StartWebSocketServer extends Command
 {
-    protected $signature = 'websocket:init';
+    protected $signature = 'start-websocket-server';
 
     protected $description = 'Start the browser faceing websocket connection';
 
