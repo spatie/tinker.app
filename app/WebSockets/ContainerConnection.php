@@ -44,7 +44,7 @@ class ContainerConnection
         return $this;
     }
 
-    public function cleanupContainer()
+    public function close()
     {
         $this
             ->container

@@ -41,9 +41,7 @@ class BrowserEventHandler implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $browserConnection, $message)
     {
-        $containerConnection = $this->findContainerConnection($browserConnection);
-
-        $containerConnection->sendMessage($message);
+        $this->findContainerConnection($browserConnection)->sendMessage($message);
 
         PartyLine::comment("Connection {$browserConnection->resourceId} sending message `{$message}` to other connection");
     }
@@ -52,11 +50,9 @@ class BrowserEventHandler implements MessageComponentInterface
     {
         PartyLine::comment("Connection {$browserConnection->resourceId} has disconnected");
 
-        $client = $this->findContainerConnection($browserConnection);
-
-        if ($client) {
-            $client->cleanupContainer();
-            $this->containerConnections->detach($client);
+        if ( $containerConnection = $this->findContainerConnection($browserConnection)) {
+            $containerConnection->close();
+            $this->containerConnections->detach($containerConnection);
         }
     }
 
