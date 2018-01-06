@@ -13,21 +13,21 @@ class Client
     protected $container;
 
     /** @var \Ratchet\ConnectionInterface */
-    protected $connection;
+    protected $browserConnection;
 
     /** @var \React\EventLoop\LoopInterface */
     protected $loop;
 
     public function __construct(ConnectionInterface $browserConnection, LoopInterface $loop)
     {
-        $this->connection = $browserConnection;
+        $this->browserConnection = $browserConnection;
 
         $this->loop = $loop;
     }
 
-    public function getConnection(): ConnectionInterface
+    public function getBrowserConnection(): ConnectionInterface
     {
-        return $this->connection;
+        return $this->browserConnection;
     }
 
     public function attachContainer(Container $container): self
@@ -35,13 +35,13 @@ class Client
         $this->container = $container;
 
         $this->container->onMessage(function ($message) {
-            $this->connection->send((string) $message);
+            $this->browserConnection->send((string) $message);
         });
 
         $this->container->onClose(function ($message) {
-            PartyLine::error("Connection to container lost; closing websocket to client {$this->connection->resourceId}");
+            PartyLine::error("Connection to container lost; closing websocket to client {$this->browserConnection->resourceId}");
 
-            $this->connection->close();
+            $this->browserConnection->close();
         });
 
         return $this;
