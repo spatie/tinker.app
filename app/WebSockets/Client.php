@@ -25,6 +25,11 @@ class Client
         $this->loop = $loop;
     }
 
+    public function getConnection(): ConnectionInterface
+    {
+        return $this->connection;
+    }
+
     public function attachContainer(Container $container): self
     {
         $this->container = $container;
@@ -42,21 +47,16 @@ class Client
         return $this;
     }
 
+    public function sendToTinker(string $message)
+    {
+        $this->container->sendMessageToWebSocket($message);
+    }
+
     public function cleanupContainer()
     {
         $this
             ->container
             ->stop()
             ->remove();
-    }
-
-    public function sendToTinker(string $message)
-    {
-        $this->container->sendMessageToWebSocket($message);
-    }
-
-    public function getConnection(): ConnectionInterface
-    {
-        return $this->connection;
     }
 }
