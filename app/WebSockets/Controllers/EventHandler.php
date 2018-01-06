@@ -53,6 +53,15 @@ class EventHandler implements MessageComponentInterface
         $this->clients->attach($client);
     }
 
+    public function onMessage(ConnectionInterface $from, $message)
+    {
+        $client = $this->getClientForConnection($from);
+
+        $client->sendToTinker($message);
+
+        PartyLine::comment("Connection {$from->resourceId} sending message `{$message}` to other connection");
+    }
+
     public function onClose(ConnectionInterface $connection)
     {
         PartyLine::comment("Connection {$connection->resourceId} has disconnected");
@@ -70,15 +79,6 @@ class EventHandler implements MessageComponentInterface
         PartyLine::error("An error has occurred: {$exception->getMessage()}");
 
         $connection->close();
-    }
-
-    public function onMessage(ConnectionInterface $from, $message)
-    {
-        $client = $this->getClientForConnection($from);
-
-        $client->sendToTinker($message);
-
-        PartyLine::comment("Connection {$from->resourceId} sending message `{$message}` to other connection");
     }
 
     protected function getContainer(string $sessionId, ConnectionInterface $connection): ?Container
