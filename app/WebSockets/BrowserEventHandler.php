@@ -2,9 +2,7 @@
 
 namespace App\WebSockets;
 
-use \Ratchet\MessageComponentInterface;
-use App\Services\Docker\Container;
-use App\Services\Docker\ContainerRepository;
+use Ratchet\MessageComponentInterface;
 use Exception;
 use GuzzleHttp\Psr7\Request;
 use PartyLine;
@@ -51,7 +49,7 @@ class BrowserEventHandler implements MessageComponentInterface
     {
         PartyLine::comment("Connection {$browserConnection->resourceId} has disconnected");
 
-        if ( $containerConnection = $this->findContainerConnection($browserConnection)) {
+        if ($containerConnection = $this->findContainerConnection($browserConnection)) {
             $containerConnection->close();
             $this->containerConnections->detach($containerConnection);
         }
