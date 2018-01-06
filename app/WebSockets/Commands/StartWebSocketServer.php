@@ -2,7 +2,7 @@
 
 namespace App\WebSockets\Commands;
 
-use App\WebSockets\Controllers\EventHandler;
+use App\WebSockets\Controllers\BrowserEventHandler;
 use Illuminate\Console\Command;
 use Partyline;
 use Ratchet\App;
@@ -45,7 +45,7 @@ class StartWebSocketServer extends Command
 
     public function configureWebSocketServer(StreamSelectLoop $eventLoop, App $ratchetApp)
     {
-        $this->webSocketServer = new WsServer(new EventHandler($eventLoop));
+        $this->webSocketServer = new WsServer(new BrowserEventHandler($eventLoop));
 
         $this->webSocketServer->enableKeepAlive($eventLoop);
 

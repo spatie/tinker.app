@@ -13,7 +13,7 @@ use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
 use SplObjectStorage;
 
-class EventHandler implements MessageComponentInterface
+class BrowserEventHandler implements MessageComponentInterface
 {
     /** @var \App\Services\Docker\ContainerRepository */
     protected $containerRepository;
