@@ -35,7 +35,7 @@ class BrowserEventHandler implements MessageComponentInterface
     {
         PartyLine::comment("New connection! ({$browserConnection->resourceId})");
 
-        $browserConnection->send("Loading Tinker session...\n\r");
+        $browserConnection->send("Loading session...\n\r");
 
         $client = new Client($browserConnection, $this->loop);
 
