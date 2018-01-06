@@ -18,9 +18,9 @@ class Client
     /** @var \React\EventLoop\LoopInterface */
     protected $loop;
 
-    public function __construct(ConnectionInterface $connection, LoopInterface $loop)
+    public function __construct(ConnectionInterface $browserConnection, LoopInterface $loop)
     {
-        $this->connection = $connection;
+        $this->connection = $browserConnection;
 
         $this->loop = $loop;
     }

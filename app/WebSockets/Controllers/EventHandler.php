@@ -16,7 +16,7 @@ use SplObjectStorage;
 class EventHandler implements MessageComponentInterface
 {
     /** @var \App\Services\Docker\ContainerRepository */
-    protected $containerManager;
+    protected $containerRepository;
 
     /** @var \SplObjectStorage */
     protected $clients;
@@ -29,18 +29,18 @@ class EventHandler implements MessageComponentInterface
 
         $this->clients = new SplObjectStorage();
 
-        $this->containerManager = new ContainerRepository($loop);
+        $this->containerRepository = new ContainerRepository($loop);
     }
 
-    public function onOpen(ConnectionInterface $connection)
+    public function onOpen(ConnectionInterface $browserConnection)
     {
-        PartyLine::comment("New connection! ({$connection->resourceId})");
+        PartyLine::comment("New connection! ({$browserConnection->resourceId})");
 
-        $connection->send("Loading Tinker session...\n\r");
+        $browserConnection->send("Loading Tinker session...\n\r");
 
-        $client = new Client($connection, $this->loop);
+        $client = new Client($browserConnection, $this->loop);
 
-        $sessionId = $this->getQueryParam($connection->httpRequest, 'sessionId');
+        $sessionId = $this->getQueryParam($browserConnection->httpRequest, 'sessionId');
 
         $container = $this->getContainer($sessionId);
 
@@ -62,11 +62,11 @@ class EventHandler implements MessageComponentInterface
         PartyLine::comment("Connection {$from->resourceId} sending message `{$message}` to other connection");
     }
 
-    public function onClose(ConnectionInterface $connection)
+    public function onClose(ConnectionInterface $browserConnection)
     {
-        PartyLine::comment("Connection {$connection->resourceId} has disconnected");
+        PartyLine::comment("Connection {$browserConnection->resourceId} has disconnected");
 
-        $client = $this->getClientForConnection($connection);
+        $client = $this->getClientForConnection($browserConnection);
 
         if ($client) {
             $client->cleanupContainer();
@@ -74,41 +74,41 @@ class EventHandler implements MessageComponentInterface
         }
     }
 
-    public function onError(ConnectionInterface $connection, Exception $exception)
+    public function onError(ConnectionInterface $browserConnection, Exception $exception)
     {
         PartyLine::error("An error has occurred: {$exception->getMessage()}");
 
-        $connection->close();
+        $browserConnection->close();
     }
 
-    protected function getContainer(string $sessionId, ConnectionInterface $connection): ?Container
+    protected function getContainer(string $sessionId, ConnectionInterface $browserConnection): ?Container
     {
         if ($sessionId) {
-            $container = $this->containerManager->findBySessionId($sessionId);
+            $container = $this->containerRepository->findBySessionId($sessionId);
 
             if (!$container) {
-                $connection->send("Session id `{$sessionId}` is invalid.\n\r");
-                $connection->close();
+                $browserConnection->send("Session id `{$sessionId}` is invalid.\n\r");
+                $browserConnection->close();
 
                 return null;
             }
 
-            $connection->send("Session id `{$sessionId}` found.\n\r");
+            $browserConnection->send("Session id `{$sessionId}` found.\n\r");
 
             return $container;
         }
 
         $container = (Container::create($this->loop))->start();
 
-        $connection->send("New Tinker session created ({$container->getName()})\n\r");
+        $browserConnection->send("New Tinker session created ({$container->getName()})\n\r");
 
         return $container;
     }
 
-    protected function getClientForConnection(ConnectionInterface $connection): ?Client
+    protected function getClientForConnection(ConnectionInterface $browserConnection): ?Client
     {
-        return collect($this->clients)->first(function ($client, $key) use ($connection) {
-            return $client->getConnection() === $connection;
+        return collect($this->clients)->first(function ($client, $key) use ($browserConnection) {
+            return $client->getConnection() === $browserConnection;
         });
     }
 
