@@ -17,6 +17,7 @@ class BrowserEventHandler implements MessageComponentInterface
     /** @var \SplObjectStorage */
     protected $containerConnections;
 
+    /** @var \React\EventLoop\LoopInterface  */
     protected $loop;
 
     public function __construct(LoopInterface $loop)
