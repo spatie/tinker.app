@@ -100,7 +100,7 @@ class EventHandler implements MessageComponentInterface
 
         $container = (Container::create($this->loop))->start();
 
-        $browserConnection->send("New Tinker session created ({$container->getName()})\n\r");
+        $browserConnection->send("New container created ({$container->getName()})\n\r");
 
         return $container;
     }
