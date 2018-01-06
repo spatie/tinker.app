@@ -16,7 +16,7 @@ class WebSocketConnection extends EventEmitter implements ConnectionInterface
     public $stream;
 
     /** @var \React\Stream\DuplexResourceStream */
-    private $input;
+    protected $input;
 
     public function __construct($resource, LoopInterface $loop)
     {
