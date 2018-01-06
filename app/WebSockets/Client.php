@@ -39,7 +39,7 @@ class Client
         });
 
         $this->container->onClose(function ($message) {
-            PartyLine::error("Connection to container lost; closing websocket to client {$this->browserConnection->resourceId}");
+            PartyLine::error("Connection to container lost; closing browser connection {$this->browserConnection->resourceId}");
 
             $this->browserConnection->close();
         });
