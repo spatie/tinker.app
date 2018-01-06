@@ -8,9 +8,6 @@ use React\EventLoop\LoopInterface;
 
 class ContainerRepository
 {
-    /** @var \Illuminate\Support\Collection */
-    protected $tinkerContainers;
-
     /** @var \React\EventLoop\LoopInterface */
     protected $loop;
 
