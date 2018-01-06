@@ -2,7 +2,6 @@
 
 namespace App\WebSockets;
 
-use \App\WebSockets\Client;
 use \Ratchet\MessageComponentInterface;
 use App\Services\Docker\Container;
 use App\Services\Docker\ContainerRepository;
