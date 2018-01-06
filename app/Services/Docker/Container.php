@@ -78,7 +78,7 @@ class Container
         return $this;
     }
 
-    public function sendMessageToWebSocket($message)
+    public function sendMessage($message)
     {
         $this->attachToWebSocket();
 

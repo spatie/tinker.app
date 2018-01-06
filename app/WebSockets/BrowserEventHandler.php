@@ -53,13 +53,13 @@ class BrowserEventHandler implements MessageComponentInterface
         $this->clients->attach($client);
     }
 
-    public function onMessage(ConnectionInterface $from, $message)
+    public function onMessage(ConnectionInterface $browserConnection, $message)
     {
-        $client = $this->getClientForConnection($from);
+        $client = $this->getClientForConnection($browserConnection);
 
-        $client->sendToTinker($message);
+        $client->sendToContainer($message);
 
-        PartyLine::comment("Connection {$from->resourceId} sending message `{$message}` to other connection");
+        PartyLine::comment("Connection {$browserConnection->resourceId} sending message `{$message}` to other connection");
     }
 
     public function onClose(ConnectionInterface $browserConnection)

@@ -47,9 +47,9 @@ class Client
         return $this;
     }
 
-    public function sendToTinker(string $message)
+    public function sendToContainer(string $message)
     {
-        $this->container->sendMessageToWebSocket($message);
+        $this->container->sendMessage($message);
     }
 
     public function cleanupContainer()
