@@ -37,9 +37,11 @@ class ContainerConnection
         return $this->browserConnection === $browserConnection;
     }
 
-    public function sendToContainer(string $message)
+    public function sendMessage(string $message): self
     {
         $this->container->sendMessage($message);
+
+        return $this;
     }
 
     public function cleanupContainer()

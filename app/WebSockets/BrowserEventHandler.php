@@ -41,9 +41,9 @@ class BrowserEventHandler implements MessageComponentInterface
 
     public function onMessage(ConnectionInterface $browserConnection, $message)
     {
-        $client = $this->findContainerConnection($browserConnection);
+        $containerConnection = $this->findContainerConnection($browserConnection);
 
-        $client->sendToContainer($message);
+        $containerConnection->sendMessage($message);
 
         PartyLine::comment("Connection {$browserConnection->resourceId} sending message `{$message}` to other connection");
     }
