@@ -16,7 +16,7 @@ class StartWebSocketServer extends Command
 {
     protected $signature = 'start-websocket-server';
 
-    protected $description = 'Start the browser faceing websocket connection';
+    protected $description = 'Start the browser facing websocket connection';
 
     /** @var \Ratchet\WebSocket\WsServer */
     protected $webSocketServer;
