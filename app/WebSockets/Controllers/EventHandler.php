@@ -107,9 +107,7 @@ class EventHandler implements MessageComponentInterface
 
     protected function getClientForConnection(ConnectionInterface $browserConnection): ?Client
     {
-        return collect($this->clients)->first(function ($client, $key) use ($browserConnection) {
-            return $client->getConnection() === $browserConnection;
-        });
+        return collect($this->clients)->first->usesBrowserConnection($browserConnection);
     }
 
     protected function getQueryParam(Request $request, string $key): ?string

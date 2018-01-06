@@ -25,9 +25,9 @@ class Client
         $this->loop = $loop;
     }
 
-    public function getBrowserConnection(): ConnectionInterface
+    public function usesBrowserConnection(ConnectionInterface $browserConnection): bool
     {
-        return $this->browserConnection;
+        return $this->browserConnection === $browserConnection;
     }
 
     public function attachContainer(Container $container): self
