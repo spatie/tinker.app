@@ -14,11 +14,8 @@ use SplObjectStorage;
 
 class BrowserEventHandler implements MessageComponentInterface
 {
-    /** @var \App\Services\Docker\ContainerRepository */
-    protected $containerRepository;
-
     /** @var \SplObjectStorage */
-    protected $clients;
+    protected $containerConnections;
 
     protected $loop;
 
@@ -26,9 +23,7 @@ class BrowserEventHandler implements MessageComponentInterface
     {
         $this->loop = $loop;
 
-        $this->clients = new SplObjectStorage();
-
-        $this->containerRepository = new ContainerRepository($loop);
+        $this->containerConnections = new SplObjectStorage();
     }
 
     public function onOpen(ConnectionInterface $browserConnection)
@@ -37,24 +32,16 @@ class BrowserEventHandler implements MessageComponentInterface
 
         $browserConnection->send("Loading session...\n\r");
 
-        $client = new Client($browserConnection, $this->loop);
-
         $sessionId = $this->getQueryParameter($browserConnection->httpRequest, 'sessionId');
 
-        $container = $this->getContainer($sessionId);
+        $containerConnection = new ContainerConnection($browserConnection, $sessionId, $this->loop);
 
-        if (!$container) {
-            return;
-        }
-
-        $client->attachContainer($container);
-
-        $this->clients->attach($client);
+        $this->containerConnections->attach($containerConnection);
     }
 
     public function onMessage(ConnectionInterface $browserConnection, $message)
     {
-        $client = $this->getClientForConnection($browserConnection);
+        $client = $this->findContainerConnection($browserConnection);
 
         $client->sendToContainer($message);
 
@@ -65,11 +52,11 @@ class BrowserEventHandler implements MessageComponentInterface
     {
         PartyLine::comment("Connection {$browserConnection->resourceId} has disconnected");
 
-        $client = $this->getClientForConnection($browserConnection);
+        $client = $this->findContainerConnection($browserConnection);
 
         if ($client) {
             $client->cleanupContainer();
-            $this->clients->detach($client);
+            $this->containerConnections->detach($client);
         }
     }
 
@@ -80,33 +67,9 @@ class BrowserEventHandler implements MessageComponentInterface
         $browserConnection->close();
     }
 
-    protected function getContainer(string $sessionId, ConnectionInterface $browserConnection): ?Container
+    protected function findContainerConnection(ConnectionInterface $browserConnection): ?ContainerConnection
     {
-        if ($sessionId) {
-            $container = $this->containerRepository->findBySessionId($sessionId);
-
-            if (!$container) {
-                $browserConnection->send("Session id `{$sessionId}` is invalid.\n\r");
-                $browserConnection->close();
-
-                return null;
-            }
-
-            $browserConnection->send("Session id `{$sessionId}` found.\n\r");
-
-            return $container;
-        }
-
-        $container = (Container::create($this->loop))->start();
-
-        $browserConnection->send("New container created ({$container->getName()})\n\r");
-
-        return $container;
-    }
-
-    protected function getClientForConnection(ConnectionInterface $browserConnection): ?Client
-    {
-        return collect($this->clients)->first->usesBrowserConnection($browserConnection);
+        return collect($this->containerConnections)->first->usesBrowserConnection($browserConnection);
     }
 
     protected function getQueryParameter(Request $request, string $key): ?string
