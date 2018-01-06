@@ -72,7 +72,9 @@ class WebSocketConnection extends EventEmitter implements ConnectionInterface
     public function close()
     {
         $this->input->close();
+
         $this->handleClose();
+
         $this->removeAllListeners();
     }
 
@@ -102,13 +104,17 @@ class WebSocketConnection extends EventEmitter implements ConnectionInterface
         return $this->parseAddress(@stream_socket_get_name($this->stream, false));
     }
 
-    private function parseAddress($address)
+    protected function parseAddress($address)
     {
         if ($address === false) {
             return null;
         }
 
-        if ($address === '' || $address[0] === "\x00") {
+        if ($address === '') {
+            return null;
+        }
+
+        if ($address[0] === "\x00") {
             return null;
         }
 
