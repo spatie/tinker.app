@@ -2,13 +2,13 @@
 
 namespace App\Services\Docker;
 
+use Closure;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\Docker;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Ratchet\Client\WebSocket;
 use React\EventLoop\LoopInterface;
-use Closure;
 
 class Container
 {
@@ -43,7 +43,7 @@ class Container
         return new static($name, $loop, $docker);
     }
 
-    public function __construct(string $name, LoopInterface $loop,  Docker $docker)
+    public function __construct(string $name, LoopInterface $loop, Docker $docker)
     {
         $this->name = $name;
 
