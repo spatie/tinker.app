@@ -34,7 +34,7 @@ class StartWebSocketServer extends Command
             $eventLoop
         );
 
-        $this->configureWebsocketServer($eventLoop, $ratchetApp);
+        $this->configureWebSocketServer($eventLoop, $ratchetApp);
 
         $ratchetApp->routes->add('tinker', $this->getRoute());
 
@@ -43,7 +43,7 @@ class StartWebSocketServer extends Command
         $ratchetApp->run();
     }
 
-    public function configureWebsocketServer(StreamSelectLoop $eventLoop, App $ratchetApp)
+    public function configureWebSocketServer(StreamSelectLoop $eventLoop, App $ratchetApp)
     {
         $this->webSocketServer = new WsServer(new EventHandler($eventLoop));
 
