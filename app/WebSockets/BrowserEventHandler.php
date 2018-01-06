@@ -40,7 +40,7 @@ class BrowserEventHandler implements MessageComponentInterface
 
         $client = new Client($browserConnection, $this->loop);
 
-        $sessionId = $this->getQueryParam($browserConnection->httpRequest, 'sessionId');
+        $sessionId = $this->getQueryParameter($browserConnection->httpRequest, 'sessionId');
 
         $container = $this->getContainer($sessionId);
 
@@ -110,7 +110,7 @@ class BrowserEventHandler implements MessageComponentInterface
         return collect($this->clients)->first->usesBrowserConnection($browserConnection);
     }
 
-    protected function getQueryParam(Request $request, string $key): ?string
+    protected function getQueryParameter(Request $request, string $key): ?string
     {
         parse_str($request->getUri()->getQuery(), $queryParams);
 
