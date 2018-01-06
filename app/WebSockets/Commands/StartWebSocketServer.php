@@ -2,7 +2,7 @@
 
 namespace App\WebSockets\Commands;
 
-use App\WebSockets\Controllers\BrowserEventHandler;
+use App\WebSockets\BrowserEventHandler;
 use Illuminate\Console\Command;
 use Partyline;
 use Ratchet\App;

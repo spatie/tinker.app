@@ -1,6 +1,6 @@
 <?php
 
-namespace App\WebSockets\Controllers;
+namespace App\WebSockets;
 
 use \App\WebSockets\Client;
 use \Ratchet\MessageComponentInterface;
