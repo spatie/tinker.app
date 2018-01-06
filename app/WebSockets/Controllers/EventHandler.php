@@ -42,13 +42,13 @@ class EventHandler implements MessageComponentInterface
 
         $sessionId = $this->getQueryParam($connection->httpRequest, 'sessionId');
 
-        $tinkerContainer = $this->getTinkerContainer($sessionId);
+        $container = $this->getContainer($sessionId);
 
-        if (!$tinkerContainer) {
+        if (!$container) {
             return;
         }
 
-        $client->attachContainer($tinkerContainer);
+        $client->attachContainer($container);
 
         $this->clients->attach($client);
     }
@@ -81,12 +81,12 @@ class EventHandler implements MessageComponentInterface
         PartyLine::comment("Connection {$from->resourceId} sending message `{$message}` to other connection");
     }
 
-    protected function getTinkerContainer(string $sessionId, ConnectionInterface $connection): ?Container
+    protected function getContainer(string $sessionId, ConnectionInterface $connection): ?Container
     {
         if ($sessionId) {
-            $tinkerContainer = $this->containerManager->findBySessionId($sessionId);
+            $container = $this->containerManager->findBySessionId($sessionId);
 
-            if (!$tinkerContainer) {
+            if (!$container) {
                 $connection->send("Session id `{$sessionId}` is invalid.\n\r");
                 $connection->close();
 
@@ -95,14 +95,14 @@ class EventHandler implements MessageComponentInterface
 
             $connection->send("Session id `{$sessionId}` found.\n\r");
 
-            return $tinkerContainer;
+            return $container;
         }
 
-        $tinkerContainer = (Container::create($this->loop))->start();
+        $container = (Container::create($this->loop))->start();
 
-        $connection->send("New Tinker session created ({$tinkerContainer->getName()})\n\r");
+        $connection->send("New Tinker session created ({$container->getName()})\n\r");
 
-        return $tinkerContainer;
+        return $container;
     }
 
     protected function getClientForConnection(ConnectionInterface $connection): ?Client
