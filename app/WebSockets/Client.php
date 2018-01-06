@@ -12,11 +12,11 @@ class Client
     /** @var \App\Services\Docker\Container */
     protected $container;
 
-    /** @var \React\EventLoop\LoopInterface */
-    protected $loop;
-
     /** @var \Ratchet\ConnectionInterface */
     protected $connection;
+
+    /** @var \React\EventLoop\LoopInterface */
+    protected $loop;
 
     public function __construct(ConnectionInterface $connection, LoopInterface $loop)
     {
@@ -52,7 +52,7 @@ class Client
 
     public function sendToTinker(string $message)
     {
-        $this->container->sendToWebSocket($message);
+        $this->container->sendMessageToWebSocket($message);
     }
 
     public function getConnection(): ConnectionInterface

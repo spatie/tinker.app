@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Ratchet\Client\WebSocket;
 use React\EventLoop\LoopInterface;
+use Closure;
 
 class Container
 {
@@ -23,51 +24,37 @@ class Container
     /** @var \React\EventLoop\LoopInterface */
     protected $loop;
 
-    public function __construct(LoopInterface $loop, string $name)
-    {
-        $this->loop = $loop;
-
-        $this->docker = Docker::create();
-
-        $this->name = $name;
-    }
-
     public static function create(LoopInterface $loop): self
     {
         $name = 'tinker-'.str_random();
 
-        $containerCreatePostBody = new ContainersCreatePostBody();
-        $containerCreatePostBody->setImage('spatie/tinker.sh-image');
-        $containerCreatePostBody->setTty(true);
-        $containerCreatePostBody->setOpenStdin(true); // -i interactive flag = keep stdin open even when not attached
-        // $containerCreatePostBody->setStdinOnce(true); // close stdin after client dc
-        $containerCreatePostBody->setAttachStdin(true);
-        $containerCreatePostBody->setAttachStdout(true);
-        $containerCreatePostBody->setAttachStderr(true);
+        $containerProperties = (new ContainersCreatePostBody())
+            ->setImage('spatie/tinker.sh-image')
+            ->setTty(true)
+            ->setOpenStdin(true)
+            ->setAttachStdin(true)
+            ->setAttachStdout(true)
+            ->setAttachStderr(true);
 
-        Docker::create()->containerCreate($containerCreatePostBody, ['name' => $name]);
+        $docker = Docker::create();
 
-        return new static($loop, $name);
+        $docker->containerCreate($containerProperties, compact('name'));
+
+        return new static($name, $loop, $docker);
     }
 
-    protected function attachToWebsocket()
+    public function __construct(string $name, LoopInterface $loop,  Docker $docker)
     {
-        if ($this->webSocket) {
-            return;
-        }
+        $this->name = $name;
 
-        $response = $this->docker->containerAttachWebsocket($this->name, [
-            'stream' => true,
-            'stdout' => true,
-            'stderr' => true,
-            'stdin'  => true,
-        ], false);
+        $this->loop = $loop;
 
-        $stream = $response->getBody()->detach();
+        $this->docker = $docker;
+    }
 
-        $connection = new WebSocketConnection($stream, $this->loop);
-
-        $this->webSocket = new WebSocket($connection, new Response, new Request('GET', '/ws'));
+    public function getName(): string
+    {
+        return $this->name;
     }
 
     public function start(): self
@@ -91,33 +78,50 @@ class Container
         return $this;
     }
 
-    public function sendToWebSocket($message)
+    public function sendMessageToWebSocket($message)
     {
-        $this->attachToWebsocket();
+        $this->attachToWebSocket();
 
         $this->webSocket->send($message);
     }
 
-    public function onMessage(\Closure $callback): self
+    public function onMessage(Closure $callback): self
     {
-        $this->attachToWebsocket();
+        $this->attachToWebSocket();
 
         $this->webSocket->on('message', $callback);
 
         return $this;
     }
 
-    public function onClose(\Closure $callback): self
+    public function onClose(Closure $callback): self
     {
-        $this->attachToWebsocket();
+        $this->attachToWebSocket();
 
         $this->webSocket->on('close', $callback);
 
         return $this;
     }
 
-    public function getName(): string
+    protected function attachToWebSocket(): self
     {
-        return $this->name;
+        if ($this->webSocket) {
+            return;
+        }
+
+        $response = $this->docker->containerAttachWebsocket($this->name, [
+            'stream' => true,
+            'stdout' => true,
+            'stderr' => true,
+            'stdin'  => true,
+        ], false);
+
+        $stream = $response->getBody()->detach();
+
+        $connection = new WebSocketConnection($stream, $this->loop);
+
+        $this->webSocket = new WebSocket($connection, new Response, new Request('GET', '/ws'));
+
+        return $this;
     }
 }
