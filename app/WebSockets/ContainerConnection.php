@@ -90,6 +90,8 @@ class ContainerConnection
         $this->container->onClose(function () use ($browserConnection) {
             PartyLine::error("Connection to container lost; closing browser connection {$browserConnection->resourceId}");
 
+            $browserConnection->send("\n\rLost connection to Tinker container.");
+
             $browserConnection->close();
         });
     }
