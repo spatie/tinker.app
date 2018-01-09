@@ -69,8 +69,9 @@ class StartWebSocketServer extends Command
         return new Route(
             '/{sessionId}',
             [
-            '_controller' => $this->webSocketServer,
-            'sessionId' => null],
+                '_controller' => $this->webSocketServer,
+                'sessionId' => null
+            ],
             ['Origin' => config('websockets.host')],
             [],
             config('websockets.host'),
