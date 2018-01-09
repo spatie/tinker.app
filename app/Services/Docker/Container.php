@@ -106,7 +106,7 @@ class Container
     protected function attachToWebSocket(): self
     {
         if ($this->webSocket) {
-            return;
+            return $this;
         }
 
         $response = $this->docker->containerAttachWebsocket($this->name, [
