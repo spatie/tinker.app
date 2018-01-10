@@ -2,11 +2,11 @@
 
 namespace App\WebSockets;
 
-use Ratchet\MessageComponentInterface;
 use Exception;
 use GuzzleHttp\Psr7\Request;
 use PartyLine;
 use Ratchet\ConnectionInterface;
+use Ratchet\MessageComponentInterface;
 use React\EventLoop\LoopInterface;
 use SplObjectStorage;
 
@@ -33,7 +33,7 @@ class BrowserEventHandler implements MessageComponentInterface
 
         $sessionId = $this->getQueryParameter($browserConnection->httpRequest, 'sessionId');
 
-        $containerConnection = new ContainerConnection($browserConnection, $sessionId, $this->loop);
+        $containerConnection = new ContainerConnection($browserConnection, $this->loop, $sessionId);
 
         $this->containerConnections->attach($containerConnection);
     }

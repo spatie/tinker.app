@@ -19,13 +19,13 @@ class ContainerConnection
     /** @var \App\Services\Docker\Container */
     protected $container;
 
-    public function __construct(ConnectionInterface $browserConnection, string $sessionId, LoopInterface $loop)
+    public function __construct(ConnectionInterface $browserConnection, LoopInterface $loop, ?string $sessionId = null)
     {
         $this->browserConnection = $browserConnection;
 
         $this->loop = $loop;
 
-        $this->container = $this->findOrCreateContainer($sessionId, $browserConnection);
+        $this->container = $this->findOrCreateContainer($browserConnection, $sessionId);
 
         if ($this->container) {
             $this->bindContainer($browserConnection);
@@ -52,7 +52,7 @@ class ContainerConnection
             ->remove();
     }
 
-    protected function findOrCreateContainer(string $sessionId, ConnectionInterface $browserConnection): ?Container
+    protected function findOrCreateContainer(ConnectionInterface $browserConnection, ?string $sessionId = null): ?Container
     {
         if ($sessionId) {
             return $this->findContainer($sessionId, $browserConnection);
