@@ -29,7 +29,9 @@ class BrowserEventHandler implements MessageComponentInterface
     {
         PartyLine::comment("New connection! ({$browserConnection->resourceId})");
 
-        $browserConnection->send("Loading session...\n\r");
+        $browserConnection->send(
+            Message::terminalData("Loading session...\n\r")
+        );
 
         $sessionId = $this->getQueryParameter($browserConnection->httpRequest, 'sessionId');
 
@@ -38,11 +40,17 @@ class BrowserEventHandler implements MessageComponentInterface
         $this->containerConnections->attach($containerConnection);
     }
 
+    /**
+     * @param ConnectionInterface $browserConnection
+     * @param string $message
+     */
     public function onMessage(ConnectionInterface $browserConnection, $message)
     {
-        $this->findContainerConnection($browserConnection)->sendMessage($message);
+        $message = Message::terminalData($message);
 
-        PartyLine::comment("Connection {$browserConnection->resourceId} sending message `{$message}` to other connection");
+        $this->findContainerConnection($browserConnection)->sendMessage($message->getPayload());
+
+        PartyLine::comment("Connection {$browserConnection->resourceId} sending message `{$message->getPayload()}` ({$message->getType()}) to other connection");
     }
 
     public function onClose(ConnectionInterface $browserConnection)

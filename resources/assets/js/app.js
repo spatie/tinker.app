@@ -1,14 +1,9 @@
 import 'babel-polyfill';
 
-import Terminal from 'xterm';
+import Vue from 'vue';
 
-Terminal.loadAddon('fit');
-Terminal.loadAddon('attach');
+Vue.component('terminal', require('./Components/Terminal'));
 
-const xterm = new Terminal();
-xterm.open(document.getElementById('terminal'), true);
-
-const socket = new WebSocket(`ws://${window.webSocket.host}:${window.webSocket.port}/${window.sessionId}`);
-
-xterm.attach(socket);
-xterm.fit();
+new Vue({
+    el: '#app',
+});

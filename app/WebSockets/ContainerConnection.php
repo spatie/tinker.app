@@ -60,7 +60,9 @@ class ContainerConnection
 
         $container = (Container::create($this->loop))->start();
 
-        $browserConnection->send("New container created ({$container->getName()})\n\r");
+        $browserConnection->send(
+            Message::terminalData("New container created ({$container->getName()})\n\r")
+        );
 
         return $container;
     }
@@ -76,7 +78,9 @@ class ContainerConnection
             return null;
         }
 
-        $browserConnection->send("Session id `{$sessionId}` found.\n\r");
+        $browserConnection->send(
+            Message::terminalData("Session id `{$sessionId}` found.\n\r")
+        );
 
         return $container;
     }
@@ -84,13 +88,15 @@ class ContainerConnection
     protected function bindContainer(ConnectionInterface $browserConnection)
     {
         $this->container->onMessage(function ($message) use ($browserConnection) {
-            $browserConnection->send((string) $message);
+            $browserConnection->send(Message::terminalData((string) $message));
         });
 
         $this->container->onClose(function () use ($browserConnection) {
             PartyLine::error("Connection to container lost; closing browser connection {$browserConnection->resourceId}");
 
-            $browserConnection->send("\n\rLost connection to Tinker container.");
+            $browserConnection->send(
+                Message::terminalData("\n\rLost connection to Tinker container.")
+            );
 
             $browserConnection->close();
         });
