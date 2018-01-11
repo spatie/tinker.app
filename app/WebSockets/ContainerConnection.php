@@ -46,6 +46,10 @@ class ContainerConnection
 
     public function close()
     {
+        if (! $this->container) {
+            return;
+        }
+
         $this
             ->container
             ->stop()
@@ -72,7 +76,10 @@ class ContainerConnection
         $container = (new ContainerRepository($this->loop))->findBySessionId($sessionId);
 
         if (!$container) {
-            $browserConnection->send("Session id `{$sessionId}` is invalid.\n\r");
+            $browserConnection->send(
+                Message::terminalData("Session id `{$sessionId}` is invalid.\n\r")
+            );
+
             $browserConnection->close();
 
             return null;

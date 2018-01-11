@@ -27,7 +27,7 @@ class ContainerRepository
             return null;
         }
 
-        return new Container($this->loop, $name);
+        return new Container($name, $this->loop);
     }
 
     public function findBySessionId(string $sessionId): ?Container

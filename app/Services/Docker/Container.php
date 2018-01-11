@@ -43,13 +43,13 @@ class Container
         return new static($name, $loop, $docker);
     }
 
-    public function __construct(string $name, LoopInterface $loop, Docker $docker)
+    public function __construct(string $name, LoopInterface $loop, ?Docker $docker = null)
     {
         $this->name = $name;
 
         $this->loop = $loop;
 
-        $this->docker = $docker;
+        $this->docker = $docker ?? Docker::create();
     }
 
     public function getName(): string
