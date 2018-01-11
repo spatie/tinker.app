@@ -3,7 +3,6 @@
 namespace App\WebSockets;
 
 use Illuminate\Contracts\Support\Jsonable;
-use Ratchet\RFC6455\Messaging\MessageInterface;
 
 class Message implements Jsonable
 {
@@ -31,9 +30,14 @@ class Message implements Jsonable
         return new static(static::TERMINAL_DATA_TYPE, $payload);
     }
 
-    public static function from(MessageInterface $message): self
+    public static function fromJson(string $json): self
     {
-        return new static(static::TERMINAL_DATA_TYPE, (string) $message);
+        $data = json_decode($json);
+
+        return new static(
+            $data['type'] ?? static::TERMINAL_DATA_TYPE,
+            (string) $data['message']
+        );
     }
 
     public function toJson($options = 0): string

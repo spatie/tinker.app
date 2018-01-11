@@ -24,11 +24,14 @@ class ContainerConnection
         $this->browserConnection = $browserConnection;
 
         $this->loop = $loop;
+    }
 
-        $this->container = $this->findOrCreateContainer($browserConnection, $sessionId);
+    public function startSession(?string $sessionId = null)
+    {
+        $this->container = $this->findOrCreateContainer($this->browserConnection, $sessionId);
 
         if ($this->container) {
-            $this->bindContainer($browserConnection);
+            $this->bindContainer($this->browserConnection);
         }
     }
 

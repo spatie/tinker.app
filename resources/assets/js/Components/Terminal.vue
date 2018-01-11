@@ -16,7 +16,7 @@ export default {
     mounted() {
         this.terminal.open(this.$el, true);
 
-        xterm.fit();
+        this.terminal.fit();
     }
 }
 </script>
