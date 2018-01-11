@@ -5,17 +5,17 @@
 import Terminal from 'xterm';
 
 export default {
-    mounted() {
+    created() {
         Terminal.loadAddon('fit');
-        Terminal.loadAddon('attach');
 
-        const xterm = new Terminal();
+        this.terminal = new Terminal();
 
-        xterm.open(this.$el, true);
+        this.socket = new WebSocket(`ws://${window.webSocket.host}:${window.webSocket.port}/${window.sessionId}`);
+    },
 
-        const socket = new WebSocket(`ws://${window.webSocket.host}:${window.webSocket.port}/${window.sessionId}`);
+    mounted() {
+        this.terminal.open(this.$el, true);
 
-        xterm.attach(socket);
         xterm.fit();
     }
 }
