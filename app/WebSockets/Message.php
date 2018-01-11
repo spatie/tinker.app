@@ -36,7 +36,7 @@ class Message implements Jsonable
 
         return new static(
             $data->type ?? static::TERMINAL_DATA_TYPE,
-            (string) $data->message
+            (string) $data->payload
         );
     }
 
@@ -58,7 +58,7 @@ class Message implements Jsonable
         return $this->payload;
     }
 
-    public function getType(): int
+    public function getType(): string
     {
         return $this->type;
     }
