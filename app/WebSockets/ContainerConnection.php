@@ -25,10 +25,10 @@ class ContainerConnection
 
         $this->loop = $loop;
 
-        $this->container = $this->findOrCreateContainer($browserConnection, $sessionId);
+        $this->container = $this->findOrCreateContainer($this->browserConnection, $sessionId);
 
         if ($this->container) {
-            $this->bindContainer($browserConnection);
+            $this->bindContainer($this->browserConnection);
         }
     }
 

@@ -3,11 +3,10 @@
 namespace App\WebSockets;
 
 use Illuminate\Contracts\Support\Jsonable;
-use Ratchet\RFC6455\Messaging\MessageInterface;
 
 class Message implements Jsonable
 {
-    const TERMINAL_DATA_TYPE = 1;
+    const TERMINAL_DATA_TYPE = 'terminal-data';
 
     /** @var int */
     protected $type;
@@ -15,13 +14,13 @@ class Message implements Jsonable
     /** @var string */
     protected $payload;
 
-    public function __construct(int $type, string $payload)
+    public function __construct(string $type, string $payload)
     {
         $this->type = $type;
         $this->payload = $payload;
     }
 
-    public static function create(int $type, string $payload): self
+    public static function create(string $type, string $payload): self
     {
         return new static(func_get_args());
     }
@@ -31,9 +30,14 @@ class Message implements Jsonable
         return new static(static::TERMINAL_DATA_TYPE, $payload);
     }
 
-    public static function from(MessageInterface $message): self
+    public static function fromJson(string $json): self
     {
-        return new static(static::TERMINAL_DATA_TYPE, (string) $message);
+        $data = json_decode($json);
+
+        return new static(
+            $data->type ?? static::TERMINAL_DATA_TYPE,
+            (string) $data->message
+        );
     }
 
     public function toJson($options = 0): string
