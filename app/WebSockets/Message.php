@@ -35,8 +35,8 @@ class Message implements Jsonable
         $data = json_decode($json);
 
         return new static(
-            $data['type'] ?? static::TERMINAL_DATA_TYPE,
-            (string) $data['message']
+            $data->type ?? static::TERMINAL_DATA_TYPE,
+            (string) $data->message
         );
     }
 
