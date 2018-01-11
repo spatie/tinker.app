@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Jsonable;
 
 class Message implements Jsonable
 {
-    const TERMINAL_DATA_TYPE = 1;
+    const TERMINAL_DATA_TYPE = 'terminal-data';
 
     /** @var int */
     protected $type;
@@ -14,13 +14,13 @@ class Message implements Jsonable
     /** @var string */
     protected $payload;
 
-    public function __construct(int $type, string $payload)
+    public function __construct(string $type, string $payload)
     {
         $this->type = $type;
         $this->payload = $payload;
     }
 
-    public static function create(int $type, string $payload): self
+    public static function create(string $type, string $payload): self
     {
         return new static(func_get_args());
     }
