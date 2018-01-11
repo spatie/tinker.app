@@ -46,7 +46,7 @@ class StartWebSocketServer extends Command
 
     public function configureWebSocketServer(StreamSelectLoop $eventLoop, App $ratchetApp)
     {
-        $this->webSocketServer = new WsServer(new WebSocketEventHandler($eventLoop, new BrowserEventHandler()));
+        $this->webSocketServer = new WsServer(new WebSocketEventHandler($eventLoop, new BrowserEventHandler($eventLoop)));
 
         $this->webSocketServer->enableKeepAlive($eventLoop);
 
