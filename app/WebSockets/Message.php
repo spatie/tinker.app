@@ -7,6 +7,7 @@ use Illuminate\Contracts\Support\Jsonable;
 class Message implements Jsonable
 {
     const TERMINAL_DATA_TYPE = 'terminal-data';
+    const FILE_DATA_TYPE = 'file-data';
 
     /** @var int */
     protected $type;

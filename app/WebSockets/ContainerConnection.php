@@ -44,6 +44,17 @@ class ContainerConnection
         return $this;
     }
 
+    public function sendFileContents(string $filePath, string $contents): self
+    {
+        $this->container->getFilesystem()->put($filePath, $contents);
+
+        Partyline::info('set file ocntents');
+
+        $this->container->sendMessage("shell_exec('php app/helpers.php')\n");
+
+        return $this;
+    }
+
     public function close()
     {
         if (! $this->container) {

@@ -1,8 +1,9 @@
 <template>
-    <div class="m-4 absolute pin"></div>
+    <div></div>
 </template>
 <script>
 import Terminal from 'xterm';
+import { WebSocketConnection } from '../WebSocketConnection';
 
 export default {
     created() {
@@ -12,15 +13,7 @@ export default {
 
         this.terminal.on('data', this.send);
 
-        this.socket = new WebSocket(`ws://${window.webSocket.host}:${window.webSocket.port}/${window.sessionId}`);
-
-        this.socket.onmessage = (message) => {
-            const data = JSON.parse(message.data);
-
-            if (data.type === 'terminal-data') {
-                this.terminal.write(data.payload);
-            }
-        };
+        WebSocketConnection.$on('message-received', this.onWebSocketMessage);
     },
 
     mounted() {
@@ -31,13 +24,11 @@ export default {
 
     methods: {
         send(data) {
-            if(this.socket.readyState === this.socket.OPEN){
-                const jsonData = JSON.stringify({
-                    'type': 'terminal-data',
-                    'payload': data,
-                });
-
-                this.socket.send(jsonData);
+            WebSocketConnection.send('terminal-data', data);
+        },
+        onWebSocketMessage({type, payload }) {
+            if (type === 'terminal-data') {
+                this.terminal.write(payload);
             }
         }
     },

@@ -39,6 +39,10 @@ class BrowserEventHandler
         if ($message->getType() === Message::TERMINAL_DATA_TYPE) {
             $containerConnection->sendMessage($message->getPayload());
         }
+
+        if ($message->getType() === Message::FILE_DATA_TYPE) {
+            $containerConnection->sendFileContents('app/helpers.php', $message->getPayload());
+        }
     }
 
     public function onClose(ConnectionInterface $browserConnection)
