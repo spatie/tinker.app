@@ -24,6 +24,31 @@
 
             this.editor.setTheme('ace/theme/tomorrow_night');
 
+            this.editor.setValue(`
+<?php
+
+$n = 100;
+
+for($i=1;$i<=$n;$i++){  //numbers to be checked as prime
+
+      $counter = 0;
+      for($j=1;$j<=$i;$j++){ //all divisible factors
+
+
+            if($i % $j==0){
+
+                  $counter++;
+            }
+      }
+
+    //prime requires 2 rules ( divisible by 1 and divisible by itself)
+    if($counter==2){
+
+           print $i." is Prime\\n";
+    }
+}
+            `);
+
             this.editor.commands.addCommand({
                 name: 'save',
                 bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
