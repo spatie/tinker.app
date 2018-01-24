@@ -50,7 +50,7 @@ class ContainerConnection
 
         Partyline::info('set file ocntents');
 
-        $this->container->sendMessage("shell_exec('php app/helpers.php')\n");
+        $this->container->sendMessage("run\n");
 
         return $this;
     }
