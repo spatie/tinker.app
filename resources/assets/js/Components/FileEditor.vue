@@ -27,6 +27,8 @@
             this.editor.setValue(`
 <?php
 
+// Use cmd+s or ctrl+s to save and run.
+
 $n = 100;
 
 for($i=1;$i<=$n;$i++){  //numbers to be checked as prime
