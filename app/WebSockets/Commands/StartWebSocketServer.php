@@ -81,7 +81,7 @@ class StartWebSocketServer extends Command
         );
     }
 
-    public function outputStartedMessageToConsole(): void
+    public function outputStartedMessageToConsole()
     {
         $wsConfig = config('websockets');
         $allowedOrigins = implode(', ', $wsConfig['allowedOrigins']);
