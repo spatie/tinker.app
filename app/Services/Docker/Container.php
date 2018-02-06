@@ -7,6 +7,7 @@ use Docker\API\Model\ContainersCreatePostBody;
 use Docker\API\Model\HostConfig;
 use Docker\API\Model\HostConfigPortBindingsItem;
 use Docker\Docker;
+use Exception;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use League\Flysystem\Filesystem;
@@ -14,6 +15,7 @@ use League\Flysystem\Sftp\SftpAdapter;
 use Partyline;
 use Ratchet\Client\WebSocket;
 use React\EventLoop\LoopInterface;
+use stdClass;
 
 class Container
 {
@@ -78,12 +80,12 @@ class Container
         return $this->name;
     }
 
-    public function getInfo(): \stdClass
+    public function getInfo(): stdClass
     {
         $response = $this->docker->containerInspect($this->getName(), [], false);
 
         if ($response->getStatusCode() !== 200) {
-            throw new \Exception('Couldnt get info for docker container.');
+            throw new Exception('Couldnt get info for docker container.');
         }
 
         $json = (string) $response->getBody();
