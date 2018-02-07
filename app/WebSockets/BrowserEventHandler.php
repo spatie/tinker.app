@@ -2,10 +2,13 @@
 
 namespace App\WebSockets;
 
+use App\Services\Docker\Container;
+use Exception;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Collection;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
+use Partyline;
 
 class BrowserEventHandler
 {
@@ -48,11 +51,28 @@ class BrowserEventHandler
     public function onClose(ConnectionInterface $browserConnection)
     {
         $containerConnection = $this->findContainerConnection($browserConnection);
+        $container = $containerConnection->getContainer();
 
-        if ($containerConnection) {
-            $containerConnection->close();
-            $this->containerConnections = $this->containerConnections->reject->usesBrowserConnection($browserConnection);
+        if (! $containerConnection) {
+            return;
         }
+
+        if ($this->findConnectionsUsingContainer($container)->count() === 1) {
+            Partyline::comment("Last client on {$container->getName()} disconnected. Shutting down container.");
+
+            $container->stop()->remove();
+        }
+
+        $this->containerConnections = $this->containerConnections->reject->usesBrowserConnection($browserConnection);
+    }
+
+    protected function findConnectionsUsingContainer(Container $container): Collection
+    {
+        return $this
+            ->containerConnections
+            ->filter(function (ContainerConnection $containerConnection) use ($container) {
+                return $container->getName() === $containerConnection->getContainer()->getName();
+            });
     }
 
     protected function findContainerConnection(ConnectionInterface $browserConnection): ?ContainerConnection

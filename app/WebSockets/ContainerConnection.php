@@ -32,6 +32,11 @@ class ContainerConnection
         }
     }
 
+    public function getContainer(): Container
+    {
+        return $this->container;
+    }
+
     public function usesBrowserConnection(ConnectionInterface $browserConnection): bool
     {
         return $this->browserConnection === $browserConnection;
@@ -48,23 +53,9 @@ class ContainerConnection
     {
         $this->container->getFilesystem()->put($filePath, $contents);
 
-        Partyline::info('set file ocntents');
-
         $this->container->sendMessage("run\n");
 
         return $this;
-    }
-
-    public function close()
-    {
-        if (! $this->container) {
-            return;
-        }
-
-        $this
-            ->container
-            ->stop()
-            ->remove();
     }
 
     protected function findOrCreateContainer(ConnectionInterface $browserConnection, ?string $sessionId = null): ?Container
