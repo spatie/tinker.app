@@ -43,7 +43,7 @@ class Message implements Jsonable
 
         return new static(
             $data->type ?? static::TERMINAL_DATA_TYPE,
-            (string) json_encode($data->payload)
+            is_object($data->payload) ? json_encode($data->payload) : (string) $data->payload
         );
     }
 
