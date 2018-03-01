@@ -3,12 +3,11 @@
 namespace App\WebSockets;
 
 use App\Services\Docker\Container;
-use Exception;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Collection;
+use Partyline;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
-use Partyline;
 
 class BrowserEventHandler
 {
@@ -44,7 +43,7 @@ class BrowserEventHandler
         }
 
         if ($message->getType() === Message::FILE_DATA_TYPE) {
-            $containerConnection->sendFileContents('app/helpers.php', $message->getPayload());
+            $containerConnection->sendFileContents('tinker_buffer', $message->getPayload());
         }
     }
 
