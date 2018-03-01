@@ -11,6 +11,7 @@
         data() {
             return {
                 editor: null,
+                lastDelta: null,
             };
         },
 
@@ -20,13 +21,18 @@
         mounted() {
             this.editor = ace.edit('editor');
 
-            this.editor.getSession().setMode('ace/mode/php');
+            this.editor.on('change', delta => {
+                if(this.lastDelta != delta) {
+                    console.log(JSON.stringify(delta));
+                    WebSocketConnection.send('buffer-change', delta);
+                }
+            });
+
+            this.editor.getSession().setMode({path:"ace/mode/php", inline:true});
 
             this.editor.setTheme('ace/theme/tomorrow_night');
 
             this.editor.setValue(`
-<?php
-
 // Use cmd+s or ctrl+s to save and run.
 
 $n = 100;
@@ -61,7 +67,7 @@ for($i=1;$i<=$n;$i++){  //numbers to be checked as prime
 
         methods: {
             saveFile(editor) {
-                WebSocketConnection.send('file-data', editor.getValue());
+                WebSocketConnection.send('buffer-run', editor.getValue());
             }
         }
     }

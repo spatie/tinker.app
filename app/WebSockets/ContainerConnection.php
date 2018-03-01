@@ -37,6 +37,11 @@ class ContainerConnection
         return $this->container;
     }
 
+    public function getBrowserConnection(): ConnectionInterface
+    {
+        return $this->browserConnection;
+    }
+
     public function usesBrowserConnection(ConnectionInterface $browserConnection): bool
     {
         return $this->browserConnection === $browserConnection;

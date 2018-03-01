@@ -7,7 +7,8 @@ use Illuminate\Contracts\Support\Jsonable;
 class Message implements Jsonable
 {
     const TERMINAL_DATA_TYPE = 'terminal-data';
-    const FILE_DATA_TYPE = 'file-data';
+    const BUFFER_RUN_TYPE = 'buffer-run';
+    const BUFFER_CHANGE_TYPE = 'buffer-change';
 
     /** @var int */
     protected $type;
@@ -31,13 +32,18 @@ class Message implements Jsonable
         return new static(static::TERMINAL_DATA_TYPE, $payload);
     }
 
+    public static function bufferChange(string $payload) : self
+    {
+        return new static(static::BUFFER_CHANGE_TYPE, $payload);
+    }
+
     public static function fromJson(string $json): self
     {
         $data = json_decode($json);
 
         return new static(
             $data->type ?? static::TERMINAL_DATA_TYPE,
-            (string) $data->payload
+            (string) json_encode($data->payload)
         );
     }
 

@@ -42,8 +42,20 @@ class BrowserEventHandler
             $containerConnection->sendMessage($message->getPayload());
         }
 
-        if ($message->getType() === Message::FILE_DATA_TYPE) {
+        if ($message->getType() === Message::BUFFER_RUN_TYPE) {
             $containerConnection->sendFileContents('tinker_buffer', $message->getPayload());
+        }
+
+        if ($message->getType() === Message::BUFFER_CHANGE_TYPE) {
+            $container = $containerConnection->getContainer();
+
+            $collaboratingContainerConnections = $this->findConnectionsUsingContainer($container);
+
+            $collaboratingBrowserConnections = $collaboratingContainerConnections->map->getBrowserConnection();
+
+            $bufferChangeMessage = Message::bufferChange($message->getPayload());
+
+            $collaboratingBrowserConnections->each->send($bufferChangeMessage);
         }
     }
 
