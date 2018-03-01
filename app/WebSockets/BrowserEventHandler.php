@@ -55,7 +55,11 @@ class BrowserEventHandler
 
             $bufferChangeMessage = Message::bufferChange($message->getPayload());
 
-            $collaboratingBrowserConnections->each->send($bufferChangeMessage);
+            $collaboratingBrowserConnections
+                ->reject(function (ConnectionInterface $collaboratingBrowserConnection) use ($browserConnection) {
+                    return $collaboratingBrowserConnection === $browserConnection;
+                })
+                ->each->send($bufferChangeMessage);
         }
     }
 

@@ -16,6 +16,7 @@
         },
 
         created() {
+            WebSocketConnection.$on('message-received', this.onWebSocketMessage);
         },
 
         mounted() {
@@ -68,7 +69,13 @@ for($i=1;$i<=$n;$i++){  //numbers to be checked as prime
         methods: {
             saveFile(editor) {
                 WebSocketConnection.send('buffer-run', editor.getValue());
-            }
+            },
+            onWebSocketMessage({type, payload }) {
+                if (type === 'buffer-change') {
+                    this.lastDelta = JSON.parse(payload);
+                    this.editor.getSession().getDocument().applyDeltas([this.lastDelta]) ;
+                }
+            },
         }
     }
 </script>
