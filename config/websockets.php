@@ -5,8 +5,8 @@ return [
     'port' => env('WS_PORT', 8080),
     'allowedOrigins' => [
         '165.227.172.206',
-        'tinker.sh',
-        'tinker.sh.test',
+        'artisan.sh',
+        'artisan.sh.test',
         'localhost',
     ],
 ];

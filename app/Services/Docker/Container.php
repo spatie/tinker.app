@@ -51,7 +51,7 @@ class Container
             ->setPortBindings($mapPorts);
 
         $containerProperties = (new ContainersCreatePostBody())
-            ->setImage('spatie/tinker.sh-image')
+            ->setImage('spatie/artisan.sh-image')
             ->setHostConfig($hostConfig)
             ->setTty(true)
             ->setOpenStdin(true)
@@ -114,7 +114,7 @@ class Container
             'host' => 'localhost',
             'port' => $this->getSshPort(),
             'username' => 'root',
-            'password' => 'tinkersh',
+            'password' => 'artisansh',
             'root' => '/var/www',
             'timeout' => 10,
             'directoryPerm' => 0755

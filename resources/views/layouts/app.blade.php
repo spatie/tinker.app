@@ -7,7 +7,7 @@
 
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-        <title>Tinker.sh</title>
+        <title>Artisan.sh</title>
     </head>
     <body class="w-screen h-screen">
         @yield('content')
