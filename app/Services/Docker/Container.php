@@ -145,9 +145,12 @@ class Container
     {
         $deleteAssociatedVolumes = true;
 
-        $this->docker->containerDelete($this->name, [
+        $response = $this->docker->containerDelete($this->name, [
             'v' => $deleteAssociatedVolumes,
         ]);
+
+        Log::debug('Stopped container');
+        Log::debug($response);
 
         return $this;
     }
