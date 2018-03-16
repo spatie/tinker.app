@@ -143,7 +143,11 @@ class Container
 
     public function remove(): self
     {
-        $this->docker->containerDelete($this->name);
+        $deleteAssociatedVolumes = true;
+
+        $this->docker->containerDelete($this->name, [
+            'v' => $deleteAssociatedVolumes,
+        ]);
 
         return $this;
     }
