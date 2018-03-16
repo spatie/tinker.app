@@ -32,6 +32,6 @@ class ContainerRepository
 
     public function findBySessionId(string $sessionId): ?Container
     {
-        return $this->find("tinker-{$sessionId}");
+        return $this->find($sessionId);
     }
 }

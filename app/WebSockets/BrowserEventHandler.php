@@ -68,14 +68,14 @@ class BrowserEventHandler
         $containerConnection = $this->findContainerConnection($browserConnection);
         $container = $containerConnection->getContainer();
 
-        if (! $containerConnection) {
+        if (is_null($container)) {
             return;
         }
 
         if ($this->findConnectionsUsingContainer($container)->count() === 1) {
             Partyline::comment("Last client on {$container->getName()} disconnected. Shutting down container.");
 
-            $container->stop()->remove();
+            $container->kill()->remove();
         }
 
         $this->containerConnections = $this->containerConnections->reject->usesBrowserConnection($browserConnection);
@@ -86,7 +86,7 @@ class BrowserEventHandler
         return $this
             ->containerConnections
             ->filter(function (ContainerConnection $containerConnection) use ($container) {
-                return $container->getName() === $containerConnection->getContainer()->getName();
+                return $container->getName() === optional($containerConnection->getContainer())->getName();
             });
     }
 

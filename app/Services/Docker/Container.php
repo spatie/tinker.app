@@ -39,7 +39,7 @@ class Container
 
     public static function create(LoopInterface $loop): self
     {
-        $name = 'tinker-'.str_random();
+        $name = str_random();
 
         $hostPortBinding = (new HostConfigPortBindingsItem())
             ->setHostIp('0.0.0.0'); // if we don't specify a host port Docker will assign one
@@ -134,16 +134,21 @@ class Container
         return $this;
     }
 
-    public function stop(): self
+    public function kill(): self
     {
-        $this->docker->containerStop($this->name);
+        $this->docker->containerKill($this->name);
 
         return $this;
     }
 
     public function remove(): self
     {
-        $this->docker->containerDelete($this->name);
+        $deleteAssociatedVolumes = true;
+
+        $response = $this->docker->containerDelete($this->name, [
+            'v' => $deleteAssociatedVolumes,
+            'force' => true,
+        ]);
 
         return $this;
     }
