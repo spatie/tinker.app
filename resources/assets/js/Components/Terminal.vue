@@ -9,7 +9,10 @@ export default {
     created() {
         Terminal.loadAddon('fit');
 
-        this.terminal = new Terminal();
+        this.terminal = new Terminal({
+            cursorBlink: true,
+            cursorStyle: 'underline',
+        });
 
         this.terminal.on('data', this.send);
 
