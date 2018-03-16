@@ -68,7 +68,7 @@ class BrowserEventHandler
         $containerConnection = $this->findContainerConnection($browserConnection);
         $container = $containerConnection->getContainer();
 
-        if (! $containerConnection) {
+        if (is_null($container)) {
             return;
         }
 
@@ -86,7 +86,7 @@ class BrowserEventHandler
         return $this
             ->containerConnections
             ->filter(function (ContainerConnection $containerConnection) use ($container) {
-                return $container->getName() === $containerConnection->getContainer()->getName();
+                return $container->getName() === optional($containerConnection->getContainer())->getName();
             });
     }
 

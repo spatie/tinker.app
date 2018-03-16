@@ -1,3 +1,4 @@
 <?php
 
-Route::get('/{sessionId?}', 'HomeController');
+Route::get('/', 'HomeController@startSession');
+Route::get('/{sessionId}', 'HomeController@joinSession');

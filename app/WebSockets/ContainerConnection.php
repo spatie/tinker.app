@@ -32,7 +32,7 @@ class ContainerConnection
         }
     }
 
-    public function getContainer(): Container
+    public function getContainer(): ?Container
     {
         return $this->container;
     }
@@ -82,7 +82,7 @@ class ContainerConnection
     {
         $container = (new ContainerRepository($this->loop))->findBySessionId($sessionId);
 
-        if (!$container) {
+        if (! $container) {
             $browserConnection->send(
                 Message::terminalData("Session id `{$sessionId}` is invalid.\n\r")
             );

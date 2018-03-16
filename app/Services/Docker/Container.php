@@ -39,7 +39,7 @@ class Container
 
     public static function create(LoopInterface $loop): self
     {
-        $name = 'tinker-'.str_random();
+        $name = str_random();
 
         $hostPortBinding = (new HostConfigPortBindingsItem())
             ->setHostIp('0.0.0.0'); // if we don't specify a host port Docker will assign one
