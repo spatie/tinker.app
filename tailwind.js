@@ -40,6 +40,19 @@ var defaultConfig = require('tailwindcss/defaultConfig')()
 var colors = {
     'transparent': 'transparent',
 
+    'dark-ui': '#1d252c',
+    'dark-ui-blue-dark': '#2875de',
+    'dark-ui-blue-light': '#2f80ed',
+    'dark-ui-grey-dark': '#39464e',
+    'dark-ui-grey-light': '#f2f2f2',
+
+    'light-ui': '#ffffff',
+    'light-ui-green-dark': '#66c48d',
+    'light-ui-green-light': '#6fcf97',
+    'light-ui-grey-darkest': '#333333',
+    'light-ui-grey-dark': '#4f4f4f',
+    'light-ui-grey-light': '#e0e0e0',
+
     'black': '#222b2f',
     'grey-darkest': '#364349',
     'grey-darker': '#596a73',
@@ -161,7 +174,8 @@ module.exports = {
     */
 
     screens: {
-        'sm': '576px',
+        'xs': '576px',
+        'sm': '680px',
         'md': '768px',
         'lg': '992px',
         'xl': '1200px',
@@ -188,6 +202,7 @@ module.exports = {
 
     fonts: {
         'sans': [
+            'geomanistweb',
             '-apple-system',
             'BlinkMacSystemFont',
             'Segoe UI',
@@ -243,6 +258,8 @@ module.exports = {
     */
 
     textSizes: {
+        '3xs': '.5625rem',     // 9px
+        '2xs': '.625rem',     // 10px
         'xs': '.75rem',     // 12px
         'sm': '.875rem',    // 14px
         'base': '1rem',     // 16px
@@ -451,8 +468,15 @@ module.exports = {
         '8': '2rem',
         '10': '2.5rem',
         '12': '3rem',
+        '14': '3.5rem',
         '16': '4rem',
+        '18': '4.5rem',
+        '20': '5rem',
+        '22': '5.5rem',
         '24': '6rem',
+        '26': '6.5rem',
+        '28': '7rem',
+        '30': '7.5rem',
         '32': '8rem',
         '48': '12rem',
         '64': '16rem',
@@ -465,10 +489,9 @@ module.exports = {
         '2/5': '40%',
         '3/5': '60%',
         '4/5': '80%',
-        '1/6': '16.66667%',
-        '5/6': '83.33333%',
         'full': '100%',
-        'screen': '100vw'
+        'screen': '100vw',
+        'grid': '92%'
     },
 
 
@@ -498,11 +521,19 @@ module.exports = {
         '8': '2rem',
         '10': '2.5rem',
         '12': '3rem',
+        '14': '3.5rem',
         '16': '4rem',
+        '18': '4.5rem',
+        '20': '5rem',
+        '22': '5.5rem',
         '24': '6rem',
+        '26': '6.5rem',
+        '28': '7rem',
+        '30': '7.5rem',
         '32': '8rem',
         '48': '12rem',
         '64': '16rem',
+        '1/2': '50%',
         'full': '100%',
         'screen': '100vh'
     },
@@ -622,6 +653,14 @@ module.exports = {
         '4': '1rem',
         '6': '1.5rem',
         '8': '2rem',
+        '10': '2.5rem',
+        '12': '3rem',
+        '14': '3.5rem',
+        '16': '4rem',
+        '20': '5rem',
+        '24': '6rem',
+        '28': '7rem',
+        '32': '8rem',
     },
 
 
@@ -650,6 +689,14 @@ module.exports = {
         '4': '1rem',
         '6': '1.5rem',
         '8': '2rem',
+        '10': '2.5rem',
+        '12': '3rem',
+        '14': '3.5rem',
+        '16': '4rem',
+        '20': '5rem',
+        '24': '6rem',
+        '28': '7rem',
+        '32': '8rem',
     },
 
 
@@ -677,6 +724,14 @@ module.exports = {
         '4': '1rem',
         '6': '1.5rem',
         '8': '2rem',
+        '10': '2.5rem',
+        '12': '3rem',
+        '14': '3.5rem',
+        '16': '4rem',
+        '20': '5rem',
+        '24': '6rem',
+        '28': '7rem',
+        '32': '8rem',
     },
 
 

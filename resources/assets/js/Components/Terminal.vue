@@ -3,7 +3,9 @@
 </template>
 <script>
 import Terminal from 'xterm';
-import { WebSocketConnection } from '../WebSocketConnection';
+import {
+    WebSocketConnection
+} from '../WebSocketConnection';
 
 export default {
     created() {
@@ -26,7 +28,10 @@ export default {
         send(data) {
             WebSocketConnection.send('terminal-data', data);
         },
-        onWebSocketMessage({type, payload }) {
+        onWebSocketMessage({
+            type,
+            payload
+        }) {
             if (type === 'terminal-data') {
                 this.terminal.write(payload);
             }

@@ -1,0 +1,17 @@
+.ace_editor {
+    font-family: 'Source Code Pro' !important;
+    font-size: 13px !important;
+    line-height: 2.2em !important;
+}
+
+.ace_gutter {
+    padding: 35px 10px 0 10px !important;
+}
+
+.ace_scroller {
+    padding: 35px 0 0 0 !important;
+}
+
+.ace_print-margin {
+    @apply hidden;
+}

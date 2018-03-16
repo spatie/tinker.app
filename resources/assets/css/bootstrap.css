@@ -1,4 +1,5 @@
 @tailwind preflight;
+
 * {
     position: relative;
     box-sizing: inherit;
@@ -34,4 +35,8 @@ img,
 svg {
     display: block;
     vertical-align: middle;
+}
+
+body {
+    @apply font-sans;
 }

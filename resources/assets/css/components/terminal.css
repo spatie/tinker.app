@@ -1,9 +1,26 @@
 @import "xterm/src/xterm.css";
 
 .terminal .xterm-viewport {
-    background-color: config('colors.black');
+    @apply bg-light-ui;
 }
 
 .terminal {
-    background-color: config('colors.black');
+    @apply bg-light-ui;
+    @apply border-b;
+    @apply border-light-ui-grey-light;
+    @apply text-xs;
+
+    font-family: 'Source Code Pro' !important;
+
+    @screen sm {
+        border-image: linear-gradient(to right, config('colors.light-ui-grey-light') 0%, config('colors.light-ui') 100%);
+    	border-image-slice: 1;
+    }
+
+    @screen md {
+        @apply border-r;
+
+        border-image: linear-gradient(to bottom, config('colors.light-ui-grey-light') 0%, config('colors.light-ui') 100%);
+    	border-image-slice: 1;
+    }
 }

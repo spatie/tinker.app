@@ -2,80 +2,90 @@
     <div id="editor"></div>
 </template>
 <script>
-    import * as ace from 'brace';
-    import 'brace/mode/php';
-    import 'brace/theme/tomorrow_night';
-    import { WebSocketConnection } from '../WebSocketConnection';
+import * as ace from 'brace';
+import 'brace/mode/php';
+import 'brace/theme/github';
+import {
+    WebSocketConnection
+} from '../WebSocketConnection';
 
-    export default {
-        data() {
-            return {
-                editor: null,
-                lastDelta: null,
-            };
-        },
+export default {
+    data() {
+        return {
+            editor: null,
+            lastDelta: null,
+        };
+    },
 
-        created() {
-            WebSocketConnection.$on('message-received', this.onWebSocketMessage);
-        },
+    created() {
+        WebSocketConnection.$on('message-received', this.onWebSocketMessage);
+    },
 
-        mounted() {
-            this.editor = ace.edit('editor');
+    mounted() {
+        this.editor = ace.edit('editor');
 
-            this.editor.on('change', delta => {
-                if(this.lastDelta != delta) {
-                    console.log(JSON.stringify(delta));
-                    WebSocketConnection.send('buffer-change', delta);
-                }
-            });
+        this.editor.on('change', delta => {
+            if (this.lastDelta != delta) {
+                console.log(JSON.stringify(delta));
+                WebSocketConnection.send('buffer-change', delta);
+            }
+        });
 
-            this.editor.getSession().setMode({path:"ace/mode/php", inline:true});
+        this.editor.getSession().setMode({
+            path: "ace/mode/php",
+            inline: true
+        });
 
-            this.editor.setTheme('ace/theme/tomorrow_night');
+        this.editor.setTheme('ace/theme/github');
 
-            this.editor.setValue(`
-// Use cmd+s or ctrl+s to save and run.
+        this.editor.setValue(
+`//use cmd+s or ctrl+s to save and run.
 
 $n = 100;
 
-for($i=1;$i<=$n;$i++){  //numbers to be checked as prime
-
+for ($i = 1; $i <= $n; $i++) {  //numbers to be checked as prime
       $counter = 0;
-      for($j=1;$j<=$i;$j++){ //all divisible factors
 
+      for ($j = 1; $j <= $i; $j++) { //all divisible factors
 
-            if($i % $j==0){
-
+            if ($i % $j == 0){
                   $counter++;
             }
       }
 
-    //prime requires 2 rules ( divisible by 1 and divisible by itself)
-    if($counter==2){
+    //prime requires 2 rules (divisible by 1 and divisible by itself)
 
+    if ($counter == 2 ) {
            print $i." is Prime\\n";
     }
 }
-            `);
+`
+        );
 
-            this.editor.commands.addCommand({
-                name: 'save',
-                bindKey: {win: 'Ctrl-S',  mac: 'Command-S'},
-                exec: this.saveFile,
-                readOnly: true // false if this command should not apply in readOnly mode
-            });
+        this.editor.commands.addCommand({
+            name: 'save',
+            bindKey: {
+                win: 'Ctrl-S',
+                mac: 'Command-S'
+            },
+            exec: this.saveFile,
+            readOnly: true // false if this command should not apply in readOnly mode
+        });
+    },
+
+    methods: {
+        saveFile(editor) {
+            WebSocketConnection.send('buffer-run', editor.getValue());
         },
-
-        methods: {
-            saveFile(editor) {
-                WebSocketConnection.send('buffer-run', editor.getValue());
-            },
-            onWebSocketMessage({type, payload }) {
-                if (type === 'buffer-change') {
-                    this.lastDelta = JSON.parse(payload);
-                    this.editor.getSession().getDocument().applyDeltas([this.lastDelta]) ;
-                }
-            },
-        }
+        onWebSocketMessage({
+            type,
+            payload
+        }) {
+            if (type === 'buffer-change') {
+                this.lastDelta = JSON.parse(payload);
+                this.editor.getSession().getDocument().applyDeltas([this.lastDelta]);
+            }
+        },
     }
+}
 </script>

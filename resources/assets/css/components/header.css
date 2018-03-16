@@ -1,0 +1,11 @@
+.header {
+    @apply bg-light-ui;
+    @apply border-b;
+    @apply border-light-ui-grey-light;
+    @apply w-full;
+
+    @screen sm {
+        border-image: linear-gradient(to right, config('colors.light-ui-grey-light') 0%, config('colors.light-ui') 100%);
+    	border-image-slice: 1;
+    }
+}

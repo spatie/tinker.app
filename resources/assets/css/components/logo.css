@@ -1,0 +1,14 @@
+.logo {
+    @apply absolute;
+    @apply bg-center;
+    @apply bg-contain;
+    @apply bg-no-repeat;
+
+    background-image: url('/images/logo-light-ui.svg');
+    height: 30px;
+    width: 31px;
+
+    @screen sm {
+        @apply static;
+    }
+}

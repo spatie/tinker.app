@@ -1,0 +1,95 @@
+.menu {
+    @apply flex;
+    @apply font-normal;
+    @apply justify-center;
+    @apply m-0;
+    @apply text-2xs;
+    @apply tracking-wide;
+    @apply uppercase;
+    @apply w-full;
+
+    @screen sm {
+        @apply justify-start;
+
+        margin: 0 0 0 4.55%;
+        width: calc(95.45% - 31px);
+    }
+
+    & .menu-item {
+        &:not(:first-child) {
+            margin: 0 0 0 -1px;
+        }
+
+        &:not(:last-child) {
+            @screen sm {
+                @apply mr-4;
+            }
+        }
+
+        &:last-child {
+            @screen sm {
+                @apply absolute;
+                @apply pin-r;
+            }
+        }
+
+        & a {
+            @apply border;
+            @apply border-light-ui-grey-light;
+            @apply flex;
+            @apply items-center;
+            @apply p-4;
+            @apply text-light-ui-grey-dark;
+
+            transition: background-color .4s, border-color .4s;
+
+            @screen sm {
+                @apply rounded-sm;
+            }
+
+            & span {
+                transition: background-color .4s;
+
+                & img {
+                    @apply mr-0;
+
+                    height: 18px;
+                    width: 18px;
+
+                    @screen sm {
+                        @apply mr-8;
+                    }
+                }
+
+                &:first-child {
+                    &:after {
+                        @apply absolute;
+                        @apply bg-light-ui-grey-light;
+                        @apply h-full;
+                        @apply hidden;
+                        @apply pin-t;
+                        @apply w-px;
+
+                        content: '';
+                        left: 34px;
+
+                        @screen sm {
+                            @apply block;
+                        }
+                    }
+                }
+            }
+
+            &:hover {
+                @apply bg-light-ui-green-light;
+                @apply border-light-ui-green-light;
+
+                & span {
+                    &:after {
+                        @apply bg-light-ui-green-dark;
+                    }
+                }
+            }
+        }
+    }
+}
