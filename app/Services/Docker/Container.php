@@ -149,8 +149,8 @@ class Container
             'v' => $deleteAssociatedVolumes,
         ]);
 
-        Log::debug('Stopped container');
-        Log::debug($response);
+        \Log::debug('Stopped container');
+        \Log::debug($response);
 
         return $this;
     }
