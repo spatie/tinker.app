@@ -134,9 +134,9 @@ class Container
         return $this;
     }
 
-    public function stop(): self
+    public function kill(): self
     {
-        $this->docker->containerStop($this->name);
+        $this->docker->containerKill($this->name);
 
         return $this;
     }
@@ -147,10 +147,8 @@ class Container
 
         $response = $this->docker->containerDelete($this->name, [
             'v' => $deleteAssociatedVolumes,
+            'force' => true,
         ]);
-
-        \Log::debug('Stopped container');
-        \Log::debug($response);
 
         return $this;
     }
