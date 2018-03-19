@@ -2,6 +2,28 @@
 
 @section('content')
 
+<section>
+    <div class="modal">
+        <div>
+            <label for="theme">
+                syntax theme
+            </label>
+            <input name="theme" type="text">
+        </div>
+        <div>
+            <label for="size">
+                font size
+            </label>
+            <input name="size" type="text">
+        </div>
+        <div>
+            <label for="height">
+                line height
+            </label>
+            <input name="height" type="text">
+        </div>
+    </div>
+</section>
 <header>
     <div class="header">
         <nav class="flex h-26 items-center m-auto w-grid">

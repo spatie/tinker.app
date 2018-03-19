@@ -1,0 +1,58 @@
+.modal {
+    @apply absolute;
+    @apply bg-light-ui;
+    @apply border;
+    @apply border-light-ui-grey-light;
+    @apply flex;
+    @apply flex-col;
+    @apply p-10;
+    @apply z-50;
+
+    top: 104px;
+
+    &:after {
+        @apply absolute;
+        @apply bg-contain;
+        @apply bg-no-repeat;
+
+        background-image: url('/images/triangle.svg');
+        content: '';
+        height: 16px;
+        top: -16px; left: calc(50% - 11px);
+        width: 22px;
+    }
+
+    & div {
+        @apply flex;
+        @apply items-center;
+        @applt justify-between;
+
+        &:not(:last-child) {
+            @apply mb-4;
+        }
+
+        & label {
+            @apply mr-6;
+            @apply text-2xs;
+            @apply tracking-wide;
+            @apply uppercase;
+
+            flex-basis: config('width.30');
+        }
+
+        & input {
+            @apply border;
+            @apply border-light-ui-grey-light;
+            @apply p-2;
+            @apply text-xs;
+            @apply w-36;
+
+            transition: border-color .4s;
+
+            &:focus {
+                @apply border-light-ui-grey-dark;
+                outline: 0;
+            }
+        }
+    }
+}
