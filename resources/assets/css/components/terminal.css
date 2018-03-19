@@ -8,8 +8,7 @@
     @apply bg-light-ui;
     @apply border-b;
     @apply border-light-ui-grey-light;
-
-    font-family: 'Source Code Pro' !important;
+    @apply font-code;
 
     @screen sm {
         border-image: linear-gradient(to right, config('colors.light-ui-grey-light') 0%, config('colors.light-ui') 100%);

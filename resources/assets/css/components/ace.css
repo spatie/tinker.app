@@ -1,5 +1,5 @@
 .ace_editor {
-    font-family: 'Source Code Pro' !important;
+    @apply font-code;
 }
 
 .ace_print-margin {

@@ -234,6 +234,9 @@ module.exports = {
             'Liberation Mono',
             'Courier New',
             'monospace',
+        ],
+        'code': [
+            'Source Code Pro',
         ]
     },
 

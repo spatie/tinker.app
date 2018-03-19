@@ -43,14 +43,18 @@
         & input {
             @apply border;
             @apply border-light-ui-grey-light;
+            @apply font-code;
             @apply p-2;
+            @apply rounded-sm;
             @apply text-xs;
             @apply w-36;
 
-            transition: border-color .4s;
+            transition: border-color .4s, color .4s;
 
             &:focus {
-                @apply border-light-ui-grey-dark;
+                @apply border-light-ui-green-light;
+                @apply text-light-ui-green-light;
+
                 outline: 0;
             }
         }
