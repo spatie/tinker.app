@@ -44,19 +44,19 @@ export default {
 $n = 100;
 
 for ($i = 1; $i <= $n; $i++) {  //numbers to be checked as prime
-      $counter = 0;
+    $counter = 0;
 
-      for ($j = 1; $j <= $i; $j++) { //all divisible factors
+    for ($j = 1; $j <= $i; $j++) { //all divisible factors
 
             if ($i % $j == 0){
-                  $counter++;
+                $counter++;
             }
-      }
+    }
 
     //prime requires 2 rules (divisible by 1 and divisible by itself)
 
     if ($counter == 2 ) {
-           print $i." is Prime\\n";
+        print $i." is Prime\\n";
     }
 }
 `
