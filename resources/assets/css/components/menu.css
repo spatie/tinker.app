@@ -72,6 +72,7 @@
 
                         content: '';
                         left: 34px;
+                        transition: background .4s, height .4s, top .4s;
 
                         @screen sm {
                             @apply block;
@@ -87,6 +88,9 @@
                 & span {
                     &:after {
                         @apply bg-light-ui-green-dark;
+
+                        height: 52px;
+                        top: -17px;
                     }
                 }
             }

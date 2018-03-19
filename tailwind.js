@@ -47,7 +47,7 @@ var colors = {
     'dark-ui-grey-light': '#f2f2f2',
 
     'light-ui': '#ffffff',
-    'light-ui-green-dark': '#66c48d',
+    'light-ui-green-dark': '#62bd88',
     'light-ui-green-light': '#6fcf97',
     'light-ui-grey-darkest': '#333333',
     'light-ui-grey-dark': '#4f4f4f',
