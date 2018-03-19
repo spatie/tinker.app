@@ -8,7 +8,11 @@
     @apply p-10;
     @apply z-50;
 
-    top: 104px;
+    top: 78px; left: -139px;
+
+    @screen sm {
+        left: -80px;
+    }
 
     &:after {
         @apply absolute;
@@ -36,8 +40,7 @@
             @apply text-2xs;
             @apply tracking-wide;
             @apply uppercase;
-
-            flex-basis: config('width.30');
+            @apply w-20;
         }
 
         & input {

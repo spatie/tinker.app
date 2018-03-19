@@ -2,46 +2,46 @@
 
 @section('content')
 
-<section>
-    <div class="modal">
-        <div>
-            <label for="theme">
-                syntax theme
-            </label>
-            <input name="theme" type="text">
-        </div>
-        <div>
-            <label for="size">
-                font size
-            </label>
-            <input name="size" type="text">
-        </div>
-        <div>
-            <label for="height">
-                line height
-            </label>
-            <input name="height" type="text">
-        </div>
-    </div>
-</section>
-<header>
-    <div class="header">
-        <nav class="flex h-26 items-center m-auto w-grid">
-            <h1 class="logo"><span class="hidden">artisan.sh</span></h1>
-            <ul class="menu">
-                <li class="menu-item"><a href="#"><span><img src="/images/icon-toggle.svg" alt="toggle ui"></span><span class="hidden | sm:inline">dark ui</span></a></li>
-                <li class="menu-item"><a href="#"><span><img src="/images/icon-syntax.svg" alt="syntax settings"></span><span class="hidden | sm:inline">syntax settings</span></a></li>
-                <li class="menu-item"><a href="#"><span><img src="/images/icon-share.svg" alt="share session"></span><span class="hidden | sm:inline">share session</span></a></li>
-            </ul>
-        </nav>
-    </div>
-</header>
-<section>
-    <div id="app" class="flex flex-col w-screen | md:flex-row" style="height: calc(100vh - 6.5rem);">
-        <terminal class="h-1/2 w-full | md:h-full md:w-1/2"></terminal>
-        <file-editor class="h-1/2 w-full | md:h-full md:w-1/2"></file-editor>
-    </div>
-</section>
+<div id="app">
+    <section>
+        <header>
+            <div class="header">
+                <nav class="flex h-26 items-center m-auto w-grid">
+                    <h1 class="logo"><span class="hidden">artisan.sh</span></h1>
+                    <ul class="menu">
+                        <li class="menu-item">
+                            <a href="#toggle">
+                                <span><img src="/images/icon-toggle.svg" alt="toggle ui"></span>
+                                <span class="hidden | sm:inline">dark ui</span>
+                            </a>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#settings">
+                                <span><img src="/images/icon-syntax.svg" alt="syntax settings"></span>
+                                <span class="hidden | sm:inline">syntax settings</span>
+                            </a>
+                            <modal></modal>
+                        </li>
+                        <li class="menu-item">
+                            <a href="#share">
+                                <span><img src="/images/icon-share.svg" alt="share session"></span>
+                                <span class="hidden | sm:inline">share session</span>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+    </section>
+    <section>
+        <main>
+            <div class="flex flex-col w-screen | md:flex-row" style="height: calc(100vh - 6.5rem);">
+                <terminal class="h-1/2 w-full | md:h-full md:w-1/2"></terminal>
+                <file-editor class="h-1/2 w-full | md:h-full md:w-1/2"></file-editor>
+            </div>
+        </main>
+    </section>
+</div>
 
 <script>
     window.webSocket = @json(config('websockets'));
