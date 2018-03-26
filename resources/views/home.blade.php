@@ -20,7 +20,7 @@
                                 <span><img src="/images/icon-syntax.svg" alt="syntax settings"></span>
                                 <span class="hidden | sm:inline">syntax settings</span>
                             </a>
-                            <modal></modal>
+                            <modal class="hidden"></modal>
                         </li>
                         <li class="menu-item">
                             <a href="#share">

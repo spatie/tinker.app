@@ -1,11 +1,13 @@
 @import "xterm/src/xterm.css";
 
 .terminal .xterm-viewport {
-    @apply bg-light-ui;
+    /*@apply bg-light-ui;*/
+    @apply bg-dark-ui;
 }
 
 .terminal {
-    @apply bg-light-ui;
+    /*@apply bg-light-ui;*/
+    @apply bg-dark-ui;
     @apply border-b;
     @apply border-light-ui-grey-light;
     @apply font-code;
