@@ -2,7 +2,7 @@
     <div></div>
 </template>
 <script>
-import Terminal from 'xterm';
+import { Terminal } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import {
     WebSocketConnection
