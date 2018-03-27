@@ -5,6 +5,7 @@
 import * as ace from 'brace';
 import 'brace/mode/php';
 import 'brace/theme/github';
+import 'brace/theme/monokai';
 import {
     WebSocketConnection
 } from '../WebSocketConnection';
@@ -15,6 +16,18 @@ export default {
             editor: null,
             lastDelta: null,
         };
+    },
+
+    computed: {
+        darkMode() {
+            return this.$store.state.darkMode;
+        },
+    },
+
+    watch: {
+        darkMode(darkMode) {
+            this.editor.setTheme((darkMode ? 'ace/theme/monokai' : 'ace/theme/github'));
+        }
     },
 
     created() {
