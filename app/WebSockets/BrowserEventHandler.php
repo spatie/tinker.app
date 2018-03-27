@@ -72,7 +72,7 @@ class BrowserEventHandler
             return;
         }
 
-        if ($this->findConnectionsUsingContainer($container)->count() === 1) {
+        if ($this->findConnectionsUsingContainer($container)->count() <= 1) {
             Partyline::comment("Last client on {$container->getName()} disconnected. Shutting down container.");
 
             $container->kill()->remove();

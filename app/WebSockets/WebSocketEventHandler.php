@@ -53,8 +53,6 @@ class WebSocketEventHandler implements MessageComponentInterface
     {
         PartyLine::error("An error has occurred: {$exception->getMessage()}");
 
-        dump($exception);
-
         $browserConnection->close();
     }
 }

@@ -14,6 +14,9 @@ export default {
         this.terminal = new Terminal({
             cursorBlink: true,
             cursorStyle: 'underline',
+            // theme: {
+            //     background: '#ffffff',
+            // },
         });
 
         this.terminal.on('data', this.send);
