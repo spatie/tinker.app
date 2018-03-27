@@ -10,10 +10,7 @@
                     <h1 class="logo"><span class="hidden">artisan.sh</span></h1>
                     <ul class="menu">
                         <li class="menu-item">
-                            <a href="#toggle">
-                                <span><img src="/images/icon-toggle.svg" alt="toggle ui"></span>
-                                <span class="hidden | sm:inline">dark ui</span>
-                            </a>
+                            <dark-mode-toggle></dark-mode-toggle>
                         </li>
                         <li class="menu-item">
                             <a href="#settings">
