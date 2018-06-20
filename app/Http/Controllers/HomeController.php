@@ -9,6 +9,10 @@ class HomeController extends Controller
 {
     public function startSession()
     {
+        if (! request()->get('start')) {
+            return '<a href="?start=true">start</a>';
+        }
+
         $container = Container::create(Factory::create());
         $container->start();
 
