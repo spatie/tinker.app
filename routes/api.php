@@ -18,3 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::get('session', 'TinkerSessionsController@start');
+Route::get('session/{sessionId}', 'TinkerSessionsController@load');

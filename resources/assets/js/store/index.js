@@ -6,7 +6,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         darkMode: false,
-        sessionId: null,
+        session: null,
     },
 
     mutations: {
@@ -14,30 +14,22 @@ export default new Vuex.Store({
             state.darkMode = ! state.darkMode;
         },
 
-        setSessionId(state, sessionId) {
-            history.replaceState(null, null, sessionId);
+        setSession(state, session) {
+            history.replaceState(null, null, session.id);
 
-            state.sessionId = sessionId;
+            state.session = session;
         },
     },
 
     actions: {
-        async getSessionId(context) {
-            const sessionId = window.location.pathname.replace(/^\//, '') || null;
+        async fetchSession(context) {
+            const sessionId = window.location.pathname.replace(/^\//, '') || '';
 
-            if (sessionId) {
-                context.commit('setSessionId', sessionId);
-
-                return sessionId;
-            }
-
-            const response = await fetch('./api/session');
+            const response = await fetch(`./api/session/${sessionId}`);
 
             const session = await response.json();
 
-            context.commit('setSessionId', session.sessionId);
-
-            return sessionId;
+            context.commit('setSession', session);
         },
     },
 });

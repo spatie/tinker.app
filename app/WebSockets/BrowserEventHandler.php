@@ -43,7 +43,7 @@ class BrowserEventHandler
         }
 
         if ($message->getType() === Message::BUFFER_RUN_TYPE) {
-            $containerConnection->sendFileContents('tinker_buffer', $message->getPayload());
+            $containerConnection->setCode($message->getPayload());
         }
 
         if ($message->getType() === Message::BUFFER_CHANGE_TYPE) {

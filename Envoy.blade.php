@@ -165,5 +165,5 @@ sudo supervisorctl restart all
 @endtask
 
 @finished
-    @slack(env('SLACK_DEPLOYMENT_WEBHOOK_URL'), '#deployments', "{$server}: {$baseDir} release {$newReleaseName} by {$user}")
+    {{--@slack(env('SLACK_DEPLOYMENT_WEBHOOK_URL'), '#deployments', "{$server}: {$baseDir} release {$newReleaseName} by {$user}")--}}
 @endfinished

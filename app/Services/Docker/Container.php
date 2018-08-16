@@ -2,6 +2,7 @@
 
 namespace App\Services\Docker;
 
+use App\Container as ContainerModel;
 use Closure;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\API\Model\HostConfig;
@@ -36,6 +37,9 @@ class Container
 
     /** @var \League\Flysystem\Filesystem */
     protected $filesystem;
+
+    /** @var \App\Container */
+    protected $containerModel;
 
     public static function create(LoopInterface $loop): self
     {
@@ -73,6 +77,12 @@ class Container
         $this->loop = $loop;
 
         $this->docker = $docker ?? Docker::create();
+
+        $this->containerModel = ContainerModel::updateOrCreate([
+            'name' => $name,
+        ], [
+            'active' => true,
+        ]);
     }
 
     public function getName(): string
@@ -123,6 +133,20 @@ class Container
         $this->filesystem = new Filesystem($adapter);
 
         return $this->filesystem;
+    }
+
+    public function sendFileContents(string $filePath, string $contents): self
+    {
+        $this->getFilesystem()->put($filePath, $contents);
+
+        $this->sendMessage("run\n");
+
+        return $this;
+    }
+
+    public function getContainerModel(): ContainerModel
+    {
+        return $this->containerModel;
     }
 
     public function start(): self

@@ -4,6 +4,7 @@ namespace App\WebSockets;
 
 use App\Services\Docker\Container;
 use App\Services\Docker\ContainerRepository;
+use App\Container as ContainerModel;
 use PartyLine;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
@@ -54,11 +55,11 @@ class ContainerConnection
         return $this;
     }
 
-    public function sendFileContents(string $filePath, string $contents): self
+    public function setCode(string $code): self
     {
-        $this->container->getFilesystem()->put($filePath, $contents);
+        $this->getContainer()->getContainerModel()->update(['code' => $code]);
 
-        $this->container->sendMessage("run\n");
+        $this->getContainer()->sendFileContents('tinker_buffer', $code);
 
         return $this;
     }

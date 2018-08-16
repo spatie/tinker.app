@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\Docker\Container;
+use App\Container as ContainerModel;
 use React\EventLoop\Factory;
 
 class TinkerSessionsController extends Controller
@@ -13,10 +14,23 @@ class TinkerSessionsController extends Controller
         $container = Container::create(Factory::create());
         $container->start();
 
-        $sessionId = $container->getName();
+        $containerName = $container->getName();
 
         return [
-            'sessionId' => $sessionId
+            'id' => $containerName,
+            'code' => 'echo "default example";',
+        ];
+    }
+
+    public function load(string $sessionId)
+    {
+        $container = ContainerModel::findByName($sessionId);
+
+        abort_unless($container, 404, 'Session not found');
+
+        return [
+            'id' => $container->name,
+            'code' => $container->code,
         ];
     }
 }

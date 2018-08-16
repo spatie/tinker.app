@@ -6,7 +6,7 @@ export const WebSocketConnection = new Vue({
 
     computed: {
         sessionId() {
-            return this.$store.state.sessionId;
+            return this.$store.state.session.id;
         },
     },
 
@@ -22,7 +22,7 @@ export const WebSocketConnection = new Vue({
 
     methods: {
         async openWebSocket() {
-            await this.$store.dispatch('getSessionId');
+            await this.$store.dispatch('fetchSession');
 
             this.webSocket = new WebSocket(`ws://${window.webSocket.host}:${window.webSocket.port}/${this.sessionId}`);
 
