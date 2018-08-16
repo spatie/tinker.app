@@ -37,13 +37,6 @@ export default {
     mounted() {
         this.editor = ace.edit('editor');
 
-        this.editor.on('change', delta => {
-            if (this.lastDelta != delta) {
-                console.log(JSON.stringify(delta));
-                WebSocketConnection.send('buffer-change', delta);
-            }
-        });
-
         this.editor.getSession().setMode({
             path: "ace/mode/php",
             inline: true
@@ -74,6 +67,13 @@ for ($i = 1; $i <= $n; $i++) {  //numbers to be checked as prime
 }
 `
         );
+
+        this.editor.on('change', delta => {
+            if (this.lastDelta != delta) {
+                console.log(JSON.stringify(delta));
+                WebSocketConnection.send('buffer-change', delta);
+            }
+        });
 
         this.editor.commands.addCommand({
             name: 'save',

@@ -4,9 +4,7 @@
 <script>
 import { Terminal } from 'xterm';
 import * as fit from 'xterm/lib/addons/fit/fit';
-import {
-    WebSocketConnection
-} from '../WebSocketConnection';
+import { WebSocketConnection } from '../WebSocketConnection';
 import darkTheme from './themes/dark';
 import lightTheme from './themes/light';
 
