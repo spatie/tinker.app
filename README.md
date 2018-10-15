@@ -1,9 +1,9 @@
-# Tinker.app - previously tinker.sh and artisan.sh
+# Tinker.app
 
 ## Getting started
 
 - `composer install`
 - `yarn install`
 - `yarn run dev`
-- `docker pull spatie/artisan.sh-image`
+- `docker pull spatie/tinker.app-image`
 - `php artisan start-websocket-server`
