@@ -24,7 +24,7 @@ export const WebSocketConnection = new Vue({
         async openWebSocket() {
             await this.$store.dispatch('fetchSession');
 
-            this.webSocket = new WebSocket(`${window.webSocket.protocol}://localhost/ws/${this.sessionId}`);
+            this.webSocket = new WebSocket(`${window.webSocket.protocol}://tinker.app/ws/${this.sessionId}`);
 
             this.webSocket.onmessage = (message) => {
                 const data = JSON.parse(message.data);
