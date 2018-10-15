@@ -7,7 +7,7 @@
         <header>
             <div class="header">
                 <nav class="flex h-26 items-center m-auto w-grid">
-                    <h1 class="logo"><span class="hidden">artisan.sh</span></h1>
+                    <h1 class="logo"><span class="hidden">tinker.app</span></h1>
                     <ul class="menu">
                         <li class="menu-item">
                             <dark-mode-toggle></dark-mode-toggle>

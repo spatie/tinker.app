@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Code+Pro:400,500,600">
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
-        <title>Artisan.sh</title>
+        <title>Tinker.app</title>
     </head>
     <body class="w-screen h-screen">
         @yield('content')
