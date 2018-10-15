@@ -68,7 +68,7 @@ class StartWebSocketServer extends Command
     protected function getRoute(): Route
     {
         return new Route(
-            '/{sessionId}',
+            '/ws/{sessionId}',
             [
                 '_controller' => $this->webSocketServer,
                 'sessionId' => null
