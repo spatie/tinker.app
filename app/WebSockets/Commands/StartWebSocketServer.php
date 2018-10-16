@@ -3,9 +3,12 @@
 namespace App\WebSockets\Commands;
 
 use App\WebSockets\BrowserEventHandler;
+use App\WebSockets\TinkerServer;
 use App\WebSockets\WebSocketEventHandler;
 use Illuminate\Console\Command;
-use Partyline;
+use Ratchet\Wamp\ServerProtocol;
+use Ratchet\Wamp\WampServer;
+use Wilderborn\Partyline\Facade as Partyline;
 use Ratchet\App;
 use Ratchet\Http\OriginCheck;
 use Ratchet\WebSocket\WsServer;
@@ -19,74 +22,21 @@ class StartWebSocketServer extends Command
 
     protected $description = 'Start the browser facing websocket connection';
 
-    /** @var \Ratchet\WebSocket\WsServer */
-    protected $webSocketServer;
-
     public function handle()
     {
         Partyline::bind($this);
 
-        $eventLoop = Factory::create();
+        $loop = Factory::create();
 
-        $ratchetApp = new App(
-            config('websockets.host'),
-            config('websockets.port'),
-            '0.0.0.0',
-            $eventLoop
-        );
-
-        $this->configureWebSocketServer($eventLoop, $ratchetApp);
-
-        $ratchetApp->routes->add('tinker', $this->getRoute());
-
-        $this->outputStartedMessageToConsole();
-
-        $ratchetApp->run();
-    }
-
-    public function configureWebSocketServer(StreamSelectLoop $eventLoop, App $ratchetApp)
-    {
-        $this->webSocketServer = new WsServer(new WebSocketEventHandler($eventLoop, new BrowserEventHandler($eventLoop)));
-
-        $this->webSocketServer->enableKeepAlive($eventLoop);
-
-        $this->addAllowedOrigins($ratchetApp);
-    }
-
-    protected function addAllowedOrigins(App $ratchetApp)
-    {
-        $allowedOrigins = config('websockets.allowedOrigins');
+        $host = config('websockets.host');
         $port = config('websockets.port');
 
-        $this->webSocketServer = new OriginCheck($this->webSocketServer, $allowedOrigins);
+        Partyline::info("WebSocket server started on {$host}:{$port} allowing access from localhost only.");
 
-        foreach ($allowedOrigins as $allowedOrgin) {
-            $ratchetApp->flashServer->app->addAllowedAccess($allowedOrgin, $port);
-        }
-    }
+        $app = new App($host, $port, '127.0.0.1', $loop);
 
-    protected function getRoute(): Route
-    {
-        return new Route(
-            '/ws/{sessionId}',
-            [
-                '_controller' => $this->webSocketServer,
-                'sessionId' => null
-            ],
-            ['Origin' => config('websockets.host')],
-            [],
-            config('websockets.host'),
-            [],
-            ['GET']
-        );
-    }
+        $app->route('/ws', new ServerProtocol(new TinkerServer($loop)));
 
-    public function outputStartedMessageToConsole()
-    {
-        $wsConfig = config('websockets');
-        $allowedOrigins = implode(', ', $wsConfig['allowedOrigins']);
-
-        Partyline::info("WebSocket server started on {$wsConfig['host']}:{$wsConfig['port']}");
-        Partyline::comment("Allowed origins: {$allowedOrigins}");
+        $app->run();
     }
 }
