@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Docker;
+namespace App\Docker;
 
 use Evenement\EventEmitter;
 use React\EventLoop\LoopInterface;

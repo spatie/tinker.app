@@ -2,104 +2,110 @@
 
 namespace App\WebSockets;
 
+use App\Docker\Container;
+use Exception;
+use Illuminate\Support\Collection;
 use Ratchet\ConnectionInterface;
-use Ratchet\Wamp\Topic;
-use Ratchet\Wamp\WampServerInterface;
+use Ratchet\MessageComponentInterface;
+use Ratchet\WebSocket\WsServerInterface;
 use React\EventLoop\LoopInterface;
+use Wilderborn\Partyline\Facade as Partyline;
 
-class TinkerServer implements WampServerInterface
+class TinkerServer implements MessageComponentInterface, WsServerInterface
 {
     /** @var LoopInterface */
     protected $loop;
 
+    /** @var Collection */
+    protected $connections;
+
     public function __construct(LoopInterface $loop)
     {
         $this->loop = $loop;
+
+        $this->connections = collect();
     }
 
-    /**
-     * When a new connection is opened it will be passed to this method
-     *
-     * @param  ConnectionInterface $conn The socket/connection that just connected to your application
-     *
-     * @throws \Exception
-     */
-    function onOpen(ConnectionInterface $conn)
+    public function onOpen(ConnectionInterface $connection)
     {
-        // TODO: Implement onOpen() method.
+        $this->connections->push(
+            new Connection($connection, $this->loop)
+        );
     }
 
-    /**
-     * This is called before or after a socket is closed (depends on how it's closed).  SendMessage to $conn will not result in an error if it has already been closed.
-     *
-     * @param  ConnectionInterface $conn The socket/connection that is closing/closed
-     *
-     * @throws \Exception
-     */
-    function onClose(ConnectionInterface $conn)
+    public function onClose(ConnectionInterface $connection)
     {
-        // TODO: Implement onClose() method.
+        $connection = $this->findConnection($connection);
+        $container = $connection->getContainer();
+
+        if (is_null($container)) {
+            return;
+        }
+
+        // $container->connections?
+        if ($this->findConnectionsUsingContainer($container)->count() <= 1) {
+            Partyline::comment("Last client on {$container->getName()} disconnected. Shutting down container.");
+
+            $container->kill()->remove();
+        }
+
+        $this->connections = $this->connections->reject->usesBrowserConnection($connection);
     }
 
-    /**
-     * If there is an error with one of the sockets, or somewhere in the application where an Exception is thrown,
-     * the Exception is sent back down the stack, handled by the Server and bubbled back up the application through this method
-     *
-     * @param  ConnectionInterface $conn
-     * @param  \Exception          $e
-     *
-     * @throws \Exception
-     */
-    function onError(ConnectionInterface $conn, \Exception $e)
+    public function onError(ConnectionInterface $connection, Exception $exception)
     {
-        // TODO: Implement onError() method.
+        PartyLine::error("An error has occurred: {$exception->getMessage()}");
+
+        $connection->close();
     }
 
-    /**
-     * An RPC call has been received
-     *
-     * @param \Ratchet\ConnectionInterface $conn
-     * @param string                       $id     The unique ID of the RPC, required to respond to
-     * @param string|Topic                 $topic  The topic to execute the call against
-     * @param array                        $params Call parameters received from the client
-     */
-    function onCall(ConnectionInterface $conn, $id, $topic, array $params)
+    public function onMessage(ConnectionInterface $connection, $message)
     {
-        // TODO: Implement onCall() method.
+        $message = Message::fromJson($message);
+
+        $connection = $this->findConnection($connection);
+
+        if ($message->getType() === Message::TERMINAL_DATA_TYPE) {
+            $connection->getContainer()->sendMessage($message->getPayload());
+        }
+
+        if ($message->getType() === Message::BUFFER_RUN_TYPE) {
+            $connection->setCode($message->getPayload());
+        }
+
+        if ($message->getType() === Message::BUFFER_CHANGE_TYPE) {
+            $container = $connection->getContainer();
+
+            $collaboratingConnections = $this->findConnectionsUsingContainer($container);
+
+            $collaboratingBrowserConnections = $collaboratingConnections->map->getBrowserConnection();
+
+            $bufferChangeMessage = Message::bufferChange($message->getPayload());
+
+            $collaboratingBrowserConnections
+                ->reject(function (ConnectionInterface $collaboratingBrowserConnection) use ($connection) {
+                    return $collaboratingBrowserConnection === $connection->getBrowserConnection();
+                })
+                ->each->send($bufferChangeMessage);
+        }
     }
 
-    /**
-     * A request to subscribe to a topic has been made
-     *
-     * @param \Ratchet\ConnectionInterface $conn
-     * @param string|Topic                 $topic The topic to subscribe to
-     */
-    function onSubscribe(ConnectionInterface $conn, $topic)
+    public function getSubProtocols(): array
     {
-        // TODO: Implement onSubscribe() method.
+        return [];
     }
 
-    /**
-     * A request to unsubscribe from a topic has been made
-     *
-     * @param \Ratchet\ConnectionInterface $conn
-     * @param string|Topic                 $topic The topic to unsubscribe from
-     */
-    function onUnSubscribe(ConnectionInterface $conn, $topic)
+    protected function findConnectionsUsingContainer(Container $container): Collection
     {
-        // TODO: Implement onUnSubscribe() method.
+        return $this
+            ->connections
+            ->filter(function (Connection $connection) use ($container) {
+                return $container->getName() === optional($connection->getContainer())->getName();
+            });
     }
 
-    /**
-     * A client is attempting to publish content to a subscribed connections on a URI
-     *
-     * @param \Ratchet\ConnectionInterface $conn
-     * @param string|Topic                 $topic    The topic the user has attempted to publish to
-     * @param string                       $event    Payload of the publish
-     * @param array                        $exclude  A list of session IDs the message should be excluded from (blacklist)
-     * @param array                        $eligible A list of session Ids the message should be send to (whitelist)
-     */
-    function onPublish(ConnectionInterface $conn, $topic, $event, array $exclude, array $eligible){
-        // TODO: Implement onPublish() method.
+    protected function findConnection(ConnectionInterface $connection): ?Connection
+    {
+        return $this->connections->first->usesBrowserConnection($connection);
     }
 }

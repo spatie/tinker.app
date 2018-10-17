@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Services\Docker\Container;
-use App\Container as ContainerModel;
+use App\Docker\Container;
+use App\Models\Container as ContainerModel;
 use React\EventLoop\Factory;
 
 class TinkerSessionsController extends Controller

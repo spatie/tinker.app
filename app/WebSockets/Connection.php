@@ -2,35 +2,27 @@
 
 namespace App\WebSockets;
 
-use App\Services\Docker\Container;
-use App\Services\Docker\ContainerRepository;
-use App\Container as ContainerModel;
-use PartyLine;
+use App\Docker\Container;
+use App\Docker\ContainerRepository;
+use Wilderborn\Partyline\Facade as PartyLine;
 use Ratchet\ConnectionInterface;
 use React\EventLoop\LoopInterface;
 
-class ContainerConnection
+class Connection
 {
-    /** @var \Ratchet\ConnectionInterface */
+    /** @var ConnectionInterface */
     protected $browserConnection;
 
-    /** @var \React\EventLoop\LoopInterface */
-    protected $loop;
-
-    /** @var \App\Services\Docker\Container */
+    /** @var ?Container */
     protected $container;
 
-    public function __construct(ConnectionInterface $browserConnection, LoopInterface $loop, ?string $sessionId = null)
+    /** @var LoopInterface */
+    protected $loop;
+
+    public function __construct(ConnectionInterface $browserConnection, LoopInterface $loop)
     {
         $this->browserConnection = $browserConnection;
-
         $this->loop = $loop;
-
-        $this->container = $this->findOrCreateContainer($this->browserConnection, $sessionId);
-
-        if ($this->container) {
-            $this->bindContainer($this->browserConnection);
-        }
     }
 
     public function getContainer(): ?Container
@@ -48,13 +40,6 @@ class ContainerConnection
         return $this->browserConnection === $browserConnection;
     }
 
-    public function sendMessage(string $message): self
-    {
-        $this->container->sendMessage($message);
-
-        return $this;
-    }
-
     public function setCode(string $code): self
     {
         $this->getContainer()->getContainerModel()->update(['code' => $code]);
@@ -64,13 +49,13 @@ class ContainerConnection
         return $this;
     }
 
-    protected function findOrCreateContainer(ConnectionInterface $browserConnection, ?string $sessionId = null): ?Container
+    protected function findOrCreateContainer(ConnectionInterface $browserConnection, ?string $sessionId = null): ?Connection
     {
         if ($sessionId) {
             return $this->findContainer($sessionId, $browserConnection);
         }
 
-        $container = (Container::create($this->loop))->start();
+        $container = (Connection::create($this->loop))->start();
 
         $browserConnection->send(
             Message::terminalData("New container created ({$container->getName()})\n\r")
@@ -79,7 +64,7 @@ class ContainerConnection
         return $container;
     }
 
-    protected function findContainer(string $sessionId, ConnectionInterface $browserConnection): ?Container
+    protected function findContainer(string $sessionId, ConnectionInterface $browserConnection): ?Connection
     {
         $container = (new ContainerRepository($this->loop))->findBySessionId($sessionId);
 

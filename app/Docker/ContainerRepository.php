@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Docker;
+namespace App\Docker;
 
 use Docker\API\Model\ContainerSummaryItem;
 use Docker\Docker;
