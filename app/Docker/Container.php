@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Services\Docker;
+namespace App\Docker;
 
-use App\Container as ContainerModel;
+use App\Models\Container as ContainerModel;
 use Closure;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\API\Model\HostConfig;
@@ -38,7 +38,7 @@ class Container
     /** @var \League\Flysystem\Filesystem */
     protected $filesystem;
 
-    /** @var \App\Container */
+    /** @var \App\Models\Container */
     protected $containerModel;
 
     public static function create(LoopInterface $loop): self
