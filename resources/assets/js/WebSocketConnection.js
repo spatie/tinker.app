@@ -30,7 +30,7 @@ export const WebSocketConnection = new Vue({
             setTimeout(() => {
                 const jsonData = JSON.stringify({ 'type': 'session-start', 'payload': '' });
                 this.webSocket.send(jsonData);
-            }, 50);
+            }, 1000);
 
             this.webSocket.onmessage = (message) => {
                 const data = JSON.parse(message.data);
