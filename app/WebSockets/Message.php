@@ -6,6 +6,7 @@ use Illuminate\Contracts\Support\Jsonable;
 
 class Message implements Jsonable
 {
+    const SESSION_START_TYPE = 'session-start';
     const TERMINAL_DATA_TYPE = 'terminal-data';
     const BUFFER_RUN_TYPE = 'buffer-run';
     const BUFFER_CHANGE_TYPE = 'buffer-change';

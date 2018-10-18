@@ -35,7 +35,7 @@ class StartWebSocketServer extends Command
 
         $app = new App($host, $port, '127.0.0.1', $loop);
 
-        $app->route('/ws', new TinkerServer($loop));
+        $app->route('/', new TinkerServer($loop), ['*']);
 
         $app->run();
     }

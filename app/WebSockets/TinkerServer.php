@@ -28,6 +28,7 @@ class TinkerServer implements MessageComponentInterface, WsServerInterface
 
     public function onOpen(ConnectionInterface $connection)
     {
+        Partyline::comment("Client connected");
         $this->connections->push(
             new Connection($connection, $this->loop)
         );
@@ -49,7 +50,7 @@ class TinkerServer implements MessageComponentInterface, WsServerInterface
             $container->kill()->remove();
         }
 
-        $this->connections = $this->connections->reject->usesBrowserConnection($connection);
+        $this->connections = $this->connections->reject($connection);
     }
 
     public function onError(ConnectionInterface $connection, Exception $exception)
@@ -64,6 +65,10 @@ class TinkerServer implements MessageComponentInterface, WsServerInterface
         $message = Message::fromJson($message);
 
         $connection = $this->findConnection($connection);
+
+        if ($message->getType() === Message::SESSION_START_TYPE) {
+            $connection->startSession();
+        }
 
         if ($message->getType() === Message::TERMINAL_DATA_TYPE) {
             $connection->getContainer()->sendMessage($message->getPayload());

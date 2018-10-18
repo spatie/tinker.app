@@ -24,7 +24,13 @@ export const WebSocketConnection = new Vue({
         async openWebSocket() {
             await this.$store.dispatch('fetchSession');
 
-            this.webSocket = new WebSocket(`${window.webSocket.protocol}://tinker.app/ws/${this.sessionId}`);
+            this.webSocket = new WebSocket(window.webSocket.public_url);
+
+            // TEMP: start new session
+            setTimeout(() => {
+                const jsonData = JSON.stringify({ 'type': 'session-start', 'payload': '' });
+                this.webSocket.send(jsonData);
+            }, 50);
 
             this.webSocket.onmessage = (message) => {
                 const data = JSON.parse(message.data);

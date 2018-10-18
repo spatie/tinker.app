@@ -49,56 +49,63 @@ class Connection
         return $this;
     }
 
-    protected function findOrCreateContainer(ConnectionInterface $browserConnection, ?string $sessionId = null): ?Connection
+    public function startSession()
+    {
+        $this->container = $this->findOrCreateContainer();
+
+        $this->bindContainer();
+    }
+
+    protected function findOrCreateContainer(?string $sessionId = null): ?Container
     {
         if ($sessionId) {
-            return $this->findContainer($sessionId, $browserConnection);
+            return $this->findContainer($sessionId);
         }
 
-        $container = (Connection::create($this->loop))->start();
+        $container = (Container::create($this->loop))->start();
 
-        $browserConnection->send(
+        $this->browserConnection->send(
             Message::terminalData("New container created ({$container->getName()})\n\r")
         );
 
         return $container;
     }
 
-    protected function findContainer(string $sessionId, ConnectionInterface $browserConnection): ?Connection
+    protected function findContainer(string $sessionId): ?Container
     {
         $container = (new ContainerRepository($this->loop))->findBySessionId($sessionId);
 
         if (! $container) {
-            $browserConnection->send(
+            $this->browserConnection->send(
                 Message::terminalData("Session id `{$sessionId}` is invalid.\n\r")
             );
 
-            $browserConnection->close();
+            $this->browserConnection->close();
 
             return null;
         }
 
-        $browserConnection->send(
+        $this->browserConnection->send(
             Message::terminalData("Session id `{$sessionId}` found.\n\r")
         );
 
         return $container;
     }
 
-    protected function bindContainer(ConnectionInterface $browserConnection)
+    protected function bindContainer()
     {
-        $this->container->onMessage(function ($message) use ($browserConnection) {
-            $browserConnection->send(Message::terminalData((string) $message));
+        $this->container->onMessage(function ($message) {
+            $this->browserConnection->send(Message::terminalData((string) $message));
         });
 
-        $this->container->onClose(function () use ($browserConnection) {
-            PartyLine::error("Connection to container lost; closing browser connection {$browserConnection->resourceId}");
+        $this->container->onClose(function () {
+            PartyLine::error("Connection to container lost; closing browser connection {$this->browserConnection->resourceId}");
 
-            $browserConnection->send(
+            $this->browserConnection->send(
                 Message::terminalData("\n\rLost connection to Tinker container.")
             );
 
-            $browserConnection->close();
+            $this->browserConnection->close();
         });
     }
 }
