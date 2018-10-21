@@ -2,21 +2,14 @@
 
 namespace App\WebSockets\Commands;
 
-use App\WebSockets\BrowserEventHandler;
 use App\WebSockets\TinkerServer;
-use App\WebSockets\WebSocketEventHandler;
 use Illuminate\Console\Command;
-use Ratchet\Wamp\ServerProtocol;
-use Ratchet\Wamp\WampServer;
+use React\EventLoop\LoopInterface;
 use Wilderborn\Partyline\Facade as Partyline;
 use Ratchet\App;
-use Ratchet\Http\OriginCheck;
-use Ratchet\WebSocket\WsServer;
 use React\EventLoop\Factory;
-use React\EventLoop\StreamSelectLoop;
-use Symfony\Component\Routing\Route;
 
-class StartWebSocketServer extends Command
+class StartWebSocketServerCommand extends Command
 {
     protected $signature = 'start-websocket-server';
 
@@ -27,6 +20,8 @@ class StartWebSocketServer extends Command
         Partyline::bind($this);
 
         $loop = Factory::create();
+
+        $this->getLaravel()->singleton(LoopInterface::class, $loop);
 
         $host = config('websockets.host');
         $port = config('websockets.port');

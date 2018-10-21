@@ -11,11 +11,11 @@ use Docker\Docker;
 use Exception;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use Illuminate\Support\Collection;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
-use Partyline;
+use Wilderborn\Partyline\Facade as Partyline;
 use Ratchet\Client\WebSocket;
-use React\EventLoop\LoopInterface;
 use stdClass;
 
 class Container
@@ -29,9 +29,6 @@ class Container
     /** @var \Ratchet\Client\WebSocket */
     protected $webSocket;
 
-    /** @var \React\EventLoop\LoopInterface */
-    protected $loop;
-
     /** @var int */
     protected $sshPort;
 
@@ -41,7 +38,10 @@ class Container
     /** @var \App\Models\Container */
     protected $containerModel;
 
-    public static function create(LoopInterface $loop): self
+    /** @var Collection */
+    protected $connections;
+
+    public static function create(): self
     {
         $name = str_random();
 
@@ -67,22 +67,42 @@ class Container
 
         $docker->containerCreate($containerProperties, compact('name'));
 
-        return new static($name, $loop, $docker);
+        $container = new static($name, $docker);
+
+        $container->start();
+
+        return $container;
     }
 
-    public function __construct(string $name, LoopInterface $loop, ?Docker $docker = null)
+    public function __construct(string $name, ?Docker $docker = null)
     {
         $this->name = $name;
 
-        $this->loop = $loop;
-
         $this->docker = $docker ?? Docker::create();
+
+        app(ContainerRepository::class)->push($this);
+
+        $this->connections = collect();
 
         $this->containerModel = ContainerModel::updateOrCreate([
             'name' => $name,
         ], [
             'active' => true,
         ]);
+    }
+
+    public static function findOrCreate(?string $sessionId = null): self
+    {
+        if ($sessionId) {
+            return static::findBySessionId($sessionId);
+        }
+
+        return static::create();
+    }
+
+    public static function findBySessionId(string $sessionId): ?Container
+    {
+        return app(ContainerRepository::class)->findBySessionId($sessionId);
     }
 
     public function getName(): string
@@ -147,6 +167,11 @@ class Container
     public function getContainerModel(): ContainerModel
     {
         return $this->containerModel;
+    }
+
+    public function getConnections(): Collection
+    {
+        return $this->connections;
     }
 
     public function start(): self
@@ -217,7 +242,7 @@ class Container
 
         $stream = $response->getBody()->detach();
 
-        $connection = new WebSocketConnection($stream, $this->loop);
+        $connection = new WebSocketConnection($stream);
 
         $this->webSocket = new WebSocket($connection, new Response, new Request('GET', '/ws'));
 

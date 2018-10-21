@@ -2,6 +2,7 @@
 
 namespace App\WebSockets;
 
+use App\Docker\Container;
 use Illuminate\Contracts\Support\Jsonable;
 
 class Message implements Jsonable
@@ -17,15 +18,19 @@ class Message implements Jsonable
     /** @var string */
     protected $payload;
 
-    public function __construct(string $type, string $payload)
+    /** @var Connection */
+    protected $from;
+
+    public function __construct(string $type, string $payload, ?Connection $from = null)
     {
         $this->type = $type;
         $this->payload = $payload;
+        $this->from = $from;
     }
 
     public static function create(string $type, string $payload): self
     {
-        return new static(func_get_args());
+        return new static(...func_get_args());
     }
 
     public static function terminalData(string $payload): self
@@ -38,14 +43,20 @@ class Message implements Jsonable
         return new static(static::BUFFER_CHANGE_TYPE, $payload);
     }
 
-    public static function fromJson(string $json): self
+    public static function fromJson(string $json, Connection $fromConnection): self
     {
         $data = json_decode($json);
 
         return new static(
             $data->type ?? static::TERMINAL_DATA_TYPE,
-            is_object($data->payload) ? json_encode($data->payload) : (string) $data->payload
+            is_object($data->payload) ? json_encode($data->payload) : (string) $data->payload,
+            $fromConnection
         );
+    }
+
+    public function from(): Connection
+    {
+        return $this->from;
     }
 
     public function toJson($options = 0): string

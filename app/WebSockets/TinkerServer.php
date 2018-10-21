@@ -16,12 +16,16 @@ class TinkerServer implements MessageComponentInterface, WsServerInterface
     /** @var LoopInterface */
     protected $loop;
 
+    /** @var MessageHandler */
+    protected $messageHandler;
+
     /** @var Collection */
     protected $connections;
 
-    public function __construct(LoopInterface $loop)
+    public function __construct(LoopInterface $loop, MessageHandler $messageHandler)
     {
         $this->loop = $loop;
+        $this->messageHandler = $messageHandler;
 
         $this->connections = collect();
     }
@@ -29,14 +33,25 @@ class TinkerServer implements MessageComponentInterface, WsServerInterface
     public function onOpen(ConnectionInterface $connection)
     {
         Partyline::comment("Client connected");
+
         $this->connections->push(
             new Connection($connection, $this->loop)
         );
     }
 
+    public function onMessage(ConnectionInterface $connection, $message)
+    {
+        $connection = $this->findConnection($connection);
+
+        $message = Message::fromJson($message, $connection);
+
+        $this->messageHandler->handle($message);
+    }
+
     public function onClose(ConnectionInterface $connection)
     {
         $connection = $this->findConnection($connection);
+
         $container = $connection->getContainer();
 
         if (is_null($container)) {
@@ -58,41 +73,6 @@ class TinkerServer implements MessageComponentInterface, WsServerInterface
         PartyLine::error("An error has occurred: {$exception->getMessage()}");
 
         $connection->close();
-    }
-
-    public function onMessage(ConnectionInterface $connection, $message)
-    {
-        $message = Message::fromJson($message);
-
-        $connection = $this->findConnection($connection);
-
-        if ($message->getType() === Message::SESSION_START_TYPE) {
-            $connection->startSession();
-        }
-
-        if ($message->getType() === Message::TERMINAL_DATA_TYPE) {
-            $connection->getContainer()->sendMessage($message->getPayload());
-        }
-
-        if ($message->getType() === Message::BUFFER_RUN_TYPE) {
-            $connection->setCode($message->getPayload());
-        }
-
-        if ($message->getType() === Message::BUFFER_CHANGE_TYPE) {
-            $container = $connection->getContainer();
-
-            $collaboratingConnections = $this->findConnectionsUsingContainer($container);
-
-            $collaboratingBrowserConnections = $collaboratingConnections->map->getBrowserConnection();
-
-            $bufferChangeMessage = Message::bufferChange($message->getPayload());
-
-            $collaboratingBrowserConnections
-                ->reject(function (ConnectionInterface $collaboratingBrowserConnection) use ($connection) {
-                    return $collaboratingBrowserConnection === $connection->getBrowserConnection();
-                })
-                ->each->send($bufferChangeMessage);
-        }
     }
 
     public function getSubProtocols(): array
