@@ -5,6 +5,7 @@ namespace App\WebSockets\Handlers;
 use App\Docker\Container;
 use App\WebSockets\Connection;
 use App\WebSockets\Message;
+use Wilderborn\Partyline\Facade as Partyline;
 
 class StartSession
 {
@@ -42,7 +43,7 @@ class StartSession
     protected function bindContainer(Container $container)
     {
         $container->onMessage(function ($message) {
-            $this->browserConnection->send(Message::terminalData((string) $message));
+            $this->connection->send(Message::terminalData((string) $message));
         });
 
         $container->onClose(function () {

@@ -7,11 +7,10 @@ use Exception;
 use Illuminate\Support\Collection;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
-use Ratchet\WebSocket\WsServerInterface;
 use React\EventLoop\LoopInterface;
 use Wilderborn\Partyline\Facade as Partyline;
 
-class TinkerServer implements MessageComponentInterface, WsServerInterface
+class TinkerServer implements MessageComponentInterface
 {
     /** @var LoopInterface */
     protected $loop;
@@ -52,17 +51,8 @@ class TinkerServer implements MessageComponentInterface, WsServerInterface
     {
         $connection = $this->findConnection($connection);
 
-        $container = $connection->getContainer();
-
-        if (is_null($container)) {
-            return;
-        }
-
-        // $container->connections?
-        if ($this->findConnectionsUsingContainer($container)->count() <= 1) {
-            Partyline::comment("Last client on {$container->getName()} disconnected. Shutting down container.");
-
-            $container->kill()->remove();
+        if ($container = $connection->getContainer()) {
+            $container->stop();
         }
 
         $this->connections = $this->connections->reject($connection);
@@ -73,20 +63,6 @@ class TinkerServer implements MessageComponentInterface, WsServerInterface
         PartyLine::error("An error has occurred: {$exception->getMessage()}");
 
         $connection->close();
-    }
-
-    public function getSubProtocols(): array
-    {
-        return [];
-    }
-
-    protected function findConnectionsUsingContainer(Container $container): Collection
-    {
-        return $this
-            ->connections
-            ->filter(function (Connection $connection) use ($container) {
-                return $container->getName() === optional($connection->getContainer())->getName();
-            });
     }
 
     protected function findConnection(ConnectionInterface $connection): ?Connection

@@ -183,6 +183,17 @@ class Container
         return $this;
     }
 
+    public function stop(): self
+    {
+        if ($this->connections->count() <= 1) {
+            Partyline::comment("Last client on {$this->getName()} disconnected. Shutting down container.");
+
+            $this->kill()->remove();
+        }
+
+        return $this;
+    }
+
     public function kill(): self
     {
         $this->docker->containerKill($this->name);
