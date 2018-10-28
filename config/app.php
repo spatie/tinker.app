@@ -181,6 +181,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         App\Providers\EventLoopServiceProvider::class,
+        App\Providers\MessageServiceProvider::class,
 
     ],
 
