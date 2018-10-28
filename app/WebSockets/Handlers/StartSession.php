@@ -42,6 +42,8 @@ class StartSession
 
     protected function bindContainer(Container $container)
     {
+        $this->connection->setContainer($container);
+
         $container->onMessage(function ($message) {
             $this->connection->send(Message::terminalData((string) $message));
         });

@@ -65,4 +65,9 @@ class Connection
 
         return $this;
     }
+
+    public function setContainer(Container $container)
+    {
+        $this->container = $container;
+    }
 }
