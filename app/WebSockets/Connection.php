@@ -3,10 +3,10 @@
 namespace App\WebSockets;
 
 use App\Docker\Container;
-use App\Docker\ContainerRepository;
+use App\Docker\ContainerInterface;
+use App\Docker\NullContainer;
 use Wilderborn\Partyline\Facade as PartyLine;
 use Ratchet\ConnectionInterface;
-use React\EventLoop\LoopInterface;
 
 class Connection
 {
@@ -16,16 +16,14 @@ class Connection
     /** @var ?Container */
     protected $container;
 
-    /** @var LoopInterface */
-    protected $loop;
-
-    public function __construct(ConnectionInterface $browserConnection, LoopInterface $loop)
+    public function __construct(ConnectionInterface $browserConnection)
     {
         $this->browserConnection = $browserConnection;
-        $this->loop = $loop;
+
+        $this->container = new NullContainer(); // TODO: DI?
     }
 
-    public function getContainer(): ?Container
+    public function getContainer(): ?ContainerInterface
     {
         return $this->container;
     }
@@ -48,6 +46,15 @@ class Connection
     public function close()
     {
         $this->browserConnection->close();
+    }
+
+    public function onClose(): self
+    {
+        if ($container = $this->getContainer()) {
+            $container->stop();
+        }
+
+        return $this;
     }
 
     public function setCode(string $code): self

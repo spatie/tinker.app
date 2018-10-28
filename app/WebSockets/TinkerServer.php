@@ -2,28 +2,23 @@
 
 namespace App\WebSockets;
 
-use App\Docker\Container;
+use App\Exceptions\ConnectionNotFoundException;
 use Exception;
 use Illuminate\Support\Collection;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
-use React\EventLoop\LoopInterface;
 use Wilderborn\Partyline\Facade as Partyline;
 
 class TinkerServer implements MessageComponentInterface
 {
-    /** @var LoopInterface */
-    protected $loop;
-
     /** @var MessageHandler */
     protected $messageHandler;
 
     /** @var Collection */
     protected $connections;
 
-    public function __construct(LoopInterface $loop, MessageHandler $messageHandler)
+    public function __construct(MessageHandler $messageHandler)
     {
-        $this->loop = $loop;
         $this->messageHandler = $messageHandler;
 
         $this->connections = collect();
@@ -34,7 +29,7 @@ class TinkerServer implements MessageComponentInterface
         Partyline::comment("Client connected");
 
         $this->connections->push(
-            new Connection($connection, $this->loop)
+            new Connection($connection)
         );
     }
 
@@ -44,6 +39,8 @@ class TinkerServer implements MessageComponentInterface
 
         $message = Message::fromJson($message, $connection);
 
+        Partyline::comment("Client messaged: {$message->getPayload()}");
+
         $this->messageHandler->handle($message);
     }
 
@@ -51,9 +48,7 @@ class TinkerServer implements MessageComponentInterface
     {
         $connection = $this->findConnection($connection);
 
-        if ($container = $connection->getContainer()) {
-            $container->stop();
-        }
+        $connection->onClose();
 
         $this->connections = $this->connections->reject($connection);
     }
@@ -65,8 +60,10 @@ class TinkerServer implements MessageComponentInterface
         $connection->close();
     }
 
-    protected function findConnection(ConnectionInterface $connection): ?Connection
+    protected function findConnection(ConnectionInterface $browserConnection): Connection
     {
-        return $this->connections->first->usesBrowserConnection($connection);
+        $connection = $this->connections->first->usesBrowserConnection($browserConnection);
+
+        return throw_unless($connection, ConnectionNotFoundException::class, $browserConnection);
     }
 }

@@ -18,7 +18,7 @@ use Wilderborn\Partyline\Facade as Partyline;
 use Ratchet\Client\WebSocket;
 use stdClass;
 
-class Container
+class Container implements ContainerInterface
 {
     /** @var string */
     protected $name;
