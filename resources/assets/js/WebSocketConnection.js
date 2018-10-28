@@ -22,7 +22,7 @@ export const WebSocketConnection = new Vue({
 
     methods: {
         async openWebSocket() {
-            await this.$store.dispatch('fetchSession');
+            // await this.$store.dispatch('fetchSession');
 
             this.webSocket = new WebSocket(window.webSocket.public_url);
 

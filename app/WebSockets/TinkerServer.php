@@ -2,26 +2,24 @@
 
 namespace App\WebSockets;
 
-use App\Docker\Container;
+use App\Exceptions\ConnectionNotFoundException;
 use Exception;
 use Illuminate\Support\Collection;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
-use Ratchet\WebSocket\WsServerInterface;
-use React\EventLoop\LoopInterface;
 use Wilderborn\Partyline\Facade as Partyline;
 
-class TinkerServer implements MessageComponentInterface, WsServerInterface
+class TinkerServer implements MessageComponentInterface
 {
-    /** @var LoopInterface */
-    protected $loop;
+    /** @var MessageHandler */
+    protected $messageHandler;
 
     /** @var Collection */
     protected $connections;
 
-    public function __construct(LoopInterface $loop)
+    public function __construct(MessageHandler $messageHandler)
     {
-        $this->loop = $loop;
+        $this->messageHandler = $messageHandler;
 
         $this->connections = collect();
     }
@@ -29,26 +27,28 @@ class TinkerServer implements MessageComponentInterface, WsServerInterface
     public function onOpen(ConnectionInterface $connection)
     {
         Partyline::comment("Client connected");
+
         $this->connections->push(
-            new Connection($connection, $this->loop)
+            new Connection($connection)
         );
+    }
+
+    public function onMessage(ConnectionInterface $connection, $message)
+    {
+        $connection = $this->findConnection($connection);
+
+        $message = Message::fromJson($message, $connection);
+
+        Partyline::comment("Client messaged: {$message->getPayload()}");
+
+        $this->messageHandler->handle($message);
     }
 
     public function onClose(ConnectionInterface $connection)
     {
         $connection = $this->findConnection($connection);
-        $container = $connection->getContainer();
 
-        if (is_null($container)) {
-            return;
-        }
-
-        // $container->connections?
-        if ($this->findConnectionsUsingContainer($container)->count() <= 1) {
-            Partyline::comment("Last client on {$container->getName()} disconnected. Shutting down container.");
-
-            $container->kill()->remove();
-        }
+        $connection->onClose();
 
         $this->connections = $this->connections->reject($connection);
     }
@@ -60,57 +60,10 @@ class TinkerServer implements MessageComponentInterface, WsServerInterface
         $connection->close();
     }
 
-    public function onMessage(ConnectionInterface $connection, $message)
+    protected function findConnection(ConnectionInterface $browserConnection): Connection
     {
-        $message = Message::fromJson($message);
+        $connection = $this->connections->first->usesBrowserConnection($browserConnection);
 
-        $connection = $this->findConnection($connection);
-
-        if ($message->getType() === Message::SESSION_START_TYPE) {
-            $connection->startSession();
-        }
-
-        if ($message->getType() === Message::TERMINAL_DATA_TYPE) {
-            $connection->getContainer()->sendMessage($message->getPayload());
-        }
-
-        if ($message->getType() === Message::BUFFER_RUN_TYPE) {
-            $connection->setCode($message->getPayload());
-        }
-
-        if ($message->getType() === Message::BUFFER_CHANGE_TYPE) {
-            $container = $connection->getContainer();
-
-            $collaboratingConnections = $this->findConnectionsUsingContainer($container);
-
-            $collaboratingBrowserConnections = $collaboratingConnections->map->getBrowserConnection();
-
-            $bufferChangeMessage = Message::bufferChange($message->getPayload());
-
-            $collaboratingBrowserConnections
-                ->reject(function (ConnectionInterface $collaboratingBrowserConnection) use ($connection) {
-                    return $collaboratingBrowserConnection === $connection->getBrowserConnection();
-                })
-                ->each->send($bufferChangeMessage);
-        }
-    }
-
-    public function getSubProtocols(): array
-    {
-        return [];
-    }
-
-    protected function findConnectionsUsingContainer(Container $container): Collection
-    {
-        return $this
-            ->connections
-            ->filter(function (Connection $connection) use ($container) {
-                return $container->getName() === optional($connection->getContainer())->getName();
-            });
-    }
-
-    protected function findConnection(ConnectionInterface $connection): ?Connection
-    {
-        return $this->connections->first->usesBrowserConnection($connection);
+        return throw_unless($connection, ConnectionNotFoundException::class, $browserConnection);
     }
 }
