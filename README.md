@@ -12,3 +12,4 @@
 
 - `Connection` in service container?
 - `Connection::send()` methods for each message type?
+- Snippets per container or per user (e.g. create 20 posts)
