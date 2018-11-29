@@ -8,6 +8,6 @@ class TerminalDataHandler
 {
     public function __invoke(Message $message)
     {
-        $message->from()->getContainer()->sendMessage($message->getPayload());
+        $message->from()->getContainer()->writeData($message->getPayload());
     }
 }

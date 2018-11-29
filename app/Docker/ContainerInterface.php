@@ -8,5 +8,5 @@ interface ContainerInterface
 {
     public function getConnections(): Collection;
 
-    public function sendMessage($message);
+    public function writeData($data);
 }

@@ -11,7 +11,7 @@ class NullContainer implements ContainerInterface
         return collect();
     }
 
-    public function sendMessage($message)
+    public function writeData($data)
     {
     }
 }

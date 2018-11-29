@@ -159,7 +159,7 @@ class Container implements ContainerInterface
     {
         $this->getFilesystem()->put($filePath, $contents);
 
-        $this->sendMessage("run\n");
+        $this->writeData("run\n");
 
         return $this;
     }
@@ -213,11 +213,11 @@ class Container implements ContainerInterface
         return $this;
     }
 
-    public function sendMessage($message)
+    public function writeData($data)
     {
         $this->attachToWebSocket();
 
-        $this->webSocket->send($message);
+        $this->webSocket->send($data);
     }
 
     public function onMessage(Closure $callback): self
