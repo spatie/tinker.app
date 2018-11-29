@@ -2,7 +2,7 @@
 
 namespace App\Console;
 
-use App\WebSockets\Commands\StartWebSocketServerCommand;
+use App\Console\Commands\StartWebSocketServerCommand;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
 class Kernel extends ConsoleKernel

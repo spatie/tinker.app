@@ -5,7 +5,6 @@ namespace App\WebSockets;
 use App\Docker\Container;
 use App\Docker\ContainerInterface;
 use App\Docker\NullContainer;
-use Wilderborn\Partyline\Facade as PartyLine;
 use Ratchet\ConnectionInterface;
 
 class Connection
@@ -41,6 +40,11 @@ class Connection
     public function send(Message $message)
     {
         $this->browserConnection->send($message);
+    }
+
+    public function writeToTerminal(string $data)
+    {
+        $this->send(Message::terminalData($data));
     }
 
     public function close()

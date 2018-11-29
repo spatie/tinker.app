@@ -1,10 +1,9 @@
 <?php
 
-namespace App\WebSockets\Commands;
+namespace App\Console\Commands;
 
 use App\WebSockets\TinkerServer;
 use Illuminate\Console\Command;
-use Illuminate\Foundation\Application;
 use React\EventLoop\LoopInterface;
 use Wilderborn\Partyline\Facade as Partyline;
 use Ratchet\App;
@@ -13,10 +12,7 @@ class StartWebSocketServerCommand extends Command
 {
     protected $signature = 'start-websocket-server';
 
-    protected $description = 'Start the browser facing websocket connection';
-
-    /** @var Application */
-    protected $app;
+    protected $description = 'Start the websocket server';
 
     /** @var LoopInterface */
     protected $loop;
@@ -24,11 +20,10 @@ class StartWebSocketServerCommand extends Command
     /** @var TinkerServer */
     protected $tinkerServer;
 
-    public function __construct(Application $app, LoopInterface $loop, TinkerServer $tinkerServer)
+    public function __construct(LoopInterface $loop, TinkerServer $tinkerServer)
     {
         parent::__construct();
 
-        $this->app = $app;
         $this->loop = $loop;
         $this->tinkerServer = $tinkerServer;
     }

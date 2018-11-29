@@ -11,23 +11,38 @@ class SessionStartHandler
 {
     public function __invoke(Message $message)
     {
-        $container = Container::findOrCreate();
-
+        $sessionId = $message->getPayload();
         $connection = $message->from();
 
+        if (! $sessionId) {
+            $this->newSession($connection);
+
+            return;
+        }
+
+        $this->loadSession($connection, $sessionId);
+    }
+
+    protected function newSession(Connection $connection)
+    {
+        $container = Container::create();
+
+        $this->bindContainer($connection, $container);
+    }
+
+    protected function loadSession(Connection $connection, string $sessionId)
+    {
+        $container = Container::findBySessionId($sessionId);
+
         if (! $container) {
-            $connection->send(
-                Message::terminalData("Session id `SESSION_ID` is invalid.\n\r")
-            );
+            $connection->writeToTerminal("Session id `SESSION_ID` is invalid.\n");
 
             $connection->close();
 
             return;
         }
 
-        $connection->send(
-            Message::terminalData("Session id `{SESSION_ID}` found.\n\r")
-        );
+        $connection->writeToTerminal("Session id `{SESSION_ID}` found.\n");
 
         $this->bindContainer($connection, $container);
     }
@@ -37,15 +52,13 @@ class SessionStartHandler
         $connection->setContainer($container);
 
         $container->onMessage(function ($message) use ($connection) {
-            $connection->send(Message::terminalData((string) $message));
+            $connection->writeToTerminal((string) $message);
         });
 
         $container->onClose(function () use ($connection) {
             PartyLine::error("Connection to container lost; closing browser connection {$connection->getBrowserConnection()->resourceId}");
 
-            $connection->send(
-                Message::terminalData("\n\rLost connection to Tinker container.")
-            );
+            $connection->writeToTerminal("\n\rLost connection to Tinker container.");
 
             $connection->close();
         });

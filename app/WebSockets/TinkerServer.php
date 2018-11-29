@@ -12,14 +12,14 @@ use Wilderborn\Partyline\Facade as Partyline;
 class TinkerServer implements MessageComponentInterface
 {
     /** @var MessageDispatcher */
-    protected $messageHandler;
+    protected $messageDispatcher;
 
     /** @var Collection */
     protected $connections;
 
-    public function __construct(MessageDispatcher $messageHandler)
+    public function __construct(MessageDispatcher $messageDispatcher)
     {
-        $this->messageHandler = $messageHandler;
+        $this->messageDispatcher = $messageDispatcher;
 
         $this->connections = collect();
     }
@@ -41,7 +41,7 @@ class TinkerServer implements MessageComponentInterface
 
         Partyline::comment("Client messaged: {$message->getPayload()}");
 
-        $this->messageHandler->dispatch($message);
+        $this->messageDispatcher->dispatch($message);
     }
 
     public function onClose(ConnectionInterface $connection)

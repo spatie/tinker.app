@@ -33,7 +33,8 @@
         "spatie/laravel-tail": "^2.0",
         "themsaid/laravel-mail-preview": "^2.0",
         "wilderborn/partyline": "^1.0",
-        "wrench/wrench": "^2.0"
+        "wrench/wrench": "^2.0",
+        "ext-json": "*"
     },
     "require-dev": {
         "filp/whoops": "~2.0",

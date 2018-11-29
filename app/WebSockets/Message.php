@@ -2,7 +2,6 @@
 
 namespace App\WebSockets;
 
-use App\Docker\Container;
 use Illuminate\Contracts\Support\Jsonable;
 
 class Message implements Jsonable

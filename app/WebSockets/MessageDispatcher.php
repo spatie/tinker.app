@@ -2,9 +2,7 @@
 
 namespace App\WebSockets;
 
-use App\WebSockets\Handlers\SessionStartHandler;
 use Illuminate\Container\Container;
-use Illuminate\Support\Collection;
 
 class MessageDispatcher
 {
