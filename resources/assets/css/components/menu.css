@@ -9,37 +9,17 @@
     @apply w-full;
 
     @screen sm {
-        @apply justify-start;
+        @apply justify-end;
 
         margin: 0 0 0 4.55%;
         width: calc(95.45% - 31px);
     }
 
     & .menu-item {
-        &:not(:first-child) {
-            margin: 0 0 0 -1px;
-        }
-
-        &:not(:last-child) {
-            @screen sm {
-                @apply mr-4;
-            }
-        }
-
-        &:last-child {
-            @screen sm {
-                @apply absolute;
-                @apply pin-r;
-            }
-        }
+        @apply mr-4;
 
         & a {
-            @apply border;
-            @apply border-light-ui-grey-light;
-            @apply flex;
-            @apply items-center;
-            @apply p-4;
-            @apply text-light-ui-grey-dark;
+            @apply border border-light-ui-grey-light flex items-center p-4 text-light-ui-grey-dark;
 
             transition: background-color .4s, border-color .4s;
 

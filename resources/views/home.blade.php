@@ -9,16 +9,18 @@
                 <nav class="flex h-26 items-center m-auto w-grid">
                     <h1 class="logo"><span class="hidden">tinker.app</span></h1>
                     <ul class="menu">
-                        <li class="menu-item">
-                            <dark-mode-toggle></dark-mode-toggle>
-                        </li>
-                        <li class="menu-item">
-                            <a href="#settings">
-                                <span><img src="/images/icon-syntax.svg" alt="syntax settings"></span>
-                                <span class="hidden | sm:inline">syntax settings</span>
-                            </a>
-                            <modal class="hidden"></modal>
-                        </li>
+                        {{--<li class="menu-item">--}}
+                            {{--<a href="#settings">--}}
+                                {{--<span><img src="/images/icon-syntax.svg" alt="syntax settings"></span>--}}
+                                {{--<span class="hidden | sm:inline">syntax settings</span>--}}
+                            {{--</a>--}}
+                            {{--<modal class="hidden"></modal>--}}
+                        {{--</li>--}}
+
+                        {{--<li class="menu-item">--}}
+                            {{--<dark-mode-toggle></dark-mode-toggle>--}}
+                        {{--</li>--}}
+
                         <li class="menu-item">
                             <a href="#share">
                                 <span><img src="/images/icon-share.svg" alt="share session"></span>

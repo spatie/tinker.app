@@ -1,7 +1,19 @@
 #editor {
-    @apply font-code;
+    font: 13px 'Source Code Pro' !important;
 }
 
 .ace_print-margin {
     @apply hidden;
+}
+
+.ace_scroller {
+    @apply mt-4 ml-2;
+}
+
+.ace_gutter {
+    @apply pt-4;
+}
+
+.ace-github .ace_gutter-active-line {
+    @apply mt-4;
 }

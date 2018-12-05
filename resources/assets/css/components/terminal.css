@@ -7,10 +7,7 @@
 
 .terminal {
     /*@apply bg-light-ui;*/
-    @apply bg-dark-ui;
-    @apply border-b;
-    @apply border-light-ui-grey-light;
-    @apply font-code;
+    @apply bg-dark-ui border-b border-light-ui-grey-light font-code p-4;
 
     @screen sm {
         border-image: linear-gradient(to right, config('colors.light-ui-grey-light') 0%, config('colors.light-ui') 100%);
