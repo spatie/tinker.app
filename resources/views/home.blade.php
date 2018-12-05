@@ -22,10 +22,7 @@
                         {{--</li>--}}
 
                         <li class="menu-item">
-                            <a href="#share">
-                                <span><img src="/images/icon-share.svg" alt="share session"></span>
-                                <span class="hidden | sm:inline">share session</span>
-                            </a>
+                            <share-button></share-button>
                         </li>
                     </ul>
                 </nav>
