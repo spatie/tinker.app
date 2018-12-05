@@ -6,9 +6,7 @@
     import 'brace/mode/php';
     import 'brace/theme/github';
     import 'brace/theme/monokai';
-    import {
-        WebSocketConnection,
-    } from '../WebSocketConnection';
+    import { WebSocketConnection } from '../WebSocketConnection';
 
     export default {
         data() {

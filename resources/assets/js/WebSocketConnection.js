@@ -4,12 +4,6 @@ import store from './store';
 export const WebSocketConnection = new Vue({
     store,
 
-    computed: {
-        sessionId() {
-            return this.$store.state.session.id;
-        },
-    },
-
     data() {
         return {
             webSocket: null,
@@ -22,20 +16,21 @@ export const WebSocketConnection = new Vue({
 
     methods: {
         async openWebSocket() {
-            // await this.$store.dispatch('fetchSession');
-
             this.webSocket = new WebSocket(window.webSocket.public_url);
 
-            // TEMP: start new session
-            setTimeout(() => {
-                const jsonData = JSON.stringify({ 'type': 'session-start', 'payload': '' });
-                this.webSocket.send(jsonData);
-            }, 1000);
+            this.webSocket.onopen = () => {
+                store.dispatch('startSession');
+            };
 
             this.webSocket.onmessage = (message) => {
                 const data = JSON.parse(message.data);
 
                 this.$emit('message-received', data);
+
+                if (data.type === 'session-started') {
+                    const sessionData = JSON.parse(data.payload);
+                    store.dispatch('updateSession', sessionData);
+                }
             };
         },
 

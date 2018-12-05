@@ -174,6 +174,14 @@ class Container implements ContainerInterface
         return $this->connections;
     }
 
+    public function getSessionData(): array
+    {
+        return [
+            'sessionId' => $this->getName(),
+            'code' => $this->getContainerModel()->code,
+        ];
+    }
+
     public function start(): self
     {
         $this->docker->containerStart($this->name);

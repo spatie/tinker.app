@@ -51,6 +51,8 @@ class SessionStartHandler
     {
         $connection->setContainer($container);
 
+        $connection->send(Message::create(Message::SESSION_STARTED_TYPE, json_encode($container->getSessionData())));
+
         $container->onMessage(function ($message) use ($connection) {
             $connection->writeToTerminal((string) $message);
         });

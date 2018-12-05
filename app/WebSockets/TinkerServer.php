@@ -57,6 +57,8 @@ class TinkerServer implements MessageComponentInterface
     {
         PartyLine::error("An error has occurred: {$exception->getMessage()}");
 
+        report($exception);
+
         $connection->close();
     }
 
