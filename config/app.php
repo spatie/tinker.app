@@ -182,6 +182,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         App\Providers\EventLoopServiceProvider::class,
         App\Providers\MessageServiceProvider::class,
+        App\Docker\DockerServiceProvider::class,
 
     ],
 

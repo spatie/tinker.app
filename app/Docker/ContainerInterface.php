@@ -9,4 +9,6 @@ interface ContainerInterface
     public function getConnections(): Collection;
 
     public function writeData($data);
+
+    public function stop();
 }

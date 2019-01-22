@@ -2,15 +2,11 @@
 
 namespace App\Docker;
 
+use Docker\Docker;
 use Illuminate\Support\ServiceProvider;
 
 class DockerServiceProvider extends ServiceProvider
 {
-    /** @var array */
-    public $singletons = [
-        ContainerRepository::class => ContainerRepository::class,
-    ];
-
     public function boot()
     {
         //
@@ -18,6 +14,8 @@ class DockerServiceProvider extends ServiceProvider
 
     public function register()
     {
-        //
+        $this->app->singleton(Docker::class, function ($app) {
+            return Docker::create();
+        });
     }
 }

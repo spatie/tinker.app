@@ -4,32 +4,21 @@ namespace App\Docker;
 
 use Docker\API\Model\ContainerSummaryItem;
 use Docker\Docker;
-use Illuminate\Support\Collection;
 use React\EventLoop\LoopInterface;
 
 class ContainerRepository
 {
-    /** @var \React\EventLoop\LoopInterface */
-    protected $loop;
+    /** @var Docker */
+    protected $docker;
 
-    /** @var Collection */
-    protected $containers;
-
-    public function __construct(LoopInterface $loop)
+    public function __construct(Docker $docker)
     {
-        $this->loop = $loop;
-        $this->containers = collect();
+        $this->docker = $docker;
     }
 
     public function find(string $name): ?Container
     {
-        // Check containers array
-
-        // Check docker containers
-
-        // Check database and initialise new
-
-        $container = collect(Docker::create()->containerList())
+        $container = collect($this->docker->containerList())
             ->first(function (ContainerSummaryItem $container) use ($name) {
                 return in_array('/' . $name, $container->getNames());
             });
@@ -38,16 +27,6 @@ class ContainerRepository
             return null;
         }
 
-        return new Container($name, $this->loop);
-    }
-
-    public function findBySessionId(string $sessionId): ?Container
-    {
-        return $this->find($sessionId);
-    }
-
-    public function push(Container $container)
-    {
-        $this->containers->push($container);
+        return new Container($name, $this->docker);
     }
 }

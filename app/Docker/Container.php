@@ -4,9 +4,6 @@ namespace App\Docker;
 
 use App\Models\Container as ContainerModel;
 use Closure;
-use Docker\API\Model\ContainersCreatePostBody;
-use Docker\API\Model\HostConfig;
-use Docker\API\Model\HostConfigPortBindingsItem;
 use Docker\Docker;
 use Exception;
 use GuzzleHttp\Psr7\Request;
@@ -41,46 +38,11 @@ class Container implements ContainerInterface
     /** @var Collection */
     protected $connections;
 
-    public static function create(): self
-    {
-        $name = str_random();
-
-        $hostPortBinding = (new HostConfigPortBindingsItem())
-            ->setHostIp('0.0.0.0'); // if we don't specify a host port Docker will assign one
-
-        $mapPorts = new \ArrayObject();
-        $mapPorts['22/tcp'] = [$hostPortBinding];
-
-        $hostConfig = (new HostConfig())
-            ->setPortBindings($mapPorts);
-
-        $containerProperties = (new ContainersCreatePostBody())
-            ->setImage('spatie/tinker.app-image')
-            ->setHostConfig($hostConfig)
-            ->setTty(true)
-            ->setOpenStdin(true)
-            ->setAttachStdin(true)
-            ->setAttachStdout(true)
-            ->setAttachStderr(true);
-
-        $docker = Docker::create();
-
-        $docker->containerCreate($containerProperties, compact('name'));
-
-        $container = new static($name, $docker);
-
-        $container->start();
-
-        return $container;
-    }
-
     public function __construct(string $name, ?Docker $docker = null)
     {
         $this->name = $name;
 
-        $this->docker = $docker ?? Docker::create();
-
-        app(ContainerRepository::class)->push($this);
+        $this->docker = $docker ?? app(Docker::class);
 
         $this->connections = collect();
 
@@ -89,20 +51,6 @@ class Container implements ContainerInterface
         ], [
             'active' => true,
         ]);
-    }
-
-    public static function findOrCreate(?string $sessionId = null): self
-    {
-        if ($sessionId) {
-            return static::findBySessionId($sessionId);
-        }
-
-        return static::create();
-    }
-
-    public static function findBySessionId(string $sessionId): ?Container
-    {
-        return app(ContainerRepository::class)->findBySessionId($sessionId);
     }
 
     public function getName(): string
@@ -194,6 +142,7 @@ class Container implements ContainerInterface
     public function stop(): self
     {
         if ($this->connections->count() <= 1) {
+            // TODO: Should probably move to somewhere else?
             Partyline::comment("Last client on {$this->getName()} disconnected. Shutting down container.");
 
             $this->kill()->remove();
@@ -213,7 +162,7 @@ class Container implements ContainerInterface
     {
         $deleteAssociatedVolumes = true;
 
-        $response = $this->docker->containerDelete($this->name, [
+        $this->docker->containerDelete($this->name, [
             'v' => $deleteAssociatedVolumes,
             'force' => true,
         ]);

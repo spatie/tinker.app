@@ -17,6 +17,5 @@ class NullContainer implements ContainerInterface
 
     public function stop()
     {
-    
     }
 }
