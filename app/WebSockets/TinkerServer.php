@@ -2,9 +2,7 @@
 
 namespace App\WebSockets;
 
-use App\Exceptions\ConnectionNotFoundException;
 use Exception;
-use Illuminate\Support\Collection;
 use Ratchet\ConnectionInterface;
 use Ratchet\MessageComponentInterface;
 use Wilderborn\Partyline\Facade as Partyline;
@@ -14,28 +12,28 @@ class TinkerServer implements MessageComponentInterface
     /** @var MessageDispatcher */
     protected $messageDispatcher;
 
-    /** @var Collection */
-    protected $connections;
+    /** @var WebSocketConnectionRepository */
+    protected $connectionRepository;
 
-    public function __construct(MessageDispatcher $messageDispatcher)
+    public function __construct(MessageDispatcher $messageDispatcher, WebSocketConnectionRepository $connectionRepository)
     {
         $this->messageDispatcher = $messageDispatcher;
 
-        $this->connections = collect();
+        $this->connectionRepository = $connectionRepository;
     }
 
-    public function onOpen(ConnectionInterface $connection)
+    public function onOpen(ConnectionInterface $browserConnection)
     {
         Partyline::comment("Client connected");
 
-        $this->connections->push(
-            new Connection($connection)
+        $this->connectionRepository->push(
+            new Connection($browserConnection)
         );
     }
 
     public function onMessage(ConnectionInterface $connection, $message)
     {
-        $connection = $this->findConnection($connection);
+        $connection = $this->connectionRepository->findForBrowserConnection($connection);
 
         $message = Message::fromJson($message, $connection);
 
@@ -46,11 +44,11 @@ class TinkerServer implements MessageComponentInterface
 
     public function onClose(ConnectionInterface $connection)
     {
-        $connection = $this->findConnection($connection);
+        $connection = $this->connectionRepository->findForBrowserConnection($connection);
 
         $connection->onClose();
 
-        $this->connections = $this->connections->reject($connection);
+        $this->connectionRepository->remove($connection);
     }
 
     public function onError(ConnectionInterface $connection, Exception $exception)
@@ -62,12 +60,5 @@ class TinkerServer implements MessageComponentInterface
         report($exception);
 
         $connection->close();
-    }
-
-    protected function findConnection(ConnectionInterface $browserConnection): Connection
-    {
-        $connection = $this->connections->first->usesBrowserConnection($browserConnection);
-
-        return throw_unless($connection, ConnectionNotFoundException::class, $browserConnection);
     }
 }
