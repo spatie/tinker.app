@@ -17,5 +17,7 @@ class DockerServiceProvider extends ServiceProvider
         $this->app->singleton(Docker::class, function ($app) {
             return Docker::create();
         });
+
+        $this->app->singleton(ContainerRepository::class);
     }
 }

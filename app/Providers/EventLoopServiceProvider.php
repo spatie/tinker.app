@@ -8,7 +8,7 @@ use React\EventLoop\LoopInterface;
 
 class EventLoopServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function register()
     {
         $this->app->instance(LoopInterface::class, Factory::create());
     }

@@ -183,6 +183,7 @@ return [
         App\Providers\EventLoopServiceProvider::class,
         App\Providers\MessageServiceProvider::class,
         App\Docker\DockerServiceProvider::class,
+        \App\WebSockets\WebSocketServiceProvider::class,
 
     ],
 

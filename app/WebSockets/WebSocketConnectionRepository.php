@@ -2,6 +2,7 @@
 
 namespace App\WebSockets;
 
+use App\Docker\ContainerInterface;
 use App\Exceptions\ConnectionNotFoundException;
 use Ratchet\ConnectionInterface;
 
@@ -17,6 +18,13 @@ class WebSocketConnectionRepository
         });
 
         return throw_unless($connection, ConnectionNotFoundException::class, $browserConnection);
+    }
+
+    public function getConnectedToContainer(ContainerInterface $container): array
+    {
+        return array_filter($this->connections, function (Connection $connection) use ($container) {
+            return $connection->getContainer() === $container;
+        });
     }
 
     public function push(Connection $connection): self

@@ -35,16 +35,11 @@ class Container implements ContainerInterface
     /** @var \App\Models\Container */
     protected $containerModel;
 
-    /** @var Collection */
-    protected $connections;
-
     public function __construct(string $name, ?Docker $docker = null)
     {
         $this->name = $name;
 
         $this->docker = $docker ?? app(Docker::class);
-
-        $this->connections = collect();
 
         $this->containerModel = ContainerModel::updateOrCreate([
             'name' => $name,
@@ -117,11 +112,6 @@ class Container implements ContainerInterface
         return $this->containerModel;
     }
 
-    public function getConnections(): Collection
-    {
-        return $this->connections;
-    }
-
     public function getSessionData(): array
     {
         return [
@@ -141,12 +131,12 @@ class Container implements ContainerInterface
 
     public function stop(): self
     {
-        if ($this->connections->count() <= 1) {
-            // TODO: Should probably move to somewhere else?
-            Partyline::comment("Last client on {$this->getName()} disconnected. Shutting down container.");
-
-            $this->kill()->remove();
-        }
+        // TODO: Should probably move to somewhere else?
+//        if ($this->connections->count() <= 1) {
+//            Partyline::comment("Last client on {$this->getName()} disconnected. Shutting down container.");
+//
+//            $this->kill()->remove();
+//        }
 
         return $this;
     }
