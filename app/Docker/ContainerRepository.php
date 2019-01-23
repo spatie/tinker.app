@@ -4,7 +4,6 @@ namespace App\Docker;
 
 use Docker\API\Model\ContainerSummaryItem;
 use Docker\Docker;
-use React\EventLoop\LoopInterface;
 
 class ContainerRepository
 {
