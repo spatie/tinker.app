@@ -15,9 +15,14 @@ class ContainerFactory
     /** @var Docker */
     protected $docker;
 
-    public function __construct(Docker $docker)
+    /** @var ContainerRepository */
+    protected $containerRepository;
+
+    public function __construct(Docker $docker, ContainerRepository $containerRepository)
     {
         $this->docker = $docker;
+
+        $this->containerRepository = $containerRepository;
     }
 
     public function create(): Container
@@ -49,6 +54,8 @@ class ContainerFactory
         }
 
         $container = new Container($name, $this->docker);
+
+        $this->containerRepository->push($container);
 
         $container->start();
 
