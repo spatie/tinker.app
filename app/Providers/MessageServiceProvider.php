@@ -21,7 +21,7 @@ class MessageServiceProvider extends ServiceProvider
     {
         $dispatcher->handle(Message::SESSION_START_TYPE, SessionStartHandler::class);
         $dispatcher->handle(Message::TERMINAL_DATA_TYPE, TerminalDataHandler::class);
-        $dispatcher->handle(Message::BUFFER_RUN_TYPE,    RunCodeBufferHandler::class);
+        $dispatcher->handle(Message::BUFFER_RUN_TYPE, RunCodeBufferHandler::class);
         $dispatcher->handle(Message::BUFFER_CHANGE_TYPE, UpdateCodeBufferHandler::class);
     }
 }
