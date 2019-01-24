@@ -8,12 +8,11 @@ use Docker\Docker;
 use Exception;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
-use Illuminate\Support\Collection;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Sftp\SftpAdapter;
-use Wilderborn\Partyline\Facade as Partyline;
 use Ratchet\Client\WebSocket;
 use stdClass;
+use Wilderborn\Partyline\Facade as Partyline;
 
 class Container implements ContainerInterface
 {
@@ -55,7 +54,7 @@ class Container implements ContainerInterface
 
     public function getInfo(): stdClass
     {
-        $response = $this->docker->containerInspect($this->getName(), [], false);
+        $response = $this->docker->containerInspect($this->getName(), [], Docker::FETCH_RESPONSE);
 
         if ($response->getStatusCode() !== 200) {
             throw new Exception('Couldnt get info for docker container.');
@@ -196,7 +195,7 @@ class Container implements ContainerInterface
             'stdout' => true,
             'stderr' => true,
             'stdin'  => true,
-        ], false);
+        ], Docker::FETCH_RESPONSE);
 
         $stream = $response->getBody()->detach();
 

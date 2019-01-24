@@ -5,7 +5,7 @@ namespace App\Docker;
 use ArrayObject;
 use Docker\API\Model\ContainersCreatePostBody;
 use Docker\API\Model\HostConfig;
-use Docker\API\Model\HostConfigPortBindingsItem;
+use Docker\API\Model\PortBinding;
 use Docker\Docker;
 use Exception;
 use Http\Client\Socket\Exception\ConnectionException;
@@ -29,8 +29,7 @@ class ContainerFactory
     {
         $name = str_random();
 
-        $hostPortBinding = (new HostConfigPortBindingsItem())
-            ->setHostIp('0.0.0.0'); // if we don't specify a host port Docker will assign one
+        $hostPortBinding = (new PortBinding())->setHostIp('0.0.0.0'); // if we don't specify a host port Docker will assign one
 
         $mapPorts = new ArrayObject();
         $mapPorts['22/tcp'] = [$hostPortBinding];
