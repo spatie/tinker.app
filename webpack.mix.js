@@ -4,8 +4,8 @@ const { mix } = require('laravel-mix');
 const PurgecssPlugin = require('purgecss-webpack-plugin');
 
 mix
-    .js('resources/assets/js/app.js', 'public/js/')
-    .postCss('resources/assets/css/app.css', 'public/css/')
+    .js('resources/js/app.js', 'public/js/')
+    .postCss('resources/css/app.css', 'public/css/')
 
     .version()
 
@@ -47,8 +47,8 @@ mix
         //             paths: glob.sync([
         //                 path.join(__dirname, 'app/**/*.php'),
         //                 path.join(__dirname, 'resources/views/**/*.blade.php'),
-        //                 path.join(__dirname, 'resources/assets/js/**/*.vue'),
-        //                 path.join(__dirname, 'resources/assets/js/**/*.js'),
+        //                 path.join(__dirname, 'resources/js/**/*.vue'),
+        //                 path.join(__dirname, 'resources/js/**/*.js'),
 
         //                 // Blender css paths. In the future it would be preferable
         //                 // to simply ignore all of blender-css by extracting all
