@@ -8,7 +8,7 @@ use App\WebSockets\WebSocketConnectionRepository;
 
 class UpdateCodeBufferHandler
 {
-    /** @var WebSocketConnectionRepository */
+    /** @var \App\WebSockets\WebSocketConnectionRepository */
     protected $connectionRepository;
 
     public function __construct(WebSocketConnectionRepository $connectionRepository)
