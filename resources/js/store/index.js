@@ -6,7 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        darkMode: false,
+        darkMode: true,
         sessionId: null,
         code: null,
     },
