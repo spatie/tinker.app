@@ -40,100 +40,14 @@ var defaultConfig = require('tailwindcss/defaultConfig')()
 var colors = {
     'transparent': 'transparent',
 
-    'dark-ui': '#1d252c',
-    'dark-ui-blue-dark': '#2875de',
-    'dark-ui-blue-light': '#2f80ed',
-    'dark-ui-grey-dark': '#39464e',
-    'dark-ui-grey-light': '#f2f2f2',
+    'logo': 'var(--logo)',
 
-    'light-ui': '#ffffff',
-    'light-ui-green-dark': '#62bd88',
-    'light-ui-green-light': '#6fcf97',
-    'light-ui-grey-darkest': '#333333',
-    'light-ui-grey-dark': '#4f4f4f',
-    'light-ui-grey-light': '#e0e0e0',
-
-    'black': '#222b2f',
-    'grey-darkest': '#364349',
-    'grey-darker': '#596a73',
-    'grey-dark': '#70818a',
-    'grey': '#9babb4',
-    'grey-light': '#dae4e9',
-    'grey-lighter': '#f3f7f9',
-    'grey-lightest': '#fafcfc',
-    'white': '#ffffff',
-
-    'red-darkest': '#420806',
-    'red-darker': '#6a1b19',
-    'red-dark': '#cc1f1a',
-    'red': '#e3342f',
-    'red-light': '#ef5753',
-    'red-lighter': '#f9acaa',
-    'red-lightest': '#fcebea',
-
-    'orange-darkest': '#542605',
-    'orange-darker': '#7f4012',
-    'orange-dark': '#de751f',
-    'orange': '#f6993f',
-    'orange-light': '#faad63',
-    'orange-lighter': '#fcd9b6',
-    'orange-lightest': '#fff5eb',
-
-    'yellow-darkest': '#453411',
-    'yellow-darker': '#684f1d',
-    'yellow-dark': '#f2d024',
-    'yellow': '#ffed4a',
-    'yellow-light': '#fff382',
-    'yellow-lighter': '#fff9c2',
-    'yellow-lightest': '#fcfbeb',
-
-    'green-darkest': '#032d19',
-    'green-darker': '#0b4228',
-    'green-dark': '#1f9d55',
-    'green': '#38c172',
-    'green-light': '#51d88a',
-    'green-lighter': '#a2f5bf',
-    'green-lightest': '#e3fcec',
-
-    'teal-darkest': '#0d3331',
-    'teal-darker': '#174e4b',
-    'teal-dark': '#38a89d',
-    'teal': '#4dc0b5',
-    'teal-light': '#64d5ca',
-    'teal-lighter': '#a0f0ed',
-    'teal-lightest': '#e8fffe',
-
-    'blue-darkest': '#05233b',
-    'blue-darker': '#103d60',
-    'blue-dark': '#2779bd',
-    'blue': '#3490dc',
-    'blue-light': '#6cb2eb',
-    'blue-lighter': '#bcdefa',
-    'blue-lightest': '#eff8ff',
-
-    'indigo-darkest': '#191e38',
-    'indigo-darker': '#2f365f',
-    'indigo-dark': '#5661b3',
-    'indigo': '#6574cd',
-    'indigo-light': '#7886d7',
-    'indigo-lighter': '#b2b7ff',
-    'indigo-lightest': '#e6e8ff',
-
-    'purple-darkest': '#1f133f',
-    'purple-darker': '#352465',
-    'purple-dark': '#794acf',
-    'purple': '#9561e2',
-    'purple-light': '#a779e9',
-    'purple-lighter': '#d6bbfc',
-    'purple-lightest': '#f3ebff',
-
-    'pink-darkest': '#45051e',
-    'pink-darker': '#72173a',
-    'pink-dark': '#eb5286',
-    'pink': '#f66d9b',
-    'pink-light': '#fa7ea8',
-    'pink-lighter': '#ffbbca',
-    'pink-lightest': '#ffebef',
+    'text': 'var(--color-text)',
+    'dimmed': 'var(--color-dimmed)',
+    'accent': 'var(--color-accent)',
+    'background': 'var(--color-background)',
+    'line': 'var(--color-line)',
+    'gutter': 'var(--color-gutter)',
 }
 
 module.exports = {
@@ -202,7 +116,7 @@ module.exports = {
 
     fonts: {
         'sans': [
-            'geomanistweb',
+            'IBM Plex Sans Condensed',
             '-apple-system',
             'BlinkMacSystemFont',
             'Segoe UI',
@@ -215,28 +129,14 @@ module.exports = {
             'Helvetica Neue',
             'sans-serif',
         ],
-        'serif': [
-            'Constantia',
-            'Lucida Bright',
-            'Lucidabright',
-            'Lucida Serif',
-            'Lucida',
-            'DejaVu Serif',
-            'Bitstream Vera Serif',
-            'Liberation Serif',
-            'Georgia',
-            'serif',
-        ],
-        'mono': [
+        'code': [
+            'IBM Plex Mono',
             'Menlo',
             'Monaco',
             'Consolas',
             'Liberation Mono',
             'Courier New',
             'monospace',
-        ],
-        'code': [
-            'Source Code Pro',
         ]
     },
 
@@ -613,6 +513,7 @@ module.exports = {
         '4xl': '90rem',
         '5xl': '100rem',
         'full': '100%',
+        'screen': '100vw',
     },
 
 
@@ -829,6 +730,7 @@ module.exports = {
 
     svgFill: {
         'current': 'currentColor',
+        'logo': colors['logo'],
     },
 
 

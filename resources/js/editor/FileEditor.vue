@@ -1,5 +1,5 @@
 <template lang="html">
-    <div id="editor"></div>
+    <div id="editor" class="ace"></div>
 </template>
 <script>
     import * as ace from 'brace';
@@ -38,9 +38,16 @@
             this.editor.getSession().setMode({
                 path: 'ace/mode/php',
                 inline: true,
+                showPrintMargin: false,
             });
 
             this.editor.setTheme('ace/theme/github');
+
+            this.editor.setShowPrintMargin(false);
+
+            this.editor.setShowFoldWidgets(false);
+
+            this.editor.renderer.setScrollMargin(10, 10);
 
             this.editor.setValue(
                 `//use cmd+s or ctrl+s to save and run.

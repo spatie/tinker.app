@@ -10,7 +10,7 @@ Vue.use(Vuex);
 
 Vue.component('terminal', require('./terminal/Terminal'));
 Vue.component('file-editor', require('./editor/FileEditor'));
-Vue.component('modal', require('./ui/Modal'));
+Vue.component('settings', require('./ui/Settings'));
 Vue.component('dark-mode-toggle', require('./ui/DarkModeToggle'));
 Vue.component('share-button', require('./ui/ShareButton'));
 

@@ -1,79 +1,10 @@
 .menu {
-    @apply flex;
-    @apply font-normal;
-    @apply justify-center;
-    @apply m-0;
-    @apply text-2xs;
-    @apply tracking-wide;
-    @apply uppercase;
-    @apply w-full;
+    @apply text-dimmed;
+    display: grid;
+    grid-auto-flow: column;
+    grid-column-gap: 2rem;
+}
 
-    @screen sm {
-        @apply justify-end;
-
-        margin: 0 0 0 4.55%;
-        width: calc(95.45% - 31px);
-    }
-
-    & .menu-item {
-        @apply mr-4;
-
-        & a {
-            @apply border border-light-ui-grey-light flex items-center p-4 text-light-ui-grey-dark;
-
-            transition: background-color .4s, border-color .4s;
-
-            @screen sm {
-                @apply rounded-sm;
-            }
-
-            & span {
-                transition: background-color .4s;
-
-                & img {
-                    @apply mr-0;
-
-                    height: 18px;
-                    width: 18px;
-
-                    @screen sm {
-                        @apply mr-8;
-                    }
-                }
-
-                &:first-child {
-                    &:after {
-                        @apply absolute;
-                        @apply bg-light-ui-grey-light;
-                        @apply h-full;
-                        @apply hidden;
-                        @apply pin-t;
-                        @apply w-px;
-
-                        content: '';
-                        left: 34px;
-                        transition: background .4s, height .4s, top .4s;
-
-                        @screen sm {
-                            @apply block;
-                        }
-                    }
-                }
-            }
-
-            &:hover {
-                @apply bg-light-ui-green-light;
-                @apply border-light-ui-green-light;
-
-                & span {
-                    &:after {
-                        @apply bg-light-ui-green-dark;
-
-                        height: 52px;
-                        top: -17px;
-                    }
-                }
-            }
-        }
-    }
+.menu a:hover {
+    @apply text-accent;
 }

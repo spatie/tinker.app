@@ -47,8 +47,8 @@ mix
         //             paths: glob.sync([
         //                 path.join(__dirname, 'app/**/*.php'),
         //                 path.join(__dirname, 'resources/views/**/*.blade.php'),
-        //                 path.join(__dirname, 'resources/js/**/*.vue'),
-        //                 path.join(__dirname, 'resources/js/**/*.js'),
+        //                 path.join(__dirname, 'resources/assets/js/**/*.vue'),
+        //                 path.join(__dirname, 'resources/assets/js/**/*.js'),
 
         //                 // Blender css paths. In the future it would be preferable
         //                 // to simply ignore all of blender-css by extracting all

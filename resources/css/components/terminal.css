@@ -1,23 +1,7 @@
 @import "xterm/src/xterm.css";
 
-.terminal .xterm-viewport {
-    /*@apply bg-light-ui;*/
-    @apply bg-dark-ui;
-}
-
-.terminal {
-    /*@apply bg-light-ui;*/
-    @apply bg-dark-ui border-b border-light-ui-grey-light font-code p-4;
-
-    @screen sm {
-        border-image: linear-gradient(to right, config('colors.light-ui-grey-light') 0%, config('colors.light-ui') 100%);
-    	border-image-slice: 1;
-    }
-
-    @screen md {
-        @apply border-r;
-
-        border-image: linear-gradient(to bottom, config('colors.light-ui-grey-light') 0%, config('colors.light-ui') 100%);
-    	border-image-slice: 1;
-    }
+.xterm {
+    @apply p-4;
+    @apply h-full;
+    font-size: 12px !important;
 }

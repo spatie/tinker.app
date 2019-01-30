@@ -1,0 +1,21 @@
+.layout {
+    @apply fixed;
+    @apply h-screen w-screen;
+    display: grid;
+    grid-template: auto 45vh 1fr / 1fr;
+    grid-template-areas:
+        'header'
+        'terminal'
+        'editor';
+
+    @screen md {
+        grid-template: auto 1fr / 50vw 50vw;
+        grid-template-areas:
+            'header header'
+            'terminal editor';
+    }
+}
+
+.layout > * {
+    grid-area: var(--area, none);
+}

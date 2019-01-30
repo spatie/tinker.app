@@ -1,5 +1,25 @@
 @tailwind preflight;
 
+:root {
+    --color-text: #000;
+    --color-dimmed: #a09f91;
+    --color-accent: #8b6cc4;
+    --color-background: #fff;
+    --color-line: #f3f7f9;
+    --color-gutter: #fafdfc;
+    
+    --logo: var(--color-accent);
+}
+
+:root.darkmode {
+    --color-text: #fff;
+    --color-dimmed: #706b5c;
+    --color-accent: #8b6cc4;
+    --color-background: #272822;
+    --color-line: #3b3d34;
+    --color-gutter: #2f3129;
+}
+
 * {
     position: relative;
     box-sizing: inherit;
@@ -14,12 +34,14 @@
 }
 
 html {
+    @apply bg-background;
+    @apply font-code;
     box-sizing: border-box;
+    font-size: 14px;
 }
 
 h1 {
     font-size: inherit;
-    /* Reset normalize 2em */
 }
 
 a {
@@ -34,9 +56,4 @@ ul {
 img,
 svg {
     display: block;
-    vertical-align: middle;
-}
-
-body {
-    @apply font-sans;
 }

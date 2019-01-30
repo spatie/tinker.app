@@ -1,8 +1,6 @@
 <template>
-    <a href="#" @click="toggleDarkMode">
-        <span><img src="/images/icon-toggle.svg" alt="toggle ui"></span>
-        <span v-if="darkMode" class="hidden | sm:inline">light ui</span>
-        <span v-else class="hidden | sm:inline">dark ui</span>
+    <a href="#" @click="toggleDarkMode" class="hover:text-accent">
+        <span v-html="darkMode ? 'switch to light ui' : 'switch to dark ui'"/>
     </a>
 </template>
 <script>
@@ -10,12 +8,14 @@
         computed: {
             darkMode() {
                 return this.$store.state.darkMode;
-            }
+            },
         },
         methods: {
             toggleDarkMode() {
-                this.$store.commit('toggleDarkMode')
+                this.$store.commit('toggleDarkMode');
+
+                document.documentElement.classList.toggle('darkmode', this.darkMode);
             },
         },
-    }
+    };
 </script>

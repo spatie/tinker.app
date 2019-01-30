@@ -1,19 +1,24 @@
-#editor {
-    font: 13px 'Source Code Pro' !important;
-}
+/* Nested to override specificity */
 
-.ace_print-margin {
-    @apply hidden;
-}
+html {
+    & .ace {
+        @apply font-code;
+        @apply text-base;
+        @apply border-t-2 border-line;
 
-.ace_scroller {
-    @apply mt-4 ml-2;
-}
+        @screen md {
+            @apply border-t-0;
+            @apply border-l-2;
+        }
+    }
 
-.ace_gutter {
-    @apply pt-4;
-}
+    & .ace_scroller {
+        box-shadow: none !important;
+    }
 
-.ace-github .ace_gutter-active-line {
-    @apply mt-4;
+    & .ace-github .ace_gutter {
+        @apply bg-gutter;
+        @apply border-r border-line;
+    }
+
 }

@@ -1,4 +1,4 @@
 export default {
-    background: '#000000',
-    foreground: '#ffffff',
+    background: '#272822',
+    foreground: '#F8F8F2',
 };

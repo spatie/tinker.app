@@ -3,6 +3,7 @@
 </template>
 <script>
 import { Terminal } from 'xterm';
+import * as WebfontLoader from 'xterm-webfont';
 import * as fit from 'xterm/lib/addons/fit/fit';
 import { WebSocketConnection } from '../WebSocketConnection';
 import darkTheme from './themes/dark';
@@ -23,10 +24,13 @@ export default {
 
     created() {
         Terminal.applyAddon(fit);
+        Terminal.applyAddon(WebfontLoader);
 
         this.terminal = new Terminal({
             cursorBlink: true,
             cursorStyle: 'underline',
+            fontFamily: 'IBM Plex Mono',
+            fontSize: '14',
         });
 
         this.setDarkMode(this.darkMode);
@@ -37,9 +41,9 @@ export default {
     },
 
     mounted() {
-        this.terminal.open(this.$el, true);
+        this.terminal.loadWebfontAndOpen(this.$el, true);
 
-        this.terminal.fit();
+        // this.terminal.fit();
     },
 
     methods: {
