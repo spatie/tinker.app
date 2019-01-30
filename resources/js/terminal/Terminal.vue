@@ -43,7 +43,7 @@ export default {
     mounted() {
         this.terminal.loadWebfontAndOpen(this.$el, true);
 
-        // this.terminal.fit();
+        this.terminal.fit();
     },
 
     methods: {
