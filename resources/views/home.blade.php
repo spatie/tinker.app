@@ -21,7 +21,7 @@
                                 C26.4,22.3,26.4,23.2,26.2,23.8z M23.7,18.7c-3.1,0.3-5.3,1.7-5.3,2.6c0,0.5,1.8,1.7,5.3,2.2c0.2-0.7,0.2-1.3,0.2-2
                                 C24.1,20.5,23.9,19.7,23.7,18.7z"/>
                             </svg>
-                        <span class="hidden text-dimmed | sm:inline">tinker.app</span>
+                        <span class="hidden text-dimmed | sm:inline hover:text-accent">tinker.app</span>
                     </h1>
                 </a>
                 <ul class="menu">

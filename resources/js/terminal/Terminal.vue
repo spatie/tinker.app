@@ -47,7 +47,6 @@ export default {
             });
 
         window.addEventListener('resize', () => {
-            console.log("resize");
             this.terminal.fit();
         })
     },
@@ -65,6 +64,7 @@ export default {
         }) {
             if (type === 'terminal-data') {
                 this.terminal.write(payload);
+                this.terminal.scrollToBottom();
             }
         }
     },
