@@ -2,7 +2,7 @@ export default {
     background: '#ffffff',
     black: '#000000',
     blue: '#a09f91', /* cfr. comment color from editor */
-    cursor: '#706b5c',
+    cursor: '#a09f91',
     cursorAccent: '#8b6cc4',
     brightBlack: '#ffffff',
     brightBlue: '#a7cfdc',
@@ -19,5 +19,5 @@ export default {
     red: '#dd1144',
     selection: 'rgba(150, 120, 200, .3)',
     white: '#ffffff',
-    yellow: '##ffc',
+    yellow: '#ffffcc',
 };
