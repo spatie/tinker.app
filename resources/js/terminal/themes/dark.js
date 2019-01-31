@@ -2,7 +2,7 @@ export default {
     background: '#272822',
     black: '#272822',
     blue: '#706b5c', /* cfr. comment color from editor */
-    cursor: '#706b5c',
+    cursor: '#8b6cc4',
     cursorAccent: '#8b6cc4',
     brightBlack: '#ffffff',
     brightBlue: '#a7cfdc',
