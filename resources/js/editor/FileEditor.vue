@@ -47,7 +47,7 @@
 
             this.editor.setShowFoldWidgets(false);
 
-            this.editor.renderer.setScrollMargin(20, 20);
+            this.editor.renderer.setScrollMargin(14, 14);
 
             this.editor.setValue(
                 `//use cmd+s or ctrl+s to save and run.
