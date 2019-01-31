@@ -4,7 +4,7 @@ export default {
     blue: '#a09f91', /* cfr. comment color from editor */
     cursor: '#706b5c',
     cursorAccent: '#8b6cc4',
-    brightBlack: '#c4c4c4',
+    brightBlack: '#000000',
     brightBlue: '#a7cfdc',
     brightCyan: '#abe8e8',
     brightGreen: '#a7dbb4',
@@ -16,8 +16,8 @@ export default {
     foreground: '#000000',
     green: '#009926',
     magenta: '#e020a3',
-    red: '#dd1144',
+    red: '#e3b3bf',
     selection: 'rgba(150, 120, 200, .3)',
     white: '#ffffff',
-    yellow: '#eab21c',
+    yellow: '#fbf4a5',
 };
