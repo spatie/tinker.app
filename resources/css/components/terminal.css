@@ -1,7 +1,8 @@
 @import "xterm/src/xterm.css";
 
 .xterm {
+    @apply absolute pin;
+    @apply overflow-hidden;
     @apply p-4;
-    @apply h-full;
     font-size: 12px !important;
 }

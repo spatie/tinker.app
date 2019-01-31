@@ -47,6 +47,7 @@ export default {
             });
 
         window.addEventListener('resize', () => {
+            console.log("resize");
             this.terminal.fit();
         })
     },
