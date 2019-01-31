@@ -11,7 +11,7 @@ export default {
     brightMagenta: '#e6bdd9',
     brightRed: '#efc6d0',
     brightWhite: '#ababab',
-    brightYellow: '#fffed5',
+    brightYellow: '#ffffd0',
     cyan: '#009999',
     foreground: '#000000',
     green: '#009926',
@@ -19,5 +19,5 @@ export default {
     red: '#dd1144',
     selection: 'rgba(150, 120, 200, .3)',
     white: '#ffffff',
-    yellow: '##d2ce33',
+    yellow: '#eab21c',
 };

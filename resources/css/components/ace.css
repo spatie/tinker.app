@@ -16,9 +16,14 @@ html {
         box-shadow: none !important;
     }
 
+    & .ace-monokai .ace_gutter,
     & .ace-github .ace_gutter {
         @apply bg-gutter;
         @apply border-r border-line;
     }
 
+    & .ace-monokai .ace_marker-layer .ace_selection,
+    & .ace-github .ace_marker-layer .ace_selection {
+        background-color: rgba(150, 120, 200, .3);
+    }
 }

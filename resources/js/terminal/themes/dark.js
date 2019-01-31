@@ -1,7 +1,7 @@
 export default {
     background: '#272822',
     black: '#000000',
-    blue: '#a09f91', /* cfr. comment color from editor */
+    blue: '#706b5c', /* cfr. comment color from editor */
     cursor: '#706b5c',
     cursorAccent: '#8b6cc4',
     brightBlack: '#828282',
@@ -11,7 +11,7 @@ export default {
     brightMagenta: '#e6bdd9',
     brightRed: '#efc6d0',
     brightWhite: '#ababab',
-    brightYellow: '#fffed5',
+    brightYellow: '#ffffd0',
     cyan: '#009999',
     foreground: '#f8f8f2',
     green: '#009926',
@@ -19,5 +19,5 @@ export default {
     red: '#dd1144',
     selection: 'rgba(150, 120, 200, .3)',
     white: '#ffffff',
-    yellow: '##d2ce33',
+    yellow: '#eab21c',
 };
