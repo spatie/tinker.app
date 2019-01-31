@@ -1,29 +1,23 @@
 export default {
     background: '#272822',
     foreground: '#F8F8F2',
-    fadeColor: '#a09f91',
-    /* black light/dark */
-    color0: '#828282',
-    color8: '#000000',
-    /* red light/dark */
-    color1: '#efc6d0',
-    color9: '#D14',
-    /* green light/dark */
-    color2: '#a7dbb4',
-    color10: '#009926',
-    /* yellow light/dark */
-    color3: '#fffed5',
-    color11: '#d2ce33',
-    /* blue light/dark */
-    color4: '#a7cfdc',
-    color12: '#0086B3',
-    /* magenta light/dark */
-    color5: '#e6bdd9',
-    color13: '#e020a3',
-    /* cyan light/dark */
-    color6: '#abe8e8',
-    color14: '#099',
-    /* white light/dark */
-    color7: '#fff',
-    color15: '#ababab',
+    black: '#000000',
+    blue: '#0086B3',
+    brightBlack: '#828282',
+    brightBlue: '#a7cfdc',
+    brightCyan: '#abe8e8',
+    brightGreen: '#a7dbb4',
+    brightMagenta: '#e6bdd9',
+    brightRed: '#efc6d0',
+    brightWhite: '#ababab',
+    brightYellow: '#fffed5',
+    cursor: '#a09f91',
+    cursorAccent: '#a09f91',
+    cyan: '#099',
+    green: '#009926',
+    magenta: '#e020a3',
+    red: '#d14',
+    selection: '#a09f91',
+    white: '#fff',
+    yellow: '##d2ce33',
 };
