@@ -18,7 +18,7 @@
             </label>
             <input name="height" type="text">
 
-            <a href="#" style="grid-column: span 2" class="modal-grid-span text-dimmed hover:text-accent">exit settings</a>
+            <a href="#" style="grid-column: span 2" class="modal-grid-span hover:text-accent">exit settings</a>
 
             <div class="text-dimmed mt-16">
                 /* made by alex@spatie.be */
