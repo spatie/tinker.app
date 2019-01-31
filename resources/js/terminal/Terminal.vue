@@ -41,9 +41,14 @@ export default {
     },
 
     mounted() {
-        this.terminal.loadWebfontAndOpen(this.$el, true);
+        this.terminal.loadWebfontAndOpen(this.$el, true)
+            .then(() => {
+                this.terminal.fit();
+            });
 
-        this.terminal.fit();
+        window.addEventListener('resize', () => {
+            this.terminal.fit();
+        })
     },
 
     methods: {
