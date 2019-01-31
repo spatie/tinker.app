@@ -4,7 +4,7 @@ export default {
     blue: '#706b5c', /* cfr. comment color from editor */
     cursor: '#706b5c',
     cursorAccent: '#8b6cc4',
-    brightBlack: '#828282',
+    brightBlack: '#c4c4c4',
     brightBlue: '#a7cfdc',
     brightCyan: '#abe8e8',
     brightGreen: '#a7dbb4',
