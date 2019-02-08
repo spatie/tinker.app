@@ -27,7 +27,7 @@ class TinkerServer implements MessageComponentInterface
         Partyline::comment("Client connected");
 
         $this->connectionRepository->push(
-            new Connection($browserConnection)
+            new Connection($browserConnection, $this->connectionRepository)
         );
     }
 
