@@ -35,7 +35,8 @@ class ContainerFactory
         $mapPorts['22/tcp'] = [$hostPortBinding];
 
         $hostConfig = (new HostConfig())
-            ->setPortBindings($mapPorts);
+            ->setPortBindings($mapPorts)
+            ->setCpuPercent(5);
 
         $containerProperties = (new ContainersCreatePostBody())
             ->setImage('spatie/tinker.app-image')
