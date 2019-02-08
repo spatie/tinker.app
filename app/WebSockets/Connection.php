@@ -6,6 +6,7 @@ use App\Docker\Container;
 use App\Docker\ContainerInterface;
 use App\Docker\NullContainer;
 use Ratchet\ConnectionInterface;
+use Wilderborn\Partyline\Partyline;
 
 class Connection
 {
@@ -15,9 +16,14 @@ class Connection
     /** @var ?Container */
     protected $container;
 
-    public function __construct(ConnectionInterface $browserConnection)
+    /** @var WebSocketConnectionRepository */
+    protected $webSocketConnectionRepository;
+
+    public function __construct(ConnectionInterface $browserConnection, WebSocketConnectionRepository $webSocketConnectionRepository)
     {
         $this->browserConnection = $browserConnection;
+
+        $this->webSocketConnectionRepository = $webSocketConnectionRepository;
 
         $this->container = new NullContainer(); // TODO: DI?
     }
@@ -55,7 +61,11 @@ class Connection
     public function onClose(): self
     {
         if ($container = $this->getContainer()) {
-            $container->stop();
+            if (count($this->webSocketConnectionRepository->getConnectedToContainer($container)) === 1) {
+                Partyline::comment("Last client on {$container->getName()} disconnected. Shutting down container.");
+
+                $container->stop();
+            }
         }
 
         return $this;

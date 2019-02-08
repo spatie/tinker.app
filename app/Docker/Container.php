@@ -130,12 +130,7 @@ class Container implements ContainerInterface
 
     public function stop(): self
     {
-        // TODO: Should probably move to somewhere else?
-//        if ($this->connections->count() <= 1) {
-//            Partyline::comment("Last client on {$this->getName()} disconnected. Shutting down container.");
-//
-//            $this->kill()->remove();
-//        }
+        $this->kill()->remove();
 
         return $this;
     }

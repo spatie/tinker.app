@@ -11,4 +11,9 @@ class NullContainer implements ContainerInterface
     public function stop()
     {
     }
+
+    public function getName(): string
+    {
+        return 'null-container';
+    }
 }
