@@ -3,7 +3,7 @@
 @section('content')
 
     <div id="app" class="layout">
-        <header style="--area: header" class="header">
+        <header style="grid-area: header" class="header">
             <nav class="flex justify-between items-center px-4 py-2">
                 <a href="/">
                     <h1 class="flex items-center">
@@ -36,10 +36,10 @@
                 </ul>
             </nav>
         </header>
-        <terminal class="max-w-screen" style="--area: terminal"></terminal>
-        <settings style="--area: editor">
+        <terminal class="max-w-screen" style="grid-area: terminal"></terminal>
+        <settings style="grid-area: editor">
         </settings>
-        <file-editor style="--area: editor"></file-editor>
+        <file-editor style="grid-area: editor"></file-editor>
     </div>
 
     <script>

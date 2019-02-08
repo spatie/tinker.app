@@ -4,11 +4,11 @@ html {
     & .ace {
         @apply font-code;
         @apply text-base;
-        @apply border-t-2 border-line;
+        @apply border-b-2 border-line;
 
         @screen md {
-            @apply border-t-0;
-            @apply border-l-2;
+            @apply border-b-0;
+            @apply border-r-2;
         }
     }
 
